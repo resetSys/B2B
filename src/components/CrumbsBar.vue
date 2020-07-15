@@ -28,7 +28,8 @@ export default {
   },
   data() {
     return {
-      isRefresh:false
+      isRefresh:false,
+      timer:null
     }
   },
   components: {
@@ -36,10 +37,18 @@ export default {
   },
   methods:{
     handleRefresh(){
+      //添加防抖
       this.isRefresh = true;
-      let timer = window.setTimeout(()=>{
+      if(this.timer){
+        window.clearTimeout(this.timer);
+      } else {
+        window.console.log("执行刷新");
+      }
+      this.timer = window.setTimeout(()=>{
+        window.console.log("执行setTimeOut")
         this.isRefresh = false;
-        clearTimeout(timer);
+        window.clearTimeout(this.timer);
+        this.timer = null;
       },1000)
     }
   },
