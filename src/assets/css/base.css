@@ -1,0 +1,33 @@
+/* element默认样式修改 */
+/* 修改navMenu默认样式 */
+.el-submenu__title{
+  text-align: left;
+}
+.el-menu-item-group__title{
+  display: none;
+}
+.el-menu-item{
+  text-align: left;
+}
+/* 解决scrollbar横向溢出 */
+.el-scrollbar__wrap{
+  overflow-x: hidden;
+  margin-right: -25px !important;
+  margin-bottom: 0 !important;
+}
+
+/* 去除tabs标签页margin-bottom */
+.el-tabs__header{
+  margin-bottom: 0;
+  border-bottom: none !important;
+}
+/* dialog设置上下居中 */
+.el-dialog{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);/*IE9*/
+  -webkit-transform: translate(-50%,-50%);/*safari和chrome*/
+  margin-top: 0 !important;
+}

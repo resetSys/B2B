@@ -101,8 +101,8 @@ export default {
   
 }
 .form{
-  width:500px;
-  height: 300px;
+  width:400px;
+  height: 250px;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -115,8 +115,8 @@ export default {
   width: 200px;
 }
 .form-code-img{
-  width: 90px;
-  height: 40px;
+  width: 80px;
+  height: 32px;
   margin-left: 20px;
   border-radius: 3px;
 }
