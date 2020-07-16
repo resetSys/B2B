@@ -11,6 +11,19 @@ const Recommend = () => import("@/views/child/system/Recommend.vue");
 //权限管理
 const Admin = () => import("@/views/child/limit/Admin.vue");
 const Role = () => import("@/views/child/limit/Role.vue");
+//会员管理
+const MemList = () => import("@/views/child/member/MemList.vue");
+const CertExpired = () => import("@/views/child/member/CertExpired.vue");
+const RegistAudit = () => import("@/views/child/member/RegistAudit.vue");
+const RegistCertificate = () => import("@/views/child/member/RegistCertificate.vue");
+const MemClassify = () => import("@/views/child/member/MemClassify.vue");
+//充值管理
+const TopupList = () => import("@/views/child/topup/TopupList.vue");
+const TopupWater = () => import("@/views/child/topup/TopupWater.vue");
+//签到管理
+const SignRule = () => import("@/views/child/sign/SignRule.vue");
+const SignFun = () => import("@/views/child/sign/SignFun.vue");
+
 
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -36,7 +49,6 @@ const routes = [
     }
   },{
     path:"/home",
-    name:"home",
     component:Home,
     children:[
       {
@@ -71,6 +83,60 @@ const routes = [
         component:Role,
         meta:{
           title:"角色管理"
+        }
+      },{
+        path:"memList",
+        component:MemList,
+        meta:{
+          title:"会员列表"
+        }
+      },{
+        path:"certExpired",
+        component:CertExpired,
+        meta:{
+          title:"证书过期管理"
+        }
+      },{
+        path:"RegistAudit",
+        component:RegistAudit,
+        meta:{
+          title:"注册审核管理"
+        }
+      },{
+        path:"RegistCertificate",
+        component:RegistCertificate,
+        meta:{
+          title:"注册资质管理"
+        }
+      },{
+        path:"memClassify",
+        component:MemClassify,
+        meta:{
+          title:"会员分类管理"
+        }
+      },{
+        path:"topupList",
+        component:TopupList,
+        meta:{
+          title:"充值活动列表"
+        }
+      },{
+        path:"topupWater",
+        component:TopupWater,
+        meta:{
+          title:"充值流水"
+        }
+      },{
+        path:"signRule",
+        component:SignRule,
+        meta:{
+          title:"签到规则"
+        }
+      },{
+        path:"signFun",
+        component:SignFun,
+        meta:{
+          title:"签到功能"
         }
       }
     ]

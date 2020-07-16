@@ -31,3 +31,29 @@
   -webkit-transform: translate(-50%,-50%);/*safari和chrome*/
   margin-top: 0 !important;
 }
+/* 注册表单drawer header content 和 footer */
+.el-drawer{
+  min-width: 300px;
+}
+.drawer-header,.drawer-footer{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+.drawer-header{
+  justify-content: flex-start;
+  height: 50px;
+  padding: 0 20px;
+  border-bottom: 1px solid #dcdcdc;
+}
+.drawer-form-wrap{
+  box-sizing:border-box;
+  padding:10px 20px;
+}
+.drawer-footer{
+  justify-content: flex-end;
+  height: 40px;
+  border-top: 1px solid #dcdcdc;
+  padding: 0 20px;
+}

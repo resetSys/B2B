@@ -36,7 +36,8 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="text" @click="dialogVisible = true">规则设置</el-button>
+            <el-button type="primary" plain style="padding:2px 3px;" 
+              @click="dialogVisible = true">规则设置</el-button>
           </template>
         </el-table-column>
       </el-table>

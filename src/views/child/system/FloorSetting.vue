@@ -42,7 +42,8 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="text" @click="dialogVisible= true">编辑</el-button>
+            <el-button type="primary" style="padding:2px 3px;" plain
+              @click="dialogVisible= true">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>

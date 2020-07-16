@@ -6,7 +6,8 @@
         >{{item}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="crumbs-controls">
-      <slot>
+      <slot name="controls"></slot>
+      <slot name="refresh">
         <el-button type="primary" @click="handleRefresh">
           <i ref="refresh" :class="{'el-icon-refresh':true,'refreshAnima':isRefresh}"></i>
         </el-button>

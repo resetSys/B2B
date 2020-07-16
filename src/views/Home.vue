@@ -3,7 +3,7 @@
     <el-container style="width:100%;height:100%;">
       <el-aside width="200px" style="background-color:#545c64;">
         <el-scrollbar class="scrollbar">
-          <div class="userInfo">
+          <div class="userInfo" style="display:none;">
             <el-avatar class="userInfo-avg" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
             <span class="userInfo-name">管理员</span>
             <div class="userInfo-con">
@@ -23,7 +23,7 @@
             text-color="#fff"
             active-text-color="#ffd04b"
             unique-opened
-            default-active="sysSetting"
+            default-active=""
             router>
             <el-submenu index="1">
               <template slot="title">
@@ -38,12 +38,45 @@
             </el-submenu>
             <el-submenu index="2">
               <template slot="title">
-                <i class="el-icon-edit"></i>
+                <i class="iconfont icon-limit"></i>
                 <span>权限管理</span>
               </template>
               <el-menu-item-group>
                 <el-menu-item index="admin">管理员管理</el-menu-item>
                 <el-menu-item index="role">角色管理</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="3">
+              <template slot="title">
+                <i class="iconfont icon-member"></i>
+                <span>会员管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="memList">会员列表</el-menu-item>
+                <el-menu-item index="certExpired">证书过期管理</el-menu-item>
+                <el-menu-item index="registAudit">注册审核管理</el-menu-item>
+                <el-menu-item index="registCertificate">注册资质管理</el-menu-item>
+                <el-menu-item index="memClassify">会员分类管理</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="4">
+              <template slot="title">
+                <i class="iconfont icon-topup"></i>
+                <span>充值管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="topupList">充值活动列表</el-menu-item>
+                <el-menu-item index="topupWater">充值流水</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="5">
+              <template slot="title">
+                <i class="iconfont"></i>
+                <span>签到管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="signRule">签到规则</el-menu-item>
+                <el-menu-item index="signFun">签到功能</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
