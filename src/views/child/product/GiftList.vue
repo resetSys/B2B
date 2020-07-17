@@ -1,14 +1,23 @@
 <template>
-  <!-- 签到规则 -->
-  <div class="signRule">
+  <div class="giftList">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['签到管理','签到规则']">
+    <crumbs-bar :crumbsList="['商品管理','礼品列表']">
+      <template slot="controls">
+        <el-button type="primary" icon="el-icon-document-delete">批量上架</el-button>
+        <el-button type="danger" icon="el-icon-document-add">批量下架</el-button>
+        <el-button type="primary" icon="el-icon-document-add">添加礼品</el-button>
+      </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
+        <el-select placeholder="礼品状态" style="width:100px;margin-right:5px" clearable>
+          <el-option label="全部" value="全部"></el-option>
+          <el-option label="上架中" value="上架中"></el-option>
+          <el-option label="下架中" value="下架中"></el-option>
+        </el-select>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入编号/名称"></el-input>
+          placeholder="输入编号/名称/厂家"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
     </search-bar>
@@ -26,43 +35,49 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="orginName"
+          prop="number"
           show-overflow-tooltip
-          label="机构名称">
+          label="商品编号">
         </el-table-column>
         <el-table-column
-          prop="ruleNum"
+          prop="name"
           align="center"
           show-overflow-tooltip
-          label="方案编号">
+          label="配置商品名称">
         </el-table-column>
         <el-table-column
-          prop="ruleNume"
-          label="方案名称"
+          prop="specification"
+          align="center"
+          show-overflow-tooltip
+          label="商品规格">
+        </el-table-column>
+        <el-table-column
+          prop="packingNnit"
+          label="包装单位"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="signType"
-          label="签到类型"
+          prop="producer"
+          label="生产厂家"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="clientType"
-          label="客户类型"
+          prop="repertory"
+          label="库存"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="isUseing"
-          label="是否启用"
+          prop="retailPrice"
+          label="建议零售价"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="create"
-          label="创建日期"
+          prop="status"
+          label="状态"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
@@ -70,7 +85,7 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>规则设置</el-button>
+            <el-button type="warning" style="padding:2px 3px;" plain>编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,32 +102,33 @@ import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 
 export default {
-  name: 'signRule',
+  name: 'giftList',
   data() {
     return {
       /**表格数据 */
-      //序号	机构名称	方案编号	方案名称	签到类型	客户类型	是否启用	创建日期	操作
+      //	序号	商品编号	商品名称	商品规格	包装单位	生产厂家	库存	建议零售价	状态	操作
       tableData:[{
-        orginName:"机构名称",
-        ruleNum:"方案编号",
-        ruleNume:"方案名称",
-        signType:"签到类型",
-        clientType:"客户类型",
-        isUseing:"是否启用",
-        create:"创建日期"
+        number:"商品编号",
+        name:"商品名称",
+        specification:"商品规格",
+        packingNnit:"包装单位",
+        producer:"生产厂家",
+        repertory:"库存",
+        retailPrice:"建议零售价",
+        status:"状态"
       }],
     }
   },
   components: {
     crumbsBar,
     Pagination,
-    SearchBar,
+    SearchBar
   }
 }
 </script>
 
 <style scoped>
-.signRule{
+.giftList{
   width: 100%;
   height: 100%;
 }

@@ -1,8 +1,8 @@
 <template>
-  <!-- 签到规则 -->
-  <div class="signRule">
+  <!-- 到货提醒 -->
+  <div class="getGoods">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['签到管理','签到规则']">
+    <crumbs-bar :crumbsList="['权限管理','角色管理']">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
@@ -26,52 +26,45 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="orginName"
+          prop="user"
           show-overflow-tooltip
-          label="机构名称">
+          label="用户账号">
         </el-table-column>
         <el-table-column
-          prop="ruleNum"
+          prop="buyer"
           align="center"
           show-overflow-tooltip
-          label="方案编号">
+          label="求货用户">
         </el-table-column>
         <el-table-column
-          prop="ruleNume"
-          label="方案名称"
+          prop="tel"
+          label="电话"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="signType"
-          label="签到类型"
+          prop="name"
+          label="名称"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="clientType"
-          label="客户类型"
+          prop="producer"
+          label="厂家"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="isUseing"
-          label="是否启用"
+          prop="repertory"
+          label="库存"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="create"
-          label="创建日期"
+          prop="time"
+          label="求货时间"
           align="center"
           show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          align="center">
-          <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>规则设置</el-button>
-          </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
@@ -87,32 +80,32 @@ import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 
 export default {
-  name: 'signRule',
+  name: 'getGoods',
   data() {
     return {
       /**表格数据 */
-      //序号	机构名称	方案编号	方案名称	签到类型	客户类型	是否启用	创建日期	操作
+      //用户账号	求货用户	电话	名称	厂家	库存	求货时间
       tableData:[{
-        orginName:"机构名称",
-        ruleNum:"方案编号",
-        ruleNume:"方案名称",
-        signType:"签到类型",
-        clientType:"客户类型",
-        isUseing:"是否启用",
-        create:"创建日期"
+        user:"用户账号",
+        buyer:"求货用户",
+        tel:"电话",
+        name:"名称",
+        producer:"厂家",
+        repertory:"库存",
+        time:"求货时间"
       }],
     }
   },
   components: {
     crumbsBar,
     Pagination,
-    SearchBar,
+    SearchBar
   }
 }
 </script>
 
 <style scoped>
-.signRule{
+.getGoods{
   width: 100%;
   height: 100%;
 }

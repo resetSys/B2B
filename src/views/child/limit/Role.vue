@@ -133,7 +133,7 @@ export default {
   components: {
     crumbsBar,
     Pagination,
-    SearchBar,
+    SearchBar
   }
 }
 </script>

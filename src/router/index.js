@@ -23,7 +23,25 @@ const TopupWater = () => import("@/views/child/topup/TopupWater.vue");
 //签到管理
 const SignRule = () => import("@/views/child/sign/SignRule.vue");
 const SignFun = () => import("@/views/child/sign/SignFun.vue");
-
+//主题活动
+const ThemeTem = () => import("@/views/child/theme/ThemeTem.vue");
+const ThemePro = () => import("@/views/child/theme/ThemePro.vue");
+const Template = () => import("@/views/child/theme/Template.vue");
+//商品管理
+const ProductList = () => import("@/views/child/product/ProductList.vue");
+const ProductClassify = () => import("@/views/child/product/ProductClassify.vue");
+const GiftList = () => import("@/views/child/product/GiftList.vue");
+const IntegralGoods = () => import("@/views/child/product/IntegralGoods.vue");
+const ControlGoods = () => import("@/views/child/product/ControlGoods.vue");
+const GetGoods = () => import("@/views/child/product/GetGoods.vue");
+const RecommendGoods = () => import("@/views/child/product/RecommendGoods.vue");
+//促销管理
+const Schemes = () => import("@/views/child/scheme/Schemes.vue");
+const Single = () => import("@/views/child/scheme/Single.vue");
+const Group = () => import("@/views/child/scheme/Group.vue");
+//优惠券管理
+const Coupons = () => import("@/views/child/coupon/Coupons.vue");
+const GiveOut = () => import("@/views/child/coupon/GiveOut.vue");
 
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -137,6 +155,96 @@ const routes = [
         component:SignFun,
         meta:{
           title:"签到功能"
+        }
+      },{
+        path:"themeTem",
+        component:ThemeTem,
+        meta:{
+          title:"主题活动模板"
+        }
+      },{
+        path:"themePro",
+        component:ThemePro,
+        meta:{
+          title:"主题商品组合"
+        }
+      },{
+        path:"template",
+        component:Template,
+        meta:{
+          title:"模板绑定"
+        }
+      },{
+        path:"productList",
+        component:ProductList,
+        meta:{
+          title:"商品列表"
+        }
+      },{
+        path:"productClassify",
+        component:ProductClassify,
+        meta:{
+          title:"商品分类"
+        }
+      },{
+        path:"giftList",
+        component:GiftList,
+        meta:{
+          title:"礼品列表"
+        }
+      },{
+        path:"integralGoods",
+        component:IntegralGoods,
+        meta:{
+          title:"积分商品"
+        }
+      },{
+        path:"controlGoods",
+        component:ControlGoods,
+        meta:{
+          title:"控销商品"
+        }
+      },{
+        path:"recommendGoods",
+        component:RecommendGoods,
+        meta:{
+          title:"推荐商品管理"
+        }
+      },{
+        path:"getGoods",
+        component:GetGoods,
+        meta:{
+          title:"商品到货管理"
+        }
+      },{
+        path:"schemes",
+        component:Schemes,
+        meta:{
+          title:"方案列表"
+        }
+      },{
+        path:"single",
+        component:Single,
+        meta:{
+          title:"单品方案设计"
+        }
+      },{
+        path:"group",
+        component:Group,
+        meta:{
+          title:"组合方案设计"
+        }
+      },{
+        path:"coupons",
+        component:Coupons,
+        meta:{
+          title:"优惠券列表"
+        }
+      },{
+        path:"giveOut",
+        component:GiveOut,
+        meta:{
+          title:"优惠券下发"
         }
       }
     ]

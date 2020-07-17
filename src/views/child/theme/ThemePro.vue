@@ -1,8 +1,12 @@
 <template>
-  <!-- 签到规则 -->
-  <div class="signRule">
+  <!-- 主题商品组合 -->
+  <div class="themePro">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['签到管理','签到规则']">
+    <crumbs-bar :crumbsList="['权限管理','角色管理']">
+      <template slot="controls">
+        <el-button type="danger" icon="el-icon-document-delete">批量删除</el-button>
+        <el-button type="primary" icon="el-icon-document-add">新增组合</el-button>
+      </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
@@ -25,40 +29,10 @@
           width="55">
         </el-table-column>
         <el-table-column
-          align="center"
-          prop="orginName"
-          show-overflow-tooltip
-          label="机构名称">
-        </el-table-column>
-        <el-table-column
-          prop="ruleNum"
+          prop="name"
           align="center"
           show-overflow-tooltip
-          label="方案编号">
-        </el-table-column>
-        <el-table-column
-          prop="ruleNume"
-          label="方案名称"
-          align="center"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-          prop="signType"
-          label="签到类型"
-          align="center"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-          prop="clientType"
-          label="客户类型"
-          align="center"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-          prop="isUseing"
-          label="是否启用"
-          align="center"
-          show-overflow-tooltip>
+          label="组合名称">
         </el-table-column>
         <el-table-column
           prop="create"
@@ -70,7 +44,7 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>规则设置</el-button>
+            <el-button type="primary" style="padding:2px 3px;" plain>商品组合</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,32 +61,26 @@ import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 
 export default {
-  name: 'signRule',
+  name: 'themePro',
   data() {
     return {
-      /**表格数据 */
-      //序号	机构名称	方案编号	方案名称	签到类型	客户类型	是否启用	创建日期	操作
+      //组合名称	创建日期	
       tableData:[{
-        orginName:"机构名称",
-        ruleNum:"方案编号",
-        ruleNume:"方案名称",
-        signType:"签到类型",
-        clientType:"客户类型",
-        isUseing:"是否启用",
-        create:"创建日期"
+        name:"模板编号",
+        create:"模板",
       }],
     }
   },
   components: {
     crumbsBar,
     Pagination,
-    SearchBar,
+    SearchBar
   }
 }
 </script>
 
 <style scoped>
-.signRule{
+.themePro{
   width: 100%;
   height: 100%;
 }

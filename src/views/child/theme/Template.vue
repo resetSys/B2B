@@ -1,14 +1,28 @@
 <template>
-  <!-- 签到规则 -->
-  <div class="signRule">
+  <!-- 模板绑定 -->
+  <div class="template">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['签到管理','签到规则']">
+    <crumbs-bar :crumbsList="['权限管理','角色管理']">
+      <template slot="controls">
+        <el-button type="danger" icon="el-icon-document-delete">批量删除</el-button>
+        <el-button type="primary" icon="el-icon-document-add">添加模板绑定</el-button>
+      </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
+        <el-select placeholder="是否启用" style="width:100px;margin-right:5px" clearable>
+          <el-option label="全部" value="全部"></el-option>
+          <el-option label="已上架" value="已上架"></el-option>
+          <el-option label="未上架" value="未上架"></el-option>
+        </el-select>
+        <el-select placeholder="类型" style="width:100px;margin-right:5px" clearable>
+          <el-option label="全部" value="全部"></el-option>
+          <el-option label="商品组合" value="商品组合"></el-option>
+          <el-option label="商品分类" value="商品分类"></el-option>
+        </el-select>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入编号/名称"></el-input>
+          placeholder="输入名称"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
     </search-bar>
@@ -26,43 +40,46 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="orginName"
+          prop="img"
           show-overflow-tooltip
-          label="机构名称">
+          label="图片">
+          <template slot-scope="scope">
+            <img :src="scope.row.img" alt="图片" style="height:50px;width:auto;vertical-align: middle;">
+          </template>
         </el-table-column>
         <el-table-column
-          prop="ruleNum"
+          prop="temNum"
           align="center"
           show-overflow-tooltip
-          label="方案编号">
+          label="模板编号">
         </el-table-column>
         <el-table-column
-          prop="ruleNume"
-          label="方案名称"
+          prop="tem"
+          label="模板"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="signType"
-          label="签到类型"
+          prop="activityType"
+          label="活动类型"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="clientType"
-          label="客户类型"
+          prop="title"
+          label="标题"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="isUseing"
-          label="是否启用"
+          prop="status"
+          label="状态"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="create"
-          label="创建日期"
+          prop="sort"
+          label="排序"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
@@ -70,7 +87,7 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>规则设置</el-button>
+            <el-button type="warning" style="padding:2px 3px;" plain>下架</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,32 +104,32 @@ import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 
 export default {
-  name: 'signRule',
+  name: 'template',
   data() {
     return {
       /**表格数据 */
-      //序号	机构名称	方案编号	方案名称	签到类型	客户类型	是否启用	创建日期	操作
+      //序号	图片	模板编号	模板	活动类型	标题	状态	排序	操作
       tableData:[{
-        orginName:"机构名称",
-        ruleNum:"方案编号",
-        ruleNume:"方案名称",
-        signType:"签到类型",
-        clientType:"客户类型",
-        isUseing:"是否启用",
-        create:"创建日期"
+        img:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+        temNum:"模板编号",
+        tem:"模板",
+        activityType:"活动类型",
+        title:"标题",
+        status:"状态",
+        sort:"排序"
       }],
     }
   },
   components: {
     crumbsBar,
     Pagination,
-    SearchBar,
+    SearchBar
   }
 }
 </script>
 
 <style scoped>
-.signRule{
+.template{
   width: 100%;
   height: 100%;
 }

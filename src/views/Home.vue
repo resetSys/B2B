@@ -71,12 +71,59 @@
             </el-submenu>
             <el-submenu index="5">
               <template slot="title">
-                <i class="iconfont"></i>
+                <i class="el-icon-eleme"></i>
                 <span>签到管理</span>
               </template>
               <el-menu-item-group>
                 <el-menu-item index="signRule">签到规则</el-menu-item>
                 <el-menu-item index="signFun">签到功能</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="6">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>主题活动</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="themeTem">主题活动模板</el-menu-item>
+                <el-menu-item index="themePro">主题商品组合</el-menu-item>
+                <el-menu-item index="template">模板绑定</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="7">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>商品管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="productList">商品列表</el-menu-item>
+                <el-menu-item index="productClassify">商品分类</el-menu-item>
+                <el-menu-item index="giftList">礼品列表</el-menu-item>
+                <el-menu-item index="integralGoods">积分商品</el-menu-item>
+                <el-menu-item index="controlGoods">控销商品</el-menu-item>
+                <el-menu-item index="GetGoods">商品到货提醒</el-menu-item>
+                <el-menu-item index="RecommendGoods">商品推荐管理</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="8">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>促销管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="schemes">方案列表</el-menu-item>
+                <el-menu-item index="single">单品方案设计</el-menu-item>
+                <el-menu-item index="group">组合方案设计</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="9">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>优惠券管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="coupons">优惠券列表</el-menu-item>
+                <el-menu-item index="giveOut">优惠券下发</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
