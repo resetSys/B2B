@@ -4,7 +4,10 @@
       <el-aside width="200px" style="background-color:#545c64;">
         <el-scrollbar class="scrollbar">
           <div class="userInfo" style="display:none;">
-            <el-avatar class="userInfo-avg" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+            <el-avatar
+              class="userInfo-avg"
+              src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            ></el-avatar>
             <span class="userInfo-name">管理员</span>
             <div class="userInfo-con">
               <span>
@@ -24,7 +27,8 @@
             active-text-color="#ffd04b"
             unique-opened
             default-active=""
-            router>
+            router
+          >
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-setting"></i>
@@ -55,7 +59,9 @@
                 <el-menu-item index="memList">会员列表</el-menu-item>
                 <el-menu-item index="certExpired">证书过期管理</el-menu-item>
                 <el-menu-item index="registAudit">注册审核管理</el-menu-item>
-                <el-menu-item index="registCertificate">注册资质管理</el-menu-item>
+                <el-menu-item index="registCertificate"
+                  >注册资质管理</el-menu-item
+                >
                 <el-menu-item index="memClassify">会员分类管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
@@ -126,6 +132,60 @@
                 <el-menu-item index="giveOut">优惠券下发</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
+            <el-submenu index="10">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>订单管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="orderList">订单列表</el-menu-item>
+                <el-menu-item index="expenseWater">消费流水列表</el-menu-item>
+                <el-menu-item index="integralList">积分订单列表</el-menu-item>
+                <el-menu-item index="integralWater">积分流水列表</el-menu-item>
+                <el-menu-item index="retreatAudit">退单审核</el-menu-item>
+                <el-menu-item index="refundRequest">退款单申请</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="11">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>评论管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="commentAduit">商品评论审核</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="12">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>专区及品牌维护</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="prefectureList">品牌列表管理</el-menu-item>
+                <el-menu-item index="pharmacyZone">药店专区管理</el-menu-item>
+                <el-menu-item index="outpatientZone">门诊专区管理</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="13">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>抽奖管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="recorded">中奖记录</el-menu-item>
+                <el-menu-item index="prizeRule">抽奖规则</el-menu-item>
+                <el-menu-item index="prizeList">奖品列表</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="14">
+              <template slot="title">
+                <i class="el-icon-eleme"></i>
+                <span>日志管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="logIp">用户IP捕捉</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
           </el-menu>
         </el-scrollbar>
       </el-aside>
@@ -150,6 +210,20 @@
                 </el-tab-pane>
               </el-tabs>
             </div> -->
+            <!-- 日间夜间模式 -->
+            <div class="theme-color">
+              <transition
+                name="fade"
+                mode="out-in"
+                appear
+                appear-class="custom-appear-class"
+                appear-to-class="custom-appear-to-class"
+                appear-active-class="custom-appear-active-class"
+                >
+                <span key="day" v-if="isDay" class="theme-day" @click="changeTheme"></span>
+                <span key="night" v-else class="theme-night" @click="changeTheme"></span>
+              </transition>
+            </div>
             <!-- 用户头像 -->
             <el-dropdown>
               <el-avatar
@@ -172,35 +246,41 @@ export default {
   name: "Home",
   data() {
     return {
-      navList:[
+      navList: [
         {
-          title:"导航1",
-          childs:[
+          title: "导航1",
+          childs: [
             {
-              title:"子导航1",
-              path:"item1"
+              title: "子导航1",
+              path: "item1",
             },
             {
-              title:"子导航2",
-              path:"item2"
-            }
-          ]
-        }
+              title: "子导航2",
+              path: "item2",
+            },
+          ],
+        },
       ],
-      tabList:[
+      tabList: [
         {
-          title:"子导航1",
-          path:"item1"
+          title: "子导航1",
+          path: "item1",
         },
         {
-          title:"子导航2",
-          path:"item2"
-        }
-      ]
+          title: "子导航2",
+          path: "item2",
+        },
+      ],
+      isDay: true, //日间模式
     };
   },
   components: {},
   mounted() {},
+  methods: {
+    changeTheme() {
+      this.isDay = !this.isDay;
+    },
+  },
 };
 </script>
 
@@ -215,7 +295,7 @@ export default {
   height: 100%;
 }
 //用户信息
-.userInfo{
+.userInfo {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -227,16 +307,16 @@ export default {
   margin-left: -7px;
   border-bottom: 0.5px solid #dcdcdc;
 }
-.userInfo-avg{
+.userInfo-avg {
   width: 100px;
   height: 100px;
 }
-.userInfo-name{
+.userInfo-name {
   font-size: 20px;
   color: #fff;
   margin-top: 10px;
 }
-.userInfo-con{
+.userInfo-con {
   display: flex;
   width: 120px;
   justify-content: space-around;
@@ -271,5 +351,47 @@ export default {
 //navMenu样式
 .el-scrollbar__view >>> .el-submenu__title {
   text-align: left;
+}
+//主题切换
+.theme-color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 40px;
+  margin-right: 20px;
+  overflow: hidden;
+}
+.theme-day {
+  background: url("../assets/home/day.png") no-repeat center;
+}
+.theme-night {
+  background: url("../assets/home/night.png") no-repeat center;
+}
+.theme-night,.theme-day{
+  width: 20px;
+  height: 20px;
+  background-size: 100% 100%;
+  transition: transform 0.7s;
+}
+//过度动画
+.fade-enter{//开始进入
+  transform: translateY(-35px);
+}
+.fade-enter-to{//进入完毕
+  transform: translateY(0px);
+}
+.fade-leave{//开始离开
+  transform: translateY(0px);
+}
+.fade-leave-to{//离开完毕
+  transform: translateY(35px);
+}
+//进入时显现
+.custom-appear-class{
+  transform: scale(0,0);
+}
+.custom-appear-to-class{
+  transform: scale(20px,20px);
 }
 </style>

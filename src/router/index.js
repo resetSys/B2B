@@ -42,6 +42,26 @@ const Group = () => import("@/views/child/scheme/Group.vue");
 //优惠券管理
 const Coupons = () => import("@/views/child/coupon/Coupons.vue");
 const GiveOut = () => import("@/views/child/coupon/GiveOut.vue");
+//订单管理
+const OrderList = () => import("@/views/child/order/OrderList.vue");
+const ExpenseWater = () => import("@/views/child/order/ExpenseWater.vue");
+const IntegralList = () => import("@/views/child/order/IntegralList.vue");
+const IntegralWater = () => import("@/views/child/order/IntegralWater.vue");
+const RetreatAudit = () => import("@/views/child/order/RetreatAudit.vue");
+const RefundRequest = () => import("@/views/child/order/RefundRequest.vue");
+//专区及品牌维护
+const CommentAduit = () => import("@/views/child/comment/CommentAduit.vue");
+//评论管理
+const PrefectureList = () => import("@/views/child/prefecture/PrefectureList.vue");
+const PharmacyZone = () => import("@/views/child/prefecture/PharmacyZone.vue");
+const OutpatientZone = () => import("@/views/child/prefecture/OutpatientZone.vue");
+//抽奖管理
+const PrizeList = () => import("@/views/child/lottery/PrizeList.vue");
+const PrizeRule = () => import("@/views/child/lottery/PrizeRule.vue");
+const Recorded = () => import("@/views/child/lottery/Recorded.vue");
+//日志管理
+const LogIp = () => import("@/views/child/log/LogIp.vue");
+
 
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -245,6 +265,90 @@ const routes = [
         component:GiveOut,
         meta:{
           title:"优惠券下发"
+        }
+      },{
+        path:"orderList",
+        component:OrderList,
+        meta:{
+          title:"订单列表"
+        }
+      },{
+        path:"expenseWater",
+        component:ExpenseWater,
+        meta:{
+          title:"消费流水列表"
+        }
+      },{
+        path:"integralList",
+        component:IntegralList,
+        meta:{
+          title:"积分订单列表"
+        }
+      },{
+        path:"integralWater",
+        component:IntegralWater,
+        meta:{
+          title:"积分流水列表"
+        }
+      },{
+        path:"retreatAudit",
+        component:RetreatAudit,
+        meta:{
+          title:"退单审核"
+        }
+      },{
+        path:"refundRequest",
+        component:RefundRequest,
+        meta:{
+          title:"退款单申请"
+        }
+      },{
+        path:"commentAduit",
+        component:CommentAduit,
+        meta:{
+          title:"商品评论审核"
+        }
+      },{
+        path:"prefectureList",
+        component:PrefectureList,
+        meta:{
+          title:"品牌列表管理"
+        }
+      },{
+        path:"pharmacyZone",
+        component:PharmacyZone,
+        meta:{
+          title:"药店专区管理"
+        }
+      },{
+        path:"outpatientZone",
+        component:OutpatientZone,
+        meta:{
+          title:"门诊专区管理"
+        }
+      },{
+        path:"prizeList",
+        component:PrizeList,
+        meta:{
+          title:"奖品列表"
+        }
+      },{
+        path:"prizeRule",
+        component:PrizeRule,
+        meta:{
+          title:"抽奖规则"
+        }
+      },{
+        path:"recorded",
+        component:Recorded,
+        meta:{
+          title:"中奖记录"
+        }
+      },{
+        path:"logIp",
+        component:LogIp,
+        meta:{
+          title:"用户IP捕捉记录"
         }
       }
     ]

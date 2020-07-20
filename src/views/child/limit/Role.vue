@@ -2,7 +2,7 @@
   <!-- 注册审核管理 -->
   <div class="role">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['权限管理','角色管理']">
+    <crumbs-bar :crumbsList="['权限管理',$route.meta.title]">
       <template slot="controls">
         <el-button type="danger" icon="el-icon-document-delete">删除</el-button>
         <el-button type="primary" icon="el-icon-document-add"
@@ -13,14 +13,14 @@
     <search-bar>
       <template>
         <el-select placeholder="是否启用" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
-          <el-option label="已启用" value="已启用"></el-option>
-          <el-option label="未启用" value="未启用"></el-option>
+          <el-option label="全部" value=""></el-option>
+          <el-option label="已启用" value=""></el-option>
+          <el-option label="未启用" value=""></el-option>
         </el-select>
         <el-select placeholder="类型" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
-          <el-option label="商城后台" value="商城后台"></el-option>
-          <el-option label="业务通APP" value="业务通APP"></el-option>
+          <el-option label="全部" value=""></el-option>
+          <el-option label="商城后台" value=""></el-option>
+          <el-option label="业务通APP" value=""></el-option>
         </el-select>
         <el-input style="width:200px;margin-right:5px" clearable
           placeholder="输入编号/名称"></el-input>

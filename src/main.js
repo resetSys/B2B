@@ -2,8 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from "@/router"
 import store from "@/store"
+//elementUI框架
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+//富文本编辑
 import VueQuillEditor from "vue-quill-editor";
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
