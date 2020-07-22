@@ -1,14 +1,14 @@
 /* element默认样式修改 */
 /* 修改navMenu默认样式 */
+/** 一级导航菜单的title */
 .el-submenu__title{
-  text-align: left;
+  padding-left: 15px !important;
 }
+/** 二级导航菜单标题 */
 .el-menu-item-group__title{
   display: none;
 }
-.el-menu-item{
-  text-align: left;
-}
+
 /* 解决scrollbar横向溢出 */
 .el-scrollbar__wrap{
   overflow-x: hidden;
@@ -34,6 +34,9 @@
 /* 注册表单drawer header content 和 footer */
 .el-drawer{
   min-width: 300px;
+}
+.el-drawer__body{
+  height: 100%;
 }
 .drawer-header,.drawer-footer{
   display: flex;

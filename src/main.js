@@ -10,7 +10,9 @@ import VueQuillEditor from "vue-quill-editor";
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
-  
+//添加被动事件监听器
+import 'default-passive-events';
+
 Vue.use(VueQuillEditor);
 Vue.use(ElementUI,{ size: 'small', zIndex: 3000 });
 // import {

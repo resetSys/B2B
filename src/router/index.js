@@ -61,7 +61,26 @@ const PrizeRule = () => import("@/views/child/lottery/PrizeRule.vue");
 const Recorded = () => import("@/views/child/lottery/Recorded.vue");
 //日志管理
 const LogIp = () => import("@/views/child/log/LogIp.vue");
-
+//用户行为分析
+const Collect = () => import("@/views/child/analyze/Collect.vue");
+const OrderFrequency = () => import("@/views/child/analyze/OrderFrequency.vue");
+const OrderSource = () => import("@/views/child/analyze/OrderSource.vue");
+const OrderTime = () => import("@/views/child/analyze/OrderTime.vue");
+const SearchFrequency = () => import("@/views/child/analyze/SearchFrequency.vue");
+const ShopCart = () => import("@/views/child/analyze/ShopCart.vue");
+const TypePay = () => import("@/views/child/analyze/TypePay.vue");
+const UnitPrice = () => import("@/views/child/analyze/UnitPrice.vue");
+//图片管理
+const ImgMan = () => import("@/views/child/image/ImgMan.vue");
+//消息推送
+const InformMan = () => import("@/views/child/inform/InformMan.vue");
+//咨询管理
+const AdvisoryMan = () => import("@/views/child/advisory/AdvisoryMan.vue");
+const Helps = () => import("@/views/child/advisory/Helps.vue");
+//业务员管理
+const GroupMembers = () => import("@/views/child/salesman/GroupMembers.vue");
+const SalesmanList = () => import("@/views/child/salesman/SalesmanList.vue");
+const SalesmanOrderList = () => import("@/views/child/salesman/SalesmanOrderList.vue");
 
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -349,6 +368,96 @@ const routes = [
         component:LogIp,
         meta:{
           title:"用户IP捕捉记录"
+        }
+      },{
+        path:"collect",
+        component:Collect,
+        meta:{
+          title:"收藏统计"
+        }
+      },{
+        path:"orderFrequency",
+        component:OrderFrequency,
+        meta:{
+          title:"下单频率分析"
+        }
+      },{
+        path:"orderSource",
+        component:OrderSource,
+        meta:{
+          title:"订单来源统计"
+        }
+      },{
+        path:"orderTime",
+        component:OrderTime,
+        meta:{
+          title:"下单时间统计"
+        }
+      },{
+        path:"searchFrequency",
+        component:SearchFrequency,
+        meta:{
+          title:"搜索频率分析"
+        }
+      },{
+        path:"shopCart",
+        component:ShopCart,
+        meta:{
+          title:"购物车商品分析"
+        }
+      },{
+        path:"typePay",
+        component:TypePay,
+        meta:{
+          title:"支付类型统计"
+        }
+      },{
+        path:"unitPrice",
+        component:UnitPrice,
+        meta:{
+          title:"客单价统计"
+        }
+      },{
+        path:"imgMan",
+        component:ImgMan,
+        meta:{
+          title:"图片管理"
+        }
+      },{
+        path:"informMan",
+        component:InformMan,
+        meta:{
+          title:"推送管理"
+        }
+      },{
+        path:"advisoryMan",
+        component:AdvisoryMan,
+        meta:{
+          title:"咨询管理"
+        }
+      },{
+        path:"helps",
+        component:Helps,
+        meta:{
+          title:"帮助中心"
+        }
+      },{
+        path:"groupMembers",
+        component:GroupMembers,
+        meta:{
+          title:"会员分组管理"
+        }
+      },{
+        path:"salesmanList",
+        component:SalesmanList,
+        meta:{
+          title:"业务员列表"
+        }
+      },{
+        path:"salesmanOrderList",
+        component:SalesmanOrderList,
+        meta:{
+          title:"业务员订单列表"
         }
       }
     ]

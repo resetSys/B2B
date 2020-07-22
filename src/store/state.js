@@ -2,7 +2,6 @@ export default {
   closeOnClickModal:false,//是否点击modal关闭
   closeOnPresEscape:false,//是否esc关闭dialog
   dialogShowClose:false,
-  dialogTop:"45vh",
   loading:false,
   nations:['汉族','蒙古族','回族','藏族','维吾尔族','苗族','彝族','壮族',
     '布依族','朝鲜族','满族','侗族','瑶族','白族','土家族','哈尼族','哈萨克族'

@@ -1,8 +1,12 @@
 <template>
-  <div class="home">
+  <div class="home" v-loading="$store.state.loading">
     <el-container style="width:100%;height:100%;">
-      <el-aside width="200px" style="background-color:#545c64;">
+      <el-aside ref="aside" class="aside" :width="asideWidth">
+        <!-- 展开关闭菜单 -->
+        <i v-if="isCollapse" class="open iconfont icon-open" @click="changeCollapse(false)"></i>
+        <i v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
         <el-scrollbar class="scrollbar">
+          <!-- 用户信息 -->
           <div class="userInfo" style="display:none;">
             <el-avatar
               class="userInfo-avg"
@@ -20,6 +24,7 @@
               </span>
             </div>
           </div>
+          <!-- 导航菜单 -->
           <el-menu
             class=""
             background-color="#545c64"
@@ -27,8 +32,8 @@
             active-text-color="#ffd04b"
             unique-opened
             default-active=""
-            router
-          >
+            :collapse="isCollapse"
+            router>
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-setting"></i>
@@ -77,7 +82,7 @@
             </el-submenu>
             <el-submenu index="5">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-sign"></i>
                 <span>签到管理</span>
               </template>
               <el-menu-item-group>
@@ -87,7 +92,7 @@
             </el-submenu>
             <el-submenu index="6">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-themeActive"></i>
                 <span>主题活动</span>
               </template>
               <el-menu-item-group>
@@ -98,7 +103,7 @@
             </el-submenu>
             <el-submenu index="7">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-product"></i>
                 <span>商品管理</span>
               </template>
               <el-menu-item-group>
@@ -113,7 +118,7 @@
             </el-submenu>
             <el-submenu index="8">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-promotion"></i>
                 <span>促销管理</span>
               </template>
               <el-menu-item-group>
@@ -124,7 +129,7 @@
             </el-submenu>
             <el-submenu index="9">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-coupon"></i>
                 <span>优惠券管理</span>
               </template>
               <el-menu-item-group>
@@ -134,7 +139,7 @@
             </el-submenu>
             <el-submenu index="10">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-orderForm"></i>
                 <span>订单管理</span>
               </template>
               <el-menu-item-group>
@@ -148,7 +153,7 @@
             </el-submenu>
             <el-submenu index="11">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-FontAwesomecommentdots"></i>
                 <span>评论管理</span>
               </template>
               <el-menu-item-group>
@@ -157,7 +162,7 @@
             </el-submenu>
             <el-submenu index="12">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-prefecture"></i>
                 <span>专区及品牌维护</span>
               </template>
               <el-menu-item-group>
@@ -168,7 +173,7 @@
             </el-submenu>
             <el-submenu index="13">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-lottery"></i>
                 <span>抽奖管理</span>
               </template>
               <el-menu-item-group>
@@ -179,11 +184,66 @@
             </el-submenu>
             <el-submenu index="14">
               <template slot="title">
-                <i class="el-icon-eleme"></i>
+                <i class="iconfont icon-log"></i>
                 <span>日志管理</span>
               </template>
               <el-menu-item-group>
                 <el-menu-item index="logIp">用户IP捕捉</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="15">
+              <template slot="title">
+                <i class="iconfont icon-analyze"></i>
+                <span>行为分析</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="searchFrequency">搜索频率分析</el-menu-item>
+                <el-menu-item index="shopCart">购物车商品分析</el-menu-item>
+                <el-menu-item index="orderTime">下单时间统计</el-menu-item>
+                <el-menu-item index="orderFrequency">下单频率统计</el-menu-item>
+                <el-menu-item index="collect">收藏统计</el-menu-item>
+                <el-menu-item index="unitPrice">客单价统计</el-menu-item>
+                <el-menu-item index="orderSource">订单来源统计</el-menu-item>
+                <el-menu-item index="typePay">支付类型统计</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="16">
+              <template slot="title">
+                <i class="iconfont icon-image"></i>
+                <span>图片管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="imgMan">图片维护</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="17">
+              <template slot="title">
+                <i class="iconfont icon-pushMsg"></i>
+                <span>消息推送</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="informMan">消息管理</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="18">
+              <template slot="title">
+                <i class="iconfont icon-salesman"></i>
+                <span>咨询管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="advisoryMan">咨询管理</el-menu-item>
+                <el-menu-item index="helps">帮助中心</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="19">
+              <template slot="title">
+                <i class="iconfont icon-advisory"></i>
+                <span>业务员管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="salesmanList">业务员列表</el-menu-item>
+                <el-menu-item index="groupMembers">会员分组管理</el-menu-item>
+                <el-menu-item index="salesmanOrderList">业务员订单列表</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -193,8 +253,12 @@
         <el-header class="home-header" height="50px">
           <div class="header-con">
             <!-- 标签页 -->
-            <!-- <div class="header-con-tabs">
-              <el-tabs type="card" closable>
+            <div class="header-con-tabs">
+              <div class="tab-controls">
+                <span @click="changeOffset(-1)"><i class="el-icon-arrow-left"></i></span>
+                <span @click="changeOffset(1)"><i class="el-icon-arrow-right"></i></span>
+              </div>
+              <el-tabs class="tabs" :style="{'margin-left':offsetLeft,'transition':'margin-left 0.3s'}" type="card" closable>
                 <el-tab-pane
                   style="background-color:red;"
                   v-for="(item, index) in tabList"
@@ -202,14 +266,14 @@
                   :label="'lable' + item.title"
                   :name="'name' + item.title">
                     <span slot="label">
-                      <router-link :to="item.path">
+                      <!-- <router-link :to="item.path"> -->
                         <i class="el-icon-date"></i>
                         {{item.title}}
-                      </router-link>
+                      <!-- </router-link> -->
                     </span>
                 </el-tab-pane>
               </el-tabs>
-            </div> -->
+            </div>
             <!-- 日间夜间模式 -->
             <div class="theme-color">
               <transition
@@ -269,17 +333,54 @@ export default {
         {
           title: "子导航2",
           path: "item2",
-        },
+        },{
+          title: "子导航3",
+          path: "item2",
+        },{
+          title: "子导航4",
+          path: "item2",
+        },{
+          title: "子导航5",
+          path: "item2",
+        },{
+          title: "子导航6",
+          path: "item2",
+        }
       ],
       isDay: true, //日间模式
+      isCollapse:false,
+      asideWidth:'200px',
+      offsetLeft:'0px',//tabs的偏移量
+      offsetIndex:0
     };
   },
   components: {},
   mounted() {},
   methods: {
+    /**改变主题 */
     changeTheme() {
       this.isDay = !this.isDay;
     },
+    /**菜单伸缩展开 */
+    changeCollapse(bool){
+      if (bool) {
+        this.isCollapse = true;
+        this.asideWidth = "auto";
+      } else {
+        this.isCollapse = false;
+        this.asideWidth = "200px";
+      }
+    },
+    /**改变tab偏移量 */
+    changeOffset(num){
+      /**
+        offsetIndex限制不能小于0，不能大于list.length-4
+       */
+      this.offsetIndex += num;
+      this.offsetIndex = this.offsetIndex <= 0 ? 0 : this.offsetIndex;
+      this.offsetIndex = this.offsetIndex >= this.tabList.length - 4 ? 2 : this.offsetIndex;
+      this.offsetLeft = -120*this.offsetIndex + 'px';
+    }
   },
 };
 </script>
@@ -290,10 +391,31 @@ export default {
   height: 100%;
   background-color: #fff;
 }
+//aside菜单容器
+.aside{
+  position: relative;
+  background-color:#545c64;
+  overflow: visible;
+  transition: width 0.3s;
+}
+.close,.open{
+  position: absolute;
+  top: 52px;
+  font-size: 30px;
+  z-index: 9;
+}
+.close{
+  right: -6px;
+}
+.open{
+  right: -22px;
+}
+
 // navMenu滚动条
 .scrollbar {
   height: 100%;
 }
+
 //用户信息
 .userInfo {
   display: flex;
@@ -326,12 +448,12 @@ export default {
 }
 //头部信息
 .home-header {
+  position: relative;
   border-bottom: 0.5px solid #dcdcdc;
 }
 //头部信息容器
 .header-con {
   display: flex;
-  // justify-content: space-between;
   justify-content: flex-end;
   align-items: center;
   width: 100%;
@@ -340,18 +462,35 @@ export default {
 }
 // tabs标签容器
 .header-con-tabs {
+  position: absolute;
+  left: 5px;
   display: flex;
   align-items: flex-end;
   height: 100%;
   width: 560px;
-  padding-top: 25px;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow: hidden;
 }
-//navMenu样式
-.el-scrollbar__view >>> .el-submenu__title {
-  text-align: left;
+.tab-controls{
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  width: 60px;
+  height: 40px;
+  bottom: 0;
+  z-index: 9;
+  background-color: #fff;
 }
+.tab-controls>span{
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  color: #000;
+}
+
 //主题切换
 .theme-color {
   display: flex;

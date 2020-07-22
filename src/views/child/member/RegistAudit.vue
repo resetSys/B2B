@@ -1,18 +1,18 @@
 <template>
   <div class="registAudit">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['会员管理','注册审核']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['会员管理',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="审核状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.type" placeholder="审核状态" style="width:100px;margin-right:5px" clearable>
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已驳回" value="已驳回"></el-option>
           <el-option label="审核中" value="审核中"></el-option>
           <el-option label="已审核" value="已审核"></el-option>
         </el-select>
-        <el-input style="width:200px;margin-right:5px" clearable
+        <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable
           placeholder="输入编号/名称"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
@@ -76,13 +76,25 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="warning" plain style="padding:2px 3px">规则设置</el-button>
+            <el-button type="warning" plain style="padding:2px 3px"
+              @click="handleAduit">审核</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
+    <el-dialog
+      title="用户审核"
+      :visible.sync="aduitDialog"
+      :close-on-click-modal="$store.state.closeOnClickModal"
+      :close-on-press-escape="$store.state.closeOnPresEscape"
+      width="70%">
+      <el-scrollbar style="height:400px">
+      
+      </el-scrollbar>
+    </el-dialog>
   </div>
 </template>
 
@@ -108,12 +120,47 @@ export default {
         area:"区",
         status:"状态"
       }],
+      /**搜索表单 */
+      searchForm:{
+        name:"",
+        type:""
+      },
+      /**分页数据 */
+      currPage:1,
+      pageSize:0,
+      allPage:0,
+
+      /**审核dialog */
+      aduitDialog:false
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+     /**获取表格 */
+    getTableData(){
+      // this.$store.commit('handleLoding');
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+    },
+
+    /**点击审核按钮 */
+    handleAduit(){
+      this.aduitDialog = true;
+    }
   }
 }
 </script>

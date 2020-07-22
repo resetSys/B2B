@@ -1,5 +1,8 @@
 export default {
-  //修改loading的数据
+  /**
+   * 开启关闭loading
+   * @param {vuex默认参数} state 
+   */
   handleLoding(state){
     state.loading = !state.loading;
   },

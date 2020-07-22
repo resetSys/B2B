@@ -2,12 +2,12 @@
   <!-- 证书过期管理 -->
   <div class="certExpired">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['会员管理','证书过期管理']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['会员管理',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-input style="width:200px;margin-right:5px" clearable
+        <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable
           placeholder="输入单位编号/单位名称"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
@@ -19,11 +19,6 @@
         stripe
         tooltip-effect="dark"
         style="width: 100%">
-        <el-table-column
-          type="selection"
-          align="center"
-          width="55">
-        </el-table-column>
         <el-table-column
           align="center"
           prop="companyId"
@@ -144,17 +139,11 @@
           align="center"
           show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          align="center">
-          <template>
-            <el-button type="primary" plain style="padding:2px 3px;">规则设置</el-button>
-          </template>
-        </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -195,12 +184,38 @@ export default {
         FCP:"食品流通许可证",//食品流通许可证
         PA:"委托书"//委托书
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:0,
+      allPage:0,
+      /**搜索表单 */
+      searchForm:{
+        name:""
+      }
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar,
+  },
+  methods:{
+    /**获取表格 */
+    getTableData(){
+      // this.$store.commit('handleLoding');
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+    },
   }
 }
 </script>

@@ -37,16 +37,18 @@ export default {
 
   },
   methods:{
+    /**点击刷新 */
     handleRefresh(){
       //添加防抖
       this.isRefresh = true;
       if(this.timer){
         window.clearTimeout(this.timer);
       } else {
-        window.console.log("执行刷新");
+        // window.console.log("执行刷新");
+        this.$emit('refresh');
       }
       this.timer = window.setTimeout(()=>{
-        window.console.log("执行setTimeOut")
+        // window.console.log("执行setTimeOut")
         this.isRefresh = false;
         window.clearTimeout(this.timer);
         this.timer = null;
