@@ -100,6 +100,7 @@ export default {
 .signRule {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 .editer {
   width: 80%;

@@ -35,6 +35,7 @@ const IntegralGoods = () => import("@/views/child/product/IntegralGoods.vue");
 const ControlGoods = () => import("@/views/child/product/ControlGoods.vue");
 const GetGoods = () => import("@/views/child/product/GetGoods.vue");
 const RecommendGoods = () => import("@/views/child/product/RecommendGoods.vue");
+const AddConGoods = () => import("@/views/child/product/AddConGoods.vue");
 //促销管理
 const Schemes = () => import("@/views/child/scheme/Schemes.vue");
 const Single = () => import("@/views/child/scheme/Single.vue");
@@ -248,6 +249,12 @@ const routes = [
         component:RecommendGoods,
         meta:{
           title:"推荐商品管理"
+        }
+      },{
+        path:"addConGoods",
+        component:AddConGoods,
+        meta:{
+          title:"添加控销商品"
         }
       },{
         path:"getGoods",

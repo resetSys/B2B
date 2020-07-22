@@ -1,17 +1,22 @@
 <template>
+  <!-- 控销产品 -->
   <div class="controlGoods">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['商品管理','控销产品']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['商品管理',$route.meta.title]">
+      <template slot="controls">
+        <el-button type="primary" icon="el-icon-circle-plus-outline"
+          @click="handleAdd">新增控销商品</el-button>
+      </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="商品状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.status" placeholder="商品状态" style="width:100px;margin-right:5px" clearable>
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已上架" value="已上架"></el-option>
           <el-option label="已下架" value="已下架"></el-option>
         </el-select>
-        <el-input style="width:200px;margin-right:5px" clearable
+        <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable
           placeholder="输入编号/名称"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
@@ -23,11 +28,6 @@
         stripe
         tooltip-effect="dark"
         style="width: 100%">
-        <el-table-column
-          type="selection"
-          align="center"
-          width="55">
-        </el-table-column>
         <el-table-column
           align="center"
           prop="organName"
@@ -97,14 +97,18 @@
         <el-table-column
           label="操作"
           align="center">
-          <template>
-            <el-button type="danger" style="padding:2px 3px;" plain>下架</el-button>
+          <template slot-scope="scope">
+            <el-button type="danger" style="padding:2px 3px;" plain
+              @click="handleOut(scope.row)">下架</el-button>
+            <el-button v-if="false" type="success" style="padding:2px 3px;" plain
+              @click="handlePut(scope.row)">上架</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -134,12 +138,59 @@ export default {
         saleableArea:"可销区域",
         notSaleableArea:"不可销区域"
       }],
+      /**搜索表单 */
+      searchForm:{
+        status:"",
+        name:""
+      },
+      /**分页数据 */
+      currPage:1,
+      pageSize:0,
+      allPage:0,
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+    /**获取表格 */
+    getTableData(){
+      // this.$store.commit('handleLoding');
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+    },
+
+    /**点击新增 */
+    handleAdd(){
+      this.$router.push("addConGoods");
+    },
+    /**点击上架 */
+    handlePut(){
+      this.$message({
+        message: '点击上架',
+        type: 'info'
+      });
+    },
+    /**点击下架 */
+    handleOut(){
+      this.$message({
+        message: '点击下架',
+        type: 'info'
+      });
+    }
+    
   }
 }
 </script>

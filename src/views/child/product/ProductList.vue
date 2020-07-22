@@ -5,9 +5,11 @@
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['商品列表',$route.meta.title]">
       <template slot="controls">
         <el-button type="danger" icon="el-icon-delete"
-          :disabled="selectedList.length==0">批量删除</el-button>
+          :disabled="selectedList.length==0" @click="handleDel">批量删除</el-button>
         <el-button type="primary" icon="el-icon-s-order"
-          :disabled="selectedList.length==0">批量上架</el-button>
+          :disabled="selectedList.length==0" @click="handlePut">批量上架</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline"
+          @click="handleAdd">添加商品</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
@@ -113,10 +115,9 @@
         <el-table-column
           label="操作"
           align="center">
-          <template>
-            <el-button type="danger" style="padding:2px 3px;" plain>下架</el-button>
+          <template slot-scope="scope">
             <el-button type="warning" style="padding:2px 3px;" plain
-              @click="addDrawer = true">编辑</el-button>
+              @click="handleEdit(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -127,9 +128,10 @@
     <!-- 商品编辑 -->
     <el-dialog
       title="商品编辑"
-      :visible.sync="addDrawer"
+      :visible.sync="addDialog"
       :close-on-click-modal="$store.state.closeOnClickModal"
       :close-on-press-escape="$store.state.closeOnPresEscape"
+      @close="clearForm"
       width="70%">
       <el-scrollbar style="height:300px;">
         <div class="drawer-form-wrap">
@@ -200,8 +202,8 @@
         </div>
       </el-scrollbar>
       <div slot="footer" style="text-align:center;">
-        <el-button type="primary">确定</el-button>
-        <el-button type="info">取消</el-button>
+        <el-button type="primary" @click="submit">确定</el-button>
+        <el-button type="info" @click="clearForm">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -248,7 +250,7 @@ export default {
         name:""
       },
       /** 商品表单drawer*/
-      addDrawer:false,
+      addDialog:false,
       /**商品表单 */
       //所属分类 推荐类型 商品名称 助记码 通用名 商品规格 包装单位 中包装 计量规格
       //生产厂家 批准文号 剂型 类别 存储条件 建议零售价 品牌 封面图片 排序值 商品说明书
@@ -328,11 +330,51 @@ export default {
       window.console.log(section)
       this.selectedList = section;
     },
-    
     /**编辑商品数据 */
     handleEdit(){
-    
+      this.addDialog = true;
     },
+    /**批量删除 */
+    handleDel(){
+      this.$message({
+        message: '批量删除',
+        type: 'info'
+      });
+    },
+    /**批量上架 */
+    handlePut(){
+      this.$message({
+        message: '批量上架',
+        type: 'info'
+      });
+    },
+    /**添加新增 */
+    handleAdd(){
+      this.$message({
+        message: '添加新增按钮',
+        type: 'info'
+      });
+    },
+    /**清空表单信息 */
+    clearForm(){
+      this.$refs['goodForm'].resetFields();
+      for (const key in this.goodForm) {
+        this.goodForm[key] = null;
+      }
+      this.addDialog = false;
+    },
+    /**提交新增分类 */
+    submit(){
+      this.$refs['goodForm'].validate((valid) => {
+        if (valid) {
+          this.$message({
+            message: '执行提交',
+            type: 'info'
+          });
+        }
+      });
+    },
+
     /**图片上传成功返回url */
     imgFallback(src){
       this.goodForm.cover = src;

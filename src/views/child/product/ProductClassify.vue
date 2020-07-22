@@ -292,6 +292,29 @@ export default {
     hanCurrChange2(val){
       this.currPage2 = val;
     },
+    /**新增分类 */
+    handleAdd(){
+      this.addDrawer = true;
+    },
+    /**关闭drawer 清空表单信息 */
+    clearForm(){
+      this.$refs['addForm'].resetFields();
+      for (const key in this.addForm) {
+        this.addForm[key] = null;
+      }
+      this.addDrawer = false;
+    },
+    /**提交新增分类 */
+    submit(){
+      this.$refs['addForm'].validate((valid) => {
+        if (valid) {
+          this.$message({
+            message: '执行提交',
+            type: 'info'
+          });
+        }
+      });
+    },
 
     /**子类删除 */
     handleDel2(){
@@ -307,28 +330,6 @@ export default {
     handleEdit2(){
     
     },
-    
-    /**新增分类 */
-    handleAdd(){
-      this.addDrawer = true;
-    },
-    /**关闭drawer 清空表单信息 */
-    clearForm(){
-      this.$refs['addForm'].resetFields();
-      this.addDrawer = false;
-    },
-    /**提交新增分类 */
-    submit(){
-      this.$refs['addForm'].validate((valid) => {
-        if (valid) {
-          this.$message({
-            message: '执行提交',
-            type: 'info'
-          });
-        }
-      });
-    },
-    
   }
 }
 </script>

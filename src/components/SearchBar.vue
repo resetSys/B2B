@@ -28,6 +28,6 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
   background-color: #ffffff;
-  border-bottom: .5px solid #dcdcdc;
+  border-bottom: 0.5px solid #dcdcdc;
 }
 </style>
