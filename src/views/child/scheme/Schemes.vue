@@ -2,12 +2,12 @@
   <!-- 方案列表 -->
   <div class="schemes">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['促销管理','方案列表']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['促销管理',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="方案类型" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.type" placeholder="方案类型" style="width:100px;margin-right:5px" clearable>
           <el-option label="全部" value="全部"></el-option>
           <el-option label="换购" value="换购"></el-option>
           <el-option label="买赠" value="买赠"></el-option>
@@ -15,20 +15,25 @@
           <el-option label="抢购" value="抢购"></el-option>
           <el-option label="效期" value="效期"></el-option>
         </el-select>
-        <el-select placeholder="方案状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.status" placeholder="方案状态" style="width:100px;margin-right:5px" clearable>
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已启用" value="已启用"></el-option>
           <el-option label="未启用" value="未启用"></el-option>
           <el-option label="已删除" value="已删除"></el-option>
         </el-select>
         <el-date-picker
-          style="width:300px;margin-right:5px;"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
+          v-model="searchForm.start"
+          style="width:200px;margin-right:5px;"
+          type="date"
+          placeholder="开始日期">
         </el-date-picker>
-        <el-input style="width:200px;margin-right:5px" clearable
+        <el-date-picker
+          v-model="searchForm.end"
+          style="width:200px;margin-right:5px;"
+          type="date"
+          placeholder="结束日期">
+        </el-date-picker>
+        <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable
           placeholder="输入编号/方案名称"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
@@ -40,11 +45,6 @@
         stripe
         tooltip-effect="dark"
         style="width: 100%">
-        <el-table-column
-          type="selection"
-          align="center"
-          width="55">
-        </el-table-column>
         <el-table-column
           align="center"
           prop="number"
@@ -92,12 +92,15 @@
           align="center">
           <template>
             <el-button type="danger" style="padding:2px 3px;" plain>下架</el-button>
+            <el-button v-if="false" type="success" style="padding:2px 3px;" plain>上架</el-button>
+            <el-button v-if="false" type="danger" style="padding:2px 3px;" plain>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -121,12 +124,42 @@ export default {
         create:"添加时间",
         status:"状态"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:0,
+      allPage:0,
+      /**搜索表单 */
+      searchForm:{
+        type:"",
+        status:"",
+        start:"",
+        end:"",
+        name:""
+      }
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+     /**获取表格 */
+    getTableData(){
+      // this.$store.commit('handleLoding');
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+    },
   }
 }
 </script>
