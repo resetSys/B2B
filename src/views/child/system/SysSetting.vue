@@ -120,7 +120,6 @@ export default {
     crumbsBar,
     Pagination
   },
-  
 }
 </script>
 

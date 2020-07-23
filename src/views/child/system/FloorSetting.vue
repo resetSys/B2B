@@ -109,7 +109,7 @@ export default {
   components: {
     crumbsBar,
     Pagination
-  }
+  },
 }
 </script>
 

@@ -59,6 +59,7 @@ export default {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  margin-bottom: -13px;
 }
 .avatar-uploader .el-upload:hover {
   border-color: #409EFF;

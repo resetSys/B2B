@@ -131,9 +131,6 @@ export default {
       this.formData.img = src;
     }
   },
-  mounted(){
-    
-  }
 }
 </script>
 

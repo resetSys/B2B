@@ -3,8 +3,16 @@
     <el-container style="width:100%;height:100%;">
       <el-aside ref="aside" class="aside" :width="asideWidth">
         <!-- 展开关闭菜单 -->
-        <i v-if="isCollapse" class="open iconfont icon-open" @click="changeCollapse(false)"></i>
-        <i v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
+        <i
+          v-if="isCollapse"
+          class="open iconfont icon-open"
+          @click="changeCollapse(false)"
+        ></i>
+        <i
+          v-else
+          class="close iconfont icon-close"
+          @click="changeCollapse(true)"
+        ></i>
         <el-scrollbar class="scrollbar">
           <!-- 用户信息 -->
           <div class="userInfo" style="display:none;">
@@ -26,15 +34,35 @@
           </div>
           <!-- 导航菜单 -->
           <el-menu
-            class=""
+            class
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
             unique-opened
-            default-active=""
+            default-active
             :collapse="isCollapse"
-            router>
-            <el-submenu index="1">
+            router
+          >
+            <el-submenu
+              v-for="(menu, index) in navList"
+              :key="index"
+              :index="index + 1 + ''"
+            >
+              <template slot="title">
+                <i :class="menu.icon"></i>
+                <span>{{ menu.title }}</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item
+                  v-for="(item, index2) in menu.childs"
+                  :key="index + '-' + index2"
+                  :index="item.path"
+                  @click="handleMenu(item)"
+                  >{{ item.title }}</el-menu-item
+                >
+              </el-menu-item-group>
+            </el-submenu>
+            <!-- <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-setting"></i>
                 <span>系统配置</span>
@@ -64,9 +92,7 @@
                 <el-menu-item index="memList">会员列表</el-menu-item>
                 <el-menu-item index="certExpired">证书过期管理</el-menu-item>
                 <el-menu-item index="registAudit">注册审核管理</el-menu-item>
-                <el-menu-item index="registCertificate"
-                  >注册资质管理</el-menu-item
-                >
+                <el-menu-item index="registCertificate">注册资质管理</el-menu-item>
                 <el-menu-item index="memClassify">会员分类管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
@@ -112,8 +138,8 @@
                 <el-menu-item index="giftList">礼品列表</el-menu-item>
                 <el-menu-item index="integralGoods">积分商品</el-menu-item>
                 <el-menu-item index="controlGoods">控销商品</el-menu-item>
-                <el-menu-item index="GetGoods">商品到货提醒</el-menu-item>
-                <el-menu-item index="RecommendGoods">商品推荐管理</el-menu-item>
+                <el-menu-item index="getGoods">商品到货提醒</el-menu-item>
+                <el-menu-item index="recommendGoods">商品推荐管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="8">
@@ -245,7 +271,7 @@
                 <el-menu-item index="groupMembers">会员分组管理</el-menu-item>
                 <el-menu-item index="salesmanOrderList">业务员订单列表</el-menu-item>
               </el-menu-item-group>
-            </el-submenu>
+            </el-submenu>-->
           </el-menu>
         </el-scrollbar>
       </el-aside>
@@ -255,22 +281,35 @@
             <!-- 标签页 -->
             <div class="header-con-tabs">
               <div class="tab-controls">
-                <span @click="changeOffset(-1)"><i class="el-icon-arrow-left"></i></span>
-                <span @click="changeOffset(1)"><i class="el-icon-arrow-right"></i></span>
+                <span @click="changeOffset(-1)">
+                  <i class="el-icon-arrow-left"></i>
+                </span>
+                <span @click="changeOffset(1)">
+                  <i class="el-icon-arrow-right"></i>
+                </span>
               </div>
-              <el-tabs class="tabs" :style="{'margin-left':offsetLeft,'transition':'margin-left 0.3s'}" type="card" closable>
+              <el-tabs
+                class="tabs"
+                :style="{
+                  'margin-left': offsetLeft,
+                  transition: 'margin-left 0.3s',
+                }"
+                type="card"
+                closable
+                v-model="activeTab"
+                @tab-remove="removeTab"
+              >
                 <el-tab-pane
-                  style="background-color:red;"
                   v-for="(item, index) in tabList"
                   :key="index"
-                  :label="'lable' + item.title"
-                  :name="'name' + item.title">
-                    <span slot="label">
-                      <!-- <router-link :to="item.path"> -->
-                        <i class="el-icon-date"></i>
-                        {{item.title}}
-                      <!-- </router-link> -->
-                    </span>
+                  :label="item.title"
+                  :name="item.name"
+                >
+                  <span slot="label">
+                    <router-link :to="item.path" tag="span">
+                      {{ item.title }}
+                    </router-link>
+                  </span>
                 </el-tab-pane>
               </el-tabs>
             </div>
@@ -283,9 +322,19 @@
                 appear-class="custom-appear-class"
                 appear-to-class="custom-appear-to-class"
                 appear-active-class="custom-appear-active-class"
-                >
-                <span key="day" v-if="isDay" class="theme-day" @click="changeTheme"></span>
-                <span key="night" v-else class="theme-night" @click="changeTheme"></span>
+              >
+                <span
+                  key="day"
+                  v-if="isDay"
+                  class="theme-day"
+                  @click="changeTheme"
+                ></span>
+                <span
+                  key="night"
+                  v-else
+                  class="theme-night"
+                  @click="changeTheme"
+                ></span>
               </transition>
             </div>
             <!-- 用户头像 -->
@@ -299,7 +348,10 @@
             </el-dropdown>
           </div>
         </el-header>
-        <router-view></router-view>
+        <!-- 菜单页面容器 -->
+        <keep-alive :include="keepAliveStr">
+          <router-view></router-view>
+        </keep-alive>
       </el-container>
     </el-container>
   </div>
@@ -310,59 +362,380 @@ export default {
   name: "Home",
   data() {
     return {
+      /**导航菜单数据 */
       navList: [
         {
-          title: "导航1",
+          title: "系统配置",
+          icon: "el-icon-setting",
           childs: [
             {
-              title: "子导航1",
-              path: "item1",
+              title: "系统设置",
+              path: "sysSetting",
             },
             {
-              title: "子导航2",
-              path: "item2",
+              title: "楼层设置",
+              path: "floorSetting",
+            },
+            {
+              title: "推荐专区",
+              path: "recommend",
+            },
+          ],
+        },
+        {
+          title: "权限管理",
+          icon: "iconfont icon-limit",
+          childs: [
+            {
+              title: "管理员管理",
+              path: "admin",
+            },
+            {
+              title: "角色管理",
+              path: "role",
+            },
+          ],
+        },
+        {
+          title: "会员管理",
+          icon: "iconfont icon-member",
+          childs: [
+            {
+              title: "会员列表",
+              path: "memList",
+            },
+            {
+              title: "证书过期管理",
+              path: "certExpired",
+            },
+            {
+              title: "注册审核管理",
+              path: "registAudit",
+            },
+            {
+              title: "注册资质管理",
+              path: "registCertificate",
+            },
+            {
+              title: "会员分类管理",
+              path: "memClassify",
+            },
+          ],
+        },
+        {
+          title: "充值管理",
+          icon: "iconfont icon-topup",
+          childs: [
+            {
+              title: "充值活动列表",
+              path: "topupList",
+            },
+            {
+              title: "充值流水",
+              path: "topupWater",
+            },
+          ],
+        },
+        {
+          title: "签到管理",
+          icon: "iconfont icon-sign",
+          childs: [
+            {
+              title: "签到规则",
+              path: "signRule",
+            },
+            {
+              title: "签到功能",
+              path: "signFun",
+            },
+          ],
+        },
+        {
+          title: "主题活动",
+          icon: "iconfont icon-themeActive",
+          childs: [
+            {
+              title: "主题活动模板",
+              path: "themeTem",
+            },
+            {
+              title: "主题商品组合",
+              path: "themePro",
+            },
+            {
+              title: "模板绑定",
+              path: "template",
+            },
+          ],
+        },
+        {
+          title: "商品管理",
+          icon: "iconfont icon-product",
+          childs: [
+            {
+              title: "商品列表",
+              path: "productList",
+            },
+            {
+              title: "商品分类",
+              path: "productClassify",
+            },
+            {
+              title: "礼品列表",
+              path: "giftList",
+            },
+            {
+              title: "积分商品",
+              path: "integralGoods",
+            },
+            {
+              title: "控销商品",
+              path: "controlGoods",
+            },
+            {
+              title: "商品到货提醒",
+              path: "getGoods",
+            },
+            {
+              title: "商品推荐管理",
+              path: "recommendGoods",
+            },
+          ],
+        },
+        {
+          title: "促销管理",
+          icon: "iconfont icon-promotion",
+          childs: [
+            {
+              title: "方案列表",
+              path: "schemes",
+            },
+            {
+              title: "单品方案设计",
+              path: "single",
+            },
+            {
+              title: "组合方案设计",
+              path: "group",
+            },
+          ],
+        },
+        {
+          title: "优惠券管理",
+          icon: "iconfont icon-coupon",
+          childs: [
+            {
+              title: "优惠券列表",
+              path: "coupons",
+            },
+            {
+              title: "优惠券下发",
+              path: "giveOut",
+            },
+          ],
+        },
+        {
+          title: "订单管理",
+          icon: "iconfont icon-orderForm",
+          childs: [
+            {
+              title: "订单列表",
+              path: "orderList",
+            },
+            {
+              title: "消费流水列表",
+              path: "expenseWater",
+            },
+            {
+              title: "积分订单列表",
+              path: "integralList",
+            },
+            {
+              title: "积分流水列表",
+              path: "integralWater",
+            },
+            {
+              title: "退单审核",
+              path: "retreatAudit",
+            },
+            {
+              title: "退款单申请",
+              path: "refundRequest",
+            },
+          ],
+        },
+        {
+          title: "评论管理",
+          icon: "iconfont icon-FontAwesomecommentdots",
+          childs: [
+            {
+              title: "商品评论审核",
+              path: "commentAduit",
+            },
+          ],
+        },
+        {
+          title: "专区及品牌维护",
+          icon: "iconfont icon-prefecture",
+          childs: [
+            {
+              title: "品牌列表管理",
+              path: "prefectureList",
+            },
+            {
+              title: "药店专区管理",
+              path: "pharmacyZone",
+            },
+            {
+              title: "门诊专区管理",
+              path: "outpatientZone",
+            },
+          ],
+        },
+        {
+          title: "抽奖管理",
+          icon: "iconfont icon-lottery",
+          childs: [
+            {
+              title: "中奖记录",
+              path: "recorded",
+            },
+            {
+              title: "抽奖规则",
+              path: "prizeRule",
+            },
+            {
+              title: "奖品列表",
+              path: "prizeList",
+            },
+          ],
+        },
+        {
+          title: "日志管理",
+          icon: "iconfont icon-log",
+          childs: [
+            {
+              title: "用户IP捕捉",
+              path: "logIp",
+            },
+          ],
+        },
+        {
+          title: "行为分析",
+          icon: "iconfont icon-analyze",
+          childs: [
+            {
+              title: "搜索频率分析",
+              path: "searchFrequency",
+            },
+            {
+              title: "购物车商品分析",
+              path: "shopCart",
+            },
+            {
+              title: "下单时间统计",
+              path: "orderTime",
+            },
+            {
+              title: "下单频率统计",
+              path: "orderFrequency",
+            },
+            {
+              title: "收藏统计",
+              path: "collect",
+            },
+            {
+              title: "客单价统计",
+              path: "unitPrice",
+            },
+            {
+              title: "订单来源统计",
+              path: "orderSource",
+            },
+            {
+              title: "支付类型统计",
+              path: "typePay",
+            },
+          ],
+        },
+        {
+          title: "图片管理",
+          icon: "iconfont icon-image",
+          childs: [
+            {
+              title: "图片维护",
+              path: "imgMan",
+            },
+          ],
+        },
+        {
+          title: "消息推送",
+          icon: "iconfont icon-pushMsg",
+          childs: [
+            {
+              title: "消息管理",
+              path: "informMan",
+            },
+          ],
+        },
+        {
+          title: "咨询管理",
+          icon: "iconfont icon-salesman",
+          childs: [
+            {
+              title: "咨询管理",
+              path: "advisoryMan",
+            },
+            {
+              title: "帮助中心",
+              path: "helps",
+            },
+          ],
+        },
+        {
+          title: "业务员管理",
+          icon: "iconfont icon-advisory",
+          childs: [
+            {
+              title: "业务员列表",
+              path: "salesmanList",
+            },
+            {
+              title: "会员分组管理",
+              path: "groupMembers",
+            },
+            {
+              title: "业务员订单列表",
+              path: "salesmanOrderList",
             },
           ],
         },
       ],
-      tabList: [
-        {
-          title: "子导航1",
-          path: "item1",
-        },
-        {
-          title: "子导航2",
-          path: "item2",
-        },{
-          title: "子导航3",
-          path: "item2",
-        },{
-          title: "子导航4",
-          path: "item2",
-        },{
-          title: "子导航5",
-          path: "item2",
-        },{
-          title: "子导航6",
-          path: "item2",
-        }
-      ],
+      /**标签页数据 */
+      tabList: [],
+      /**活动状态的的tab */
+      activeTab: "",
       isDay: true, //日间模式
-      isCollapse:false,
-      asideWidth:'200px',
-      offsetLeft:'0px',//tabs的偏移量
-      offsetIndex:0
+      isCollapse: false,
+      asideWidth: "200px",
+      offsetLeft: "0px", //tabs的偏移量
+      offsetIndex: 0,
+      /**存储打开的标签页 */
+      keepAlive: [],
     };
   },
-  components: {},
-  mounted() {},
+  computed: {
+    keepAliveStr() {
+      return this.keepAlive.join();
+    },
+  },
   methods: {
     /**改变主题 */
     changeTheme() {
       this.isDay = !this.isDay;
     },
     /**菜单伸缩展开 */
-    changeCollapse(bool){
+    changeCollapse(bool) {
       if (bool) {
         this.isCollapse = true;
         this.asideWidth = "auto";
@@ -372,15 +745,54 @@ export default {
       }
     },
     /**改变tab偏移量 */
-    changeOffset(num){
+    changeOffset(num) {
       /**
         offsetIndex限制不能小于0，不能大于list.length-4
        */
       this.offsetIndex += num;
       this.offsetIndex = this.offsetIndex <= 0 ? 0 : this.offsetIndex;
-      this.offsetIndex = this.offsetIndex >= this.tabList.length - 4 ? 2 : this.offsetIndex;
-      this.offsetLeft = -120*this.offsetIndex + 'px';
-    }
+      this.offsetIndex = this.offsetIndex >= (this.tabList.length - 4) ? (this.tabList.length - 4) : this.offsetIndex;
+      this.offsetLeft = -120 * this.offsetIndex + "px";
+    },
+
+    /**添加tab */
+    handleMenu(item) {
+      //将组件名称存储到keepAlive
+      //再存一份给标签页
+      //1、判断缓存组件中是否包含
+      let result = this.keepAlive.indexOf(item.path);
+      if (result == -1) {
+        this.keepAlive.push(item.path);
+        this.tabList.push({ title: item.title, path: item.path, name:item.path});
+      }
+      this.activeTab = item.path;
+      //2、调整tabs位置
+      if ((this.tabList.length - 4)>0) {
+        this.offsetIndex = this.tabList.length-4;
+        this.offsetLeft = -120 * this.offsetIndex + "px";
+      }
+      //3、定位到当前activeTab
+    },
+    /**删除tab */
+    removeTab(targetName) {
+      let tabs = this.tabList;
+      let activeName = this.activeTab;
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1];
+            if (nextTab) {
+              activeName = nextTab.name;
+            }
+          }
+        });
+      }
+
+      this.activeTab = activeName;
+      this.tabList = tabs.filter((tab) => tab.name !== targetName);
+      this.keepAlive = this.keepAlive.filter((item) =>item !== targetName);
+      this.$router.push(this.activeTab);
+    },
   },
 };
 </script>
@@ -392,22 +804,23 @@ export default {
   background-color: #fff;
 }
 //aside菜单容器
-.aside{
+.aside {
   position: relative;
-  background-color:#545c64;
+  background-color: #545c64;
   overflow: visible;
   transition: width 0.3s;
 }
-.close,.open{
+.close,
+.open {
   position: absolute;
   top: 52px;
   font-size: 30px;
   z-index: 9;
 }
-.close{
+.close {
   right: -6px;
 }
-.open{
+.open {
   right: -22px;
 }
 
@@ -470,7 +883,7 @@ export default {
   width: 560px;
   overflow: hidden;
 }
-.tab-controls{
+.tab-controls {
   position: absolute;
   right: 0;
   display: flex;
@@ -481,7 +894,7 @@ export default {
   z-index: 9;
   background-color: #fff;
 }
-.tab-controls>span{
+.tab-controls > span {
   width: 30px;
   height: 30px;
   display: flex;
@@ -507,30 +920,35 @@ export default {
 .theme-night {
   background: url("../assets/home/night.png") no-repeat center;
 }
-.theme-night,.theme-day{
+.theme-night,
+.theme-day {
   width: 20px;
   height: 20px;
   background-size: 100% 100%;
   transition: transform 0.7s;
 }
 //过度动画
-.fade-enter{//开始进入
+.fade-enter {
+  //开始进入
   transform: translateY(-35px);
 }
-.fade-enter-to{//进入完毕
+.fade-enter-to {
+  //进入完毕
   transform: translateY(0px);
 }
-.fade-leave{//开始离开
+.fade-leave {
+  //开始离开
   transform: translateY(0px);
 }
-.fade-leave-to{//离开完毕
+.fade-leave-to {
+  //离开完毕
   transform: translateY(35px);
 }
 //进入时显现
-.custom-appear-class{
-  transform: scale(0,0);
+.custom-appear-class {
+  transform: scale(0, 0);
 }
-.custom-appear-to-class{
-  transform: scale(20px,20px);
+.custom-appear-to-class {
+  transform: scale(20px, 20px);
 }
 </style>
