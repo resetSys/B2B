@@ -3,16 +3,8 @@
     <el-container style="width:100%;height:100%;">
       <el-aside ref="aside" class="aside" :width="asideWidth">
         <!-- 展开关闭菜单 -->
-        <i
-          v-if="isCollapse"
-          class="open iconfont icon-open"
-          @click="changeCollapse(false)"
-        ></i>
-        <i
-          v-else
-          class="close iconfont icon-close"
-          @click="changeCollapse(true)"
-        ></i>
+        <i v-if="isCollapse" class="open iconfont icon-open" @click="changeCollapse(false)"></i>
+        <i v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
         <el-scrollbar class="scrollbar">
           <!-- 用户信息 -->
           <div class="userInfo" style="display:none;">
@@ -41,13 +33,8 @@
             unique-opened
             default-active
             :collapse="isCollapse"
-            router
-          >
-            <el-submenu
-              v-for="(menu, index) in navList"
-              :key="index"
-              :index="index + 1 + ''"
-            >
+            router>
+            <el-submenu v-for="(menu, index) in navList" :key="index" :index="index + 1 + ''">
               <template slot="title">
                 <i :class="menu.icon"></i>
                 <span>{{ menu.title }}</span>
@@ -57,9 +44,9 @@
                   v-for="(item, index2) in menu.childs"
                   :key="index + '-' + index2"
                   :index="item.path"
-                  @click="handleMenu(item)"
-                  >{{ item.title }}</el-menu-item
-                >
+                  @click="handleMenu(item)">
+                    {{ item.title }}
+                </el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <!-- <el-submenu index="1">
@@ -306,9 +293,7 @@
                   :name="item.name"
                 >
                   <span slot="label">
-                    <router-link :to="item.path" tag="span">
-                      {{ item.title }}
-                    </router-link>
+                    <router-link :to="item.path" tag="span">{{ item.title }}</router-link>
                   </span>
                 </el-tab-pane>
               </el-tabs>
@@ -323,25 +308,13 @@
                 appear-to-class="custom-appear-to-class"
                 appear-active-class="custom-appear-active-class"
               >
-                <span
-                  key="day"
-                  v-if="isDay"
-                  class="theme-day"
-                  @click="changeTheme"
-                ></span>
-                <span
-                  key="night"
-                  v-else
-                  class="theme-night"
-                  @click="changeTheme"
-                ></span>
+                <span key="day" v-if="isDay" class="theme-day" @click="changeTheme"></span>
+                <span key="night" v-else class="theme-night" @click="changeTheme"></span>
               </transition>
             </div>
             <!-- 用户头像 -->
             <el-dropdown>
-              <el-avatar
-                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-              ></el-avatar>
+              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>退出登录</el-dropdown-item>
               </el-dropdown-menu>
@@ -358,6 +331,8 @@
 </template>
 
 <script>
+//网络请求
+
 export default {
   name: "Home",
   data() {
@@ -379,7 +354,19 @@ export default {
             {
               title: "推荐专区",
               path: "recommend",
-            },
+            },{
+              title: "广告位设置",
+              path: "advertising",
+            },{
+              title: "App楼层管理",
+              path: "appFloorMan",
+            },{
+              title: "App版本管理",
+              path: "appMan",
+            },{
+              title: "商城配置",
+              path: "mallConfig",
+            }
           ],
         },
         {
@@ -389,6 +376,10 @@ export default {
             {
               title: "管理员管理",
               path: "admin",
+            },
+            {
+              title: "路径管理",
+              path: "pathMan",
             },
             {
               title: "角色管理",
@@ -725,9 +716,13 @@ export default {
     };
   },
   computed: {
+    /**将keep-alive组件数组改为字符串 */
     keepAliveStr() {
       return this.keepAlive.join();
     },
+  },
+  mounted(){
+   
   },
   methods: {
     /**改变主题 */
@@ -751,7 +746,10 @@ export default {
        */
       this.offsetIndex += num;
       this.offsetIndex = this.offsetIndex <= 0 ? 0 : this.offsetIndex;
-      this.offsetIndex = this.offsetIndex >= (this.tabList.length - 4) ? (this.tabList.length - 4) : this.offsetIndex;
+      this.offsetIndex =
+        this.offsetIndex >= this.tabList.length - 4
+          ? this.tabList.length - 4
+          : this.offsetIndex;
       this.offsetLeft = -120 * this.offsetIndex + "px";
     },
 
@@ -763,12 +761,16 @@ export default {
       let result = this.keepAlive.indexOf(item.path);
       if (result == -1) {
         this.keepAlive.push(item.path);
-        this.tabList.push({ title: item.title, path: item.path, name:item.path});
+        this.tabList.push({
+          title: item.title,
+          path: item.path,
+          name: item.path,
+        });
       }
       this.activeTab = item.path;
       //2、调整tabs位置
-      if ((this.tabList.length - 4)>0) {
-        this.offsetIndex = this.tabList.length-4;
+      if (this.tabList.length - 4 > 0) {
+        this.offsetIndex = this.tabList.length - 4;
         this.offsetLeft = -120 * this.offsetIndex + "px";
       }
       //3、定位到当前activeTab
@@ -790,20 +792,20 @@ export default {
 
       this.activeTab = activeName;
       this.tabList = tabs.filter((tab) => tab.name !== targetName);
-      this.keepAlive = this.keepAlive.filter((item) =>item !== targetName);
+      this.keepAlive = this.keepAlive.filter((item) => item !== targetName);
       this.$router.push(this.activeTab);
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .home {
   width: 100%;
   height: 100%;
   background-color: #fff;
 }
-//aside菜单容器
+/* //aside菜单容器 */
 .aside {
   position: relative;
   background-color: #545c64;
@@ -824,12 +826,12 @@ export default {
   right: -22px;
 }
 
-// navMenu滚动条
+/* // navMenu滚动条 */
 .scrollbar {
   height: 100%;
 }
 
-//用户信息
+/* //用户信息 */
 .userInfo {
   display: flex;
   flex-direction: column;
@@ -859,12 +861,12 @@ export default {
   margin-top: 10px;
   font-size: 14px;
 }
-//头部信息
+/* //头部信息 */
 .home-header {
   position: relative;
   border-bottom: 0.5px solid #dcdcdc;
 }
-//头部信息容器
+/* //头部信息容器 */
 .header-con {
   display: flex;
   justify-content: flex-end;
@@ -873,7 +875,7 @@ export default {
   height: 100%;
   overflow: hidden;
 }
-// tabs标签容器
+/* // tabs标签容器 */
 .header-con-tabs {
   position: absolute;
   left: 5px;
@@ -904,7 +906,7 @@ export default {
   color: #000;
 }
 
-//主题切换
+/* //主题切换 */
 .theme-color {
   display: flex;
   justify-content: center;
@@ -927,24 +929,24 @@ export default {
   background-size: 100% 100%;
   transition: transform 0.7s;
 }
-//过度动画
+/* //过度动画 */
 .fade-enter {
-  //开始进入
+  /* //开始进入 */
   transform: translateY(-35px);
 }
 .fade-enter-to {
-  //进入完毕
+  /* //进入完毕 */
   transform: translateY(0px);
 }
 .fade-leave {
-  //开始离开
+  /* //开始离开 */
   transform: translateY(0px);
 }
 .fade-leave-to {
-  //离开完毕
+  /* //离开完毕 */
   transform: translateY(35px);
 }
-//进入时显现
+/* //进入时显现 */
 .custom-appear-class {
   transform: scale(0, 0);
 }

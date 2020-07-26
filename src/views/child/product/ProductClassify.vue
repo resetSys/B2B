@@ -1,4 +1,5 @@
 <template>
+  <!-- 商品分类 -->
   <div class="productClassify">
     <!-- 面包屑导航 -->
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['商品管理',$route.meta.title]">
@@ -294,7 +295,7 @@ export default {
     },
     /**新增分类 */
     handleAdd(){
-      this.addDrawer = true;
+      this.$router.push('addProClassify');
     },
     /**关闭drawer 清空表单信息 */
     clearForm(){

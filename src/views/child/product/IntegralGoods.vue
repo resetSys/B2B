@@ -246,7 +246,8 @@ export default {
 
     /**点击新增 */
     handleAdd(){
-      this.addDrawer = true;
+      // this.addDrawer = true;
+      this.$router.push('addIntGoods');
     },
     /**点击上架 */
     handlePut(){

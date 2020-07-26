@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import {request} from "@/request"
+
 export default {
   name: 'Login',
   data() {
@@ -75,6 +77,21 @@ export default {
           this.$router.push({
             path:"/home"
           })
+          let json = {
+            type: "AdminLogin",
+            username: this.form.user,
+            password: this.form.pass,
+            code: this.form.code,
+          }
+          let params = "login" + "&json=" + encodeURIComponent(JSON.stringify(json))+"&proc=Proc_Admin_MembersQuery";
+          request({
+            method:"post",
+            url:"http://47.105.206.10:8077/Admin/main/ashx/UserJson.ashx?type="+params,
+          }).then((res) => {
+            window.console.log(res)
+          }).catch((err) => {
+            window.console.log(err)
+          });
         } else {
           alert("补全字段")
           return false;

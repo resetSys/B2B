@@ -1,11 +1,10 @@
 <template>
-  <!-- 注册审核管理 -->
-  <div class="role">
+  <div class="pathMan">
     <!-- 面包屑导航 -->
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['权限管理',$route.meta.title]">
       <template slot="controls">
         <el-button type="danger" icon="el-icon-delete"
-         :disabled="selectedList.length==0">删除</el-button>
+         :disabled="selectedList.length==0">批量删除</el-button>
         <el-button type="primary" icon="el-icon-circle-plus-outline"
           @click="addDrawer = true">添加</el-button>
       </template>
@@ -23,8 +22,7 @@
           <el-option label="商城后台" value="b"></el-option>
           <el-option label="业务通APP" value="c"></el-option>
         </el-select>
-        <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable
-          placeholder="输入编号/名称"></el-input>
+        <el-input v-model="searchForm.name" style="width:200px;margin-right:5px"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
     </search-bar>
@@ -48,10 +46,10 @@
           label="姓名">
         </el-table-column>
         <el-table-column
-          prop="des"
+          prop="path"
           align="center"
           show-overflow-tooltip
-          label="描述">
+          label="路径">
         </el-table-column>
         <el-table-column
           prop="sort"
@@ -60,8 +58,8 @@
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="type"
-          label="类型"
+          prop="isUsing"
+          label="是否启用"
           align="center"
           show-overflow-tooltip>
         </el-table-column>
@@ -78,7 +76,7 @@
     <!-- 分页 -->
     <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
       @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
-    <!-- 添加角色 -->
+    <!-- 添加路径 -->
     <el-drawer
       title=""
       :visible.sync="addDrawer"
@@ -87,23 +85,32 @@
       :wrapperClosable="$store.state.closeOnClickModal"
       direction="rtl">
       <div class="drawer-header">
-        信息注册
+        新增路径
       </div>
       <el-scrollbar style="height:calc(100% - 90px);">
         <div class="drawer-form-wrap">
           <el-form :model="addForm" label-position="rigth" label-width="80px"
             :rules="formRule" ref="addForm">
-            <el-form-item label="名称" prop="name">
+            <el-form-item label="分类" prop="type">
+              <el-select v-model="addForm.type" placeholder="类型" style="width:100%;" clearable>
+                <el-option label="全部" value="a"></el-option>
+                <el-option label="商城后台" value="b"></el-option>
+                <el-option label="业务通APP" value="c"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="权限名称" prop="name">
               <el-input v-model="addForm.name" clearable></el-input>
             </el-form-item>
-            <el-form-item label="描述" prop="des">
-              <el-input v-model="addForm.des" clearable></el-input>
+            <el-form-item label="路径地址" prop="path">
+              <el-input v-model="addForm.path" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="父级" prop="parentId">
+              <el-select v-model="addForm.parentId" placeholder="请选择" style="width:100%;" clearable>
+                <el-option label="全部" value="a"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
               <el-input v-model="addForm.sort" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="类型" prop="type">
-              <el-input v-model="addForm.type" clearable></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -123,16 +130,17 @@ import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 
 export default {
-  name: 'role',
+  name: 'pathMan',
   data() {
     return {
-      /**表格数据 */
-      //名称	描述	排序	类型
+      //Id	权限名称	路径名称	父级Id	排序	是否启用	操作
       tableData:[{
+        id:"",
         name:"aa",
-        des:"bb",
+        path:"bb",
+        parentId:"",
         sort:"cc",
-        type:"dd"
+        isUsing:""
       }],
       /**分页数据 */
       currPage:1,
@@ -141,22 +149,25 @@ export default {
       /**新增drawer */
       addDrawer:false,
       /**新增表单 */
+      //分类 权限名称 路径地址 父级 排序
       addForm:{
+        type:"",
         name:"",
-        des:"",
+        path:"",
+        parentId:"",
         sort:"",
-        type:""
       },
       /**表单规则 */
       formRule:{},
       /**搜索表单 */
       searchForm:{
-        name:"",
         isUsing:"",
-        type:""
+        type:"",
+        name:""
       },
       /**select选中项 */
       selectedList:[],
+
     }
   },
   components: {
@@ -177,6 +188,7 @@ export default {
     hanCurrChange(val){
       this.currPage = val;
     },
+
     /**刷新表格数据 */
     handleRefresh(){
       this.getTableData();
@@ -205,7 +217,7 @@ export default {
 </script>
 
 <style scoped>
-.role{
+.pathMan{
   width: 100%;
   height: 100%;
 }

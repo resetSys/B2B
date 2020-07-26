@@ -1,7 +1,7 @@
 <template>
   <div class="sysSetting">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['系统配置','系统设置']"></crumbs-bar>
+    <crumbs-bar :crumbsList="['系统配置',$route.meta.title]"></crumbs-bar>
     <!-- 数据展示 -->
     <el-scrollbar style="height:calc(100% - 90px)">
       <el-table
@@ -43,7 +43,8 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
     <!-- 规则设置 -->
     <el-dialog
       title="规则设置"
@@ -113,13 +114,35 @@ export default {
         config:[
           {required:true,message:"请输入配置",trigger:'blur'}
         ]
-      }
+      },
+      /**分页数据 */
+      currPage:1,
+      pageSize:0,
+      allPage:0,
     }
   },
   components: {
     crumbsBar,
     Pagination
   },
+  methods:{
+     /**获取表格 */
+    getTableData(){
+      // this.$store.commit('handleLoding');
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+  }
 }
 </script>
 

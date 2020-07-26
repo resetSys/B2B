@@ -1,7 +1,7 @@
 <template>
   <div class="floorSetting">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['系统配置','楼层设置']"></crumbs-bar>
+    <crumbs-bar :crumbsList="['系统配置',$route.meta.title]"></crumbs-bar>
     <!-- 数据展示 -->
     <el-scrollbar style="height:calc(100% - 90px)">
       <el-table

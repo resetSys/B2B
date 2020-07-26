@@ -233,7 +233,8 @@ export default {
     },
     /**礼品新增 */
     handleAdd(){
-      this.addDrawer = true;
+      // this.addDrawer = true;
+      this.$router.push('addGift');
     },
     /**点击编辑 */
     handleEdit(row){

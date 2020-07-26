@@ -8,9 +8,14 @@ const Home = () =>import("@/views/Home.vue");
 const SysSetting = () => import("@/views/child/system/SysSetting.vue");
 const FloorSetting = () => import("@/views/child/system/FloorSetting.vue");
 const Recommend = () => import("@/views/child/system/Recommend.vue");
+const Advertising = () => import("@/views/child/system/Advertising.vue");
+const AppFloorMan = () => import("@/views/child/system/AppFloorMan.vue");
+const MallConfig = () => import("@/views/child/system/MallConfig.vue");
+const AppMan = () => import("@/views/child/system/AppMan.vue");
 //权限管理
 const Admin = () => import("@/views/child/limit/Admin.vue");
 const Role = () => import("@/views/child/limit/Role.vue");
+const PathMan = () => import("@/views/child/limit/PathMan.vue");
 //会员管理
 const MemList = () => import("@/views/child/member/MemList.vue");
 const CertExpired = () => import("@/views/child/member/CertExpired.vue");
@@ -36,6 +41,10 @@ const ControlGoods = () => import("@/views/child/product/ControlGoods.vue");
 const GetGoods = () => import("@/views/child/product/GetGoods.vue");
 const RecommendGoods = () => import("@/views/child/product/RecommendGoods.vue");
 const AddConGoods = () => import("@/views/child/product/AddConGoods.vue");
+const AddGift = () => import("@/views/child/product/AddGift.vue");
+const AddIntGoods = () => import("@/views/child/product/AddIntGoods.vue");
+const AddProClassify = () => import("@/views/child/product/AddProClassify.vue");
+const AddComm = () => import("@/views/child/product/AddComm.vue");
 //促销管理
 const Schemes = () => import("@/views/child/scheme/Schemes.vue");
 const Single = () => import("@/views/child/scheme/Single.vue");
@@ -131,6 +140,30 @@ const routes = [
           title:"推荐专区"
         }
       },{
+        path:"advertising",
+        component:Advertising,
+        meta:{
+          title:"广告位设置"
+        }
+      },{
+        path:"appFloorMan",
+        component:AppFloorMan,
+        meta:{
+          title:"App楼层管理"
+        }
+      },{
+        path:"mallConfig",
+        component:MallConfig,
+        meta:{
+          title:"商城配置"
+        }
+      },{
+        path:"appMan",
+        component:AppMan,
+        meta:{
+          title:"App版本管理"
+        }
+      },{
         path:"admin",
         component:Admin,
         meta:{
@@ -141,6 +174,12 @@ const routes = [
         component:Role,
         meta:{
           title:"角色管理"
+        }
+      },{
+        path:"pathMan",
+        component:PathMan,
+        meta:{
+          title:"路径管理"
         }
       },{
         path:"memList",
@@ -255,6 +294,31 @@ const routes = [
         component:AddConGoods,
         meta:{
           title:"添加控销商品"
+        }
+      },{
+        path:"addGift",
+        component:AddGift,
+        meta:{
+          title:"添加礼品"
+        }
+      },{
+        path:"addIntGoods",
+        component:AddIntGoods,
+        meta:{
+          title:"添加积分商品"
+        }
+      },{
+        path:"addProClassify",
+        component:AddProClassify,
+        meta:{
+          title:"新增商品分类"
+        }
+      },{
+        
+        path:"addComm",
+        component:AddComm,
+        meta:{
+          title:"新增推荐商品"
         }
       },{
         path:"getGoods",

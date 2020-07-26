@@ -215,7 +215,8 @@ export default {
     
     /**点击新增 */
     handleAdd(){
-      this.addDrawer = true;
+      // this.addDrawer = true;
+      this.$router.push('AddComm');
     },
     /**点击修改 */
     handleEdit(row){

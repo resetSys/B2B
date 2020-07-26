@@ -67,8 +67,11 @@ Vue.use(ElementUI,{ size: 'small', zIndex: 3000 });
 
 Vue.config.productionTip = false
 
-new Vue({
+const vm = new Vue({
   render: h => h(App),
   router,
   store
 }).$mount('#app')
+
+//导出vm实例
+export default vm
