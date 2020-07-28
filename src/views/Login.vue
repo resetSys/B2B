@@ -32,7 +32,9 @@
 </template>
 
 <script>
+//网络请求
 import {request} from "@/request"
+//工具方法
 
 export default {
   name: 'Login',
@@ -60,6 +62,9 @@ export default {
   },
   components: {
 
+  },
+  mounted(){
+   
   },
   methods:{
     /**

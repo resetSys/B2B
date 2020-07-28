@@ -7,7 +7,7 @@
         <i v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
         <el-scrollbar class="scrollbar">
           <!-- 用户信息 -->
-          <div class="userInfo" style="display:none;">
+          <!-- <div class="userInfo">
             <el-avatar
               class="userInfo-avg"
               src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -23,7 +23,7 @@
                 退出
               </span>
             </div>
-          </div>
+          </div>-->
           <!-- 导航菜单 -->
           <el-menu
             class
@@ -33,7 +33,8 @@
             unique-opened
             default-active
             :collapse="isCollapse"
-            router>
+            router
+          >
             <el-submenu v-for="(menu, index) in navList" :key="index" :index="index + 1 + ''">
               <template slot="title">
                 <i :class="menu.icon"></i>
@@ -44,9 +45,8 @@
                   v-for="(item, index2) in menu.childs"
                   :key="index + '-' + index2"
                   :index="item.path"
-                  @click="handleMenu(item)">
-                    {{ item.title }}
-                </el-menu-item>
+                  @click="handleMenu(item)"
+                >{{ item.title }}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <!-- <el-submenu index="1">
@@ -277,10 +277,7 @@
               </div>
               <el-tabs
                 class="tabs"
-                :style="{
-                  'margin-left': offsetLeft,
-                  transition: 'margin-left 0.3s',
-                }"
+                :style="{'margin-left': offsetLeft,transition: 'margin-left 0.3s'}"
                 type="card"
                 closable
                 v-model="activeTab"
@@ -301,7 +298,7 @@
             <!-- 日间夜间模式 -->
             <div class="theme-color">
               <transition
-                name="fade"
+                name="slide"
                 mode="out-in"
                 appear
                 appear-class="custom-appear-class"
@@ -314,35 +311,49 @@
             </div>
             <!-- 用户头像 -->
             <el-dropdown>
-              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+              <img
+                style="height:40px;border-radius:50%;"
+                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+                alt
+              />
               <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>修改密码</el-dropdown-item>
                 <el-dropdown-item>退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
         </el-header>
         <!-- 菜单页面容器 -->
-        <keep-alive :include="keepAliveStr">
-          <router-view></router-view>
-        </keep-alive>
+        <!-- <keep-alive :include="keepAliveStr"> -->
+          <!-- <transition mode="out-in" name="fade"> -->
+            <router-view></router-view>
+          <!-- </transition> -->
+        <!-- </keep-alive> -->
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-//网络请求
+//网络
+import { request } from "@/request";
 
 export default {
   name: "Home",
   data() {
     return {
+      adminId:this.$store.state.adminId,
+      organId:this.$store.state.organId,
       /**导航菜单数据 */
       navList: [
         {
           title: "系统配置",
           icon: "el-icon-setting",
           childs: [
+            {
+              title: "数据统计",
+              path: "firstPage",
+            },
             {
               title: "系统设置",
               path: "sysSetting",
@@ -354,19 +365,23 @@ export default {
             {
               title: "推荐专区",
               path: "recommend",
-            },{
+            },
+            {
               title: "广告位设置",
               path: "advertising",
-            },{
+            },
+            {
               title: "App楼层管理",
               path: "appFloorMan",
-            },{
+            },
+            {
               title: "App版本管理",
               path: "appMan",
-            },{
+            },
+            {
               title: "商城配置",
               path: "mallConfig",
-            }
+            },
           ],
         },
         {
@@ -721,10 +736,31 @@ export default {
       return this.keepAlive.join();
     },
   },
-  mounted(){
-   
+  mounted() {
+    // this.getNavList();
   },
   methods: {
+    /**获取导航菜单数据 */
+    getNavList(){
+      request({
+        url:"HTSystemSetting/GetFunctionModule",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+        },
+      }).then((res) => {
+        // let {Success,Data} = res.data.models;
+        // this.tableData = [];
+        // if (Success) {
+          
+        // }
+        window.console.log(res)
+      }).catch((err) => {
+        window.console.log(err);
+      });
+    },
+
     /**改变主题 */
     changeTheme() {
       this.isDay = !this.isDay;
@@ -746,10 +782,7 @@ export default {
        */
       this.offsetIndex += num;
       this.offsetIndex = this.offsetIndex <= 0 ? 0 : this.offsetIndex;
-      this.offsetIndex =
-        this.offsetIndex >= this.tabList.length - 4
-          ? this.tabList.length - 4
-          : this.offsetIndex;
+      this.offsetIndex =this.offsetIndex >= (this.tabList.length - 4)? (this.tabList.length - 4): this.offsetIndex;
       this.offsetLeft = -120 * this.offsetIndex + "px";
     },
 
@@ -789,7 +822,6 @@ export default {
           }
         });
       }
-
       this.activeTab = activeName;
       this.tabList = tabs.filter((tab) => tab.name !== targetName);
       this.keepAlive = this.keepAlive.filter((item) => item !== targetName);
@@ -820,7 +852,7 @@ export default {
   z-index: 9;
 }
 .close {
-  right: -6px;
+  right: -5px;
 }
 .open {
   right: -22px;
@@ -879,6 +911,7 @@ export default {
 .header-con-tabs {
   position: absolute;
   left: 5px;
+  top: 0;
   display: flex;
   align-items: flex-end;
   height: 100%;
@@ -930,19 +963,19 @@ export default {
   transition: transform 0.7s;
 }
 /* //过度动画 */
-.fade-enter {
+.slide-enter {
   /* //开始进入 */
   transform: translateY(-35px);
 }
-.fade-enter-to {
+.slide-enter-to {
   /* //进入完毕 */
   transform: translateY(0px);
 }
-.fade-leave {
+.slide-leave {
   /* //开始离开 */
   transform: translateY(0px);
 }
-.fade-leave-to {
+.slide-leave-to {
   /* //离开完毕 */
   transform: translateY(35px);
 }
@@ -952,5 +985,25 @@ export default {
 }
 .custom-appear-to-class {
   transform: scale(20px, 20px);
+}
+
+/* 组件切换过渡效果 */
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave {
+  opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: opacity 0.3s;
 }
 </style>

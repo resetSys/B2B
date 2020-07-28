@@ -5,13 +5,92 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <!-- 极速模式 -->
+    <!-- <meta name=renderer  content=webkit> -->
+    <!-- IE兼容模式（低版本IE模式） -->
+    <!-- <meta name=renderer  content=ie-comp> -->
+    <!-- IE标准模式（高版本IE模式） -->
+    <!-- <meta name=renderer  content=ie-stand> -->
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      html,body{
+        width: 100%;
+        height: 100%;
+      }
+      #app{
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+      #tooltip{
+        position: absolute;
+        width: 500px;
+        height: 350px;
+        top: 50%;
+        left: 50%;
+        margin-left: -250px;
+        margin-top: -175px;
+        padding: 20px;
+        border: 1px solid #000;
+        line-height: 30px;
+      }
+      .tooltip-title{
+        text-indent: 2em;
+      }
+    </style>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
+    <div id="app">
+      <div id="tooltip" style="display: none;">
+        <p class="tooltip-title">为了您的用户体验，我们强烈建议您使用IE10+或其他主流浏览器使用该系统</p>
+        <p>为您提供主流浏览器下载地址:</p>
+        <p>谷歌:<a href="https://www.google.cn/chrome/">点击跳转</a></p>
+        <p>火狐:<a href="http://www.firefox.com.cn/">点击跳转</a></p>
+        <p>opera:<a href="https://www.opera.com/zh-cn">点击跳转</a></p>
+        <p>360浏览器:<a href="https://browser.360.cn/">点击跳转</a></p>
+      </div>
+    </div>
+    <!-- built files will be auto injected（构建的文件将被自动注入） -->
+    <script>
+      function IEVersion() {
+        var userAgent = window.navigator.userAgent; //取得浏览器的userAgent字符串
+        var isIE =
+          userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器
+        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器
+        var isIE11 =
+          userAgent.indexOf("Trident") > -1 && userAgent.indexOf("rv:11.0") > -1;
+        if (isIE) {
+          var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+          reIE.test(userAgent);
+          var fIEVersion = parseFloat(RegExp["$1"]);
+          if (fIEVersion == 7) {
+            return 7;
+          } else if (fIEVersion == 8) {
+            return 8;
+          } else if (fIEVersion == 9) {
+            return 9;
+          } else if (fIEVersion == 10) {
+            return 10;
+          } else {
+            return 6; //IE版本<=7
+          }
+        } else if (isEdge) {
+          //return "edge"; //edge
+          return 12;
+        } else if (isIE11) {
+          return 11; //IE11
+        } else {
+          //return -1; //不是ie浏览器
+          return 12;
+        }
+      }
+      var tolltip = document.getElementById('tolltip');
+      if (IEVersion() < 9) {
+        tolltip.style.display = "block";
+      }
+    </script>
   </body>
 </html>

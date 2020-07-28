@@ -4,6 +4,8 @@ import VueRouter from "vue-router";
 //导入页面
 const Login = () =>import("@/views/Login.vue");
 const Home = () =>import("@/views/Home.vue");
+//第一个页面
+const FirstPage = () => import("@/views/child/FirstPage.vue");
 //系统配置
 const SysSetting = () => import("@/views/child/system/SysSetting.vue");
 const FloorSetting = () => import("@/views/child/system/FloorSetting.vue");
@@ -16,6 +18,7 @@ const AppMan = () => import("@/views/child/system/AppMan.vue");
 const Admin = () => import("@/views/child/limit/Admin.vue");
 const Role = () => import("@/views/child/limit/Role.vue");
 const PathMan = () => import("@/views/child/limit/PathMan.vue");
+const AddRole = () => import("@/views/child/limit/AddRole.vue");
 //会员管理
 const MemList = () => import("@/views/child/member/MemList.vue");
 const CertExpired = () => import("@/views/child/member/CertExpired.vue");
@@ -120,8 +123,16 @@ const routes = [
     children:[
       {
         path:"",
-        redirect:"sysSetting"
-      },{
+        redirect:"firstPage"
+      },
+      {
+        path:"firstPage",
+        component:FirstPage,
+        meta:{
+          title:"首页"
+        }
+      },
+      {
         path:"sysSetting",
         component:SysSetting,
         meta:{
@@ -180,6 +191,12 @@ const routes = [
         component:PathMan,
         meta:{
           title:"路径管理"
+        }
+      },{
+        path:"addRole",
+        component:AddRole,
+        meta:{
+          title:"信息管理"
         }
       },{
         path:"memList",
@@ -538,6 +555,16 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode:"hash"
+})
+
+router.beforeEach((to,from,next)=>{
+  //从from跳转到to里面去
+  next();//跳转，系统默认是加上的，如果不加会造成无法跳转
+  //修改页面的title
+  document.title = to.meta.title;
+  //to：表示当前路由，meta实在路由映射中配置的静态资源
+  //如果以上述方式修改title的话，有嵌套其他组件的组件将会显示不正常
+  // document.title = to.matched[0].meta.title;
 })
 
 export default router

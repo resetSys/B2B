@@ -2,6 +2,7 @@
 //导入vue实例，使用$store
 import vm from "../main.js";
 import axios from "axios";
+import Qs from "qs";
 
 
 /**
@@ -12,7 +13,14 @@ import axios from "axios";
 export function request (config){
   let instence = axios.create({
     timeout:5000,
-    baseURL:"http://localhost/supermall/"
+    baseURL:"http://47.105.206.10:8094/",
+    headers: {
+      'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    transformRequest:[function (data) {
+      data = Qs.stringify(data);
+      return data;
+    }],
   });
 
   instence.interceptors.request.use(function (res) {

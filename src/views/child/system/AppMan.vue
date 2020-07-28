@@ -44,8 +44,8 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="" prop="">
-            <el-button type="primary">提交</el-button>
-            <el-button type="info">重置</el-button>
+            <el-button type="primary" @click="submit">提交</el-button>
+            <el-button type="info" @click="handleRefresh">重置</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -81,8 +81,18 @@ export default {
   methods:{
     /**重置表单|刷新页面 */
     handleRefresh(){
-      
+      this.$refs['addForm'].resetFields();
     },
+    submit(){
+      this.$refs['addForm'].validate((valid)=>{
+        if (valid) {
+          this.$message({
+            message: '点击提交',
+            type: 'success'
+          });
+        }
+      })
+    }
   }
 }
 </script>

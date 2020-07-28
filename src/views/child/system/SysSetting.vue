@@ -142,7 +142,7 @@ export default {
     handleRefresh(){
       this.getTableData();
     },
-  }
+  },
 }
 </script>
 

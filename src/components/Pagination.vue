@@ -4,7 +4,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currIndex"
-      :page-sizes="[10, 30, 50]"
+      :page-sizes="[20, 30, 50]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="allPage">
@@ -26,7 +26,7 @@ export default {
     },
     pageSize:{
       type:Number,
-      default:10,
+      default:20,
       required:true
     },
     currIndex:{
