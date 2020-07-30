@@ -74,12 +74,12 @@ export default {
 }
 .breadcrumb{
   position: absolute;
-  left: 40px;
+  left: 20px;
   top: 13px;
 }
 .crumbs-controls{
   position: absolute;
-  right: 40px;
+  right:20px;
   width: 500px;
   height: 100%;
   text-align: right;
