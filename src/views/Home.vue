@@ -1,7 +1,8 @@
 <template>
   <div class="home" v-loading="$store.state.loading">
-    <el-container style="width:100%;height:100%;">
-      <el-aside ref="aside" class="aside" :width="asideWidth">
+    <div style="width:100%;height:100%;">
+      <!-- aside菜单容器 -->
+      <div ref="aside" class="aside" :style="asideStyle">
         <!-- 展开关闭菜单 -->
         <i v-if="isCollapse" class="open iconfont icon-open" @click="changeCollapse(false)"></i>
         <i v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
@@ -33,8 +34,7 @@
             unique-opened
             default-active
             :collapse="isCollapse"
-            router
-          >
+            router>
             <el-submenu v-for="(menu, index) in navList" :key="index" :index="index + 1 + ''">
               <template slot="title">
                 <i :class="menu.icon"></i>
@@ -261,8 +261,9 @@
             </el-submenu>-->
           </el-menu>
         </el-scrollbar>
-      </el-aside>
-      <el-container style="height:100%;">
+      </div>
+      <!-- main主题内容容器 -->
+      <div ref="main" class="main" :style="mainStyle">
         <el-header class="home-header" height="50px">
           <div class="header-con">
             <!-- 标签页 -->
@@ -277,45 +278,28 @@
               </div>
               <el-tabs
                 class="tabs"
-                :style="{'margin-left': offsetLeft,transition: 'margin-left 0.3s'}"
+                :style="{'margin-left': offsetLeft,transition: 'margin-left 0.3s','margin-top':'10px'}"
                 type="card"
                 closable
                 v-model="activeTab"
-                @tab-remove="removeTab"
-              >
+                @tab-remove="removeTab">
                 <el-tab-pane
                   v-for="(item, index) in tabList"
                   :key="index"
                   :label="item.title"
-                  :name="item.name"
-                >
+                  :name="item.name">
                   <span slot="label">
                     <router-link :to="item.path" tag="span">{{ item.title }}</router-link>
                   </span>
                 </el-tab-pane>
               </el-tabs>
             </div>
-            <!-- 日间夜间模式 -->
-            <div class="theme-color">
-              <transition
-                name="slide"
-                mode="out-in"
-                appear
-                appear-class="custom-appear-class"
-                appear-to-class="custom-appear-to-class"
-                appear-active-class="custom-appear-active-class"
-              >
-                <span key="day" v-if="isDay" class="theme-day" @click="changeTheme"></span>
-                <span key="night" v-else class="theme-night" @click="changeTheme"></span>
-              </transition>
-            </div>
             <!-- 用户头像 -->
-            <el-dropdown>
+            <el-dropdown style="margin-top:5px">
               <img
-                style="height:40px;border-radius:50%;"
+                style="height:40px;width:40px;border-radius:50%;"
                 src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-                alt
-              />
+                alt/>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>修改密码</el-dropdown-item>
                 <el-dropdown-item>退出登录</el-dropdown-item>
@@ -324,13 +308,14 @@
           </div>
         </el-header>
         <!-- 菜单页面容器 -->
-        <!-- <keep-alive :include="keepAliveStr"> -->
-          <!-- <transition mode="out-in" name="fade"> -->
+        <div class="main-con">
+          <!-- <keep-alive :include="keepAliveStr"> -->
             <router-view></router-view>
-          <!-- </transition> -->
-        <!-- </keep-alive> -->
-      </el-container>
-    </el-container>
+          <!-- </keep-alive> -->
+        </div>
+        
+      </div>
+    </div>
   </div>
 </template>
 
@@ -723,11 +708,12 @@ export default {
       activeTab: "",
       isDay: true, //日间模式
       isCollapse: false,
-      asideWidth: "200px",
       offsetLeft: "0px", //tabs的偏移量
       offsetIndex: 0,
       /**存储打开的标签页 */
       keepAlive: [],
+      mainStyle:{width:'calc(100% - 200px)'},
+      asideStyle:{width:'200px'}
     };
   },
   computed: {
@@ -761,20 +747,19 @@ export default {
       });
     },
 
-    /**改变主题 */
-    changeTheme() {
-      this.isDay = !this.isDay;
-    },
     /**菜单伸缩展开 */
     changeCollapse(bool) {
       if (bool) {
         this.isCollapse = true;
-        this.asideWidth = "auto";
+        this.asideStyle = {width:'64px'};
+        this.mainStyle = {width:'calc(100% - 64px)'};
       } else {
         this.isCollapse = false;
-        this.asideWidth = "200px";
+        this.mainStyle = {width:'calc(100% - 200px)'};
+        this.asideStyle = {width:'200px'};
       }
     },
+
     /**改变tab偏移量 */
     changeOffset(num) {
       /**
@@ -785,7 +770,6 @@ export default {
       this.offsetIndex =this.offsetIndex >= (this.tabList.length - 4)? (this.tabList.length - 4): this.offsetIndex;
       this.offsetLeft = -120 * this.offsetIndex + "px";
     },
-
     /**添加tab */
     handleMenu(item) {
       //将组件名称存储到keepAlive
@@ -837,9 +821,12 @@ export default {
   height: 100%;
   background-color: #fff;
 }
-/* //aside菜单容器 */
+/******************* aside菜单容器 *******************/
 .aside {
+  display: inline-block;
   position: relative;
+  width: 200px;
+  height: 100%;
   background-color: #545c64;
   overflow: visible;
   transition: width 0.3s;
@@ -857,42 +844,6 @@ export default {
 .open {
   right: -22px;
 }
-
-/* // navMenu滚动条 */
-.scrollbar {
-  height: 100%;
-}
-
-/* //用户信息 */
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  height: auto;
-  box-sizing: border-box;
-  padding: 20px 0;
-  margin-left: -7px;
-  border-bottom: 0.5px solid #dcdcdc;
-}
-.userInfo-avg {
-  width: 100px;
-  height: 100px;
-}
-.userInfo-name {
-  font-size: 20px;
-  color: #fff;
-  margin-top: 10px;
-}
-.userInfo-con {
-  display: flex;
-  width: 120px;
-  justify-content: space-around;
-  color: #fff;
-  margin-top: 10px;
-  font-size: 14px;
-}
 /* //头部信息 */
 .home-header {
   position: relative;
@@ -900,20 +851,17 @@ export default {
 }
 /* //头部信息容器 */
 .header-con {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  text-align: right;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
-/* // tabs标签容器 */
+
+/******************* tabs标签容器 *******************/
 .header-con-tabs {
   position: absolute;
   left: 5px;
   top: 0;
-  display: flex;
-  align-items: flex-end;
   height: 100%;
   width: 560px;
   overflow: hidden;
@@ -939,71 +887,22 @@ export default {
   color: #000;
 }
 
-/* //主题切换 */
-.theme-color {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 40px;
-  margin-right: 20px;
+/******************* main菜单容器 *******************/
+.main{
+  height:100%;
+  display:inline-block;
+  width:calc(100% - 200px);
   overflow: hidden;
+  transition: width 0.3s;
 }
-.theme-day {
-  background: url("../assets/home/day.png") no-repeat center;
-}
-.theme-night {
-  background: url("../assets/home/night.png") no-repeat center;
-}
-.theme-night,
-.theme-day {
-  width: 20px;
-  height: 20px;
-  background-size: 100% 100%;
-  transition: transform 0.7s;
-}
-/* //过度动画 */
-.slide-enter {
-  /* //开始进入 */
-  transform: translateY(-35px);
-}
-.slide-enter-to {
-  /* //进入完毕 */
-  transform: translateY(0px);
-}
-.slide-leave {
-  /* //开始离开 */
-  transform: translateY(0px);
-}
-.slide-leave-to {
-  /* //离开完毕 */
-  transform: translateY(35px);
-}
-/* //进入时显现 */
-.custom-appear-class {
-  transform: scale(0, 0);
-}
-.custom-appear-to-class {
-  transform: scale(20px, 20px);
+.main-con{
+  width: 100%;
+  height: calc(100% - 50px);
 }
 
-/* 组件切换过渡效果 */
-.fade-enter {
-  opacity: 0;
+/* // navMenu滚动条 */
+.scrollbar {
+  height: 100%;
 }
-.fade-enter-active {
-  transition: opacity 0.3s;
-}
-.fade-enter-to {
-  opacity: 1;
-}
-.fade-leave {
-  opacity: 1;
-}
-.fade-leave-to {
-  opacity: 0;
-}
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
+
 </style>
