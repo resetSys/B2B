@@ -20,9 +20,8 @@ export default {
 
 <style scoped>
 .searchBar{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  text-align: right;
+  line-height: 37.5px;
   width: 100%;
   height: 40px;
   padding: 0 20px;
