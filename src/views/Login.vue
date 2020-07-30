@@ -79,27 +79,34 @@ export default {
     submitFomr(){
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.$router.push({
-            path:"/home"
-          })
-          let json = {
-            type: "AdminLogin",
-            username: this.form.user,
-            password: this.form.pass,
-            code: this.form.code,
-          }
-          let params = "login" + "&json=" + encodeURIComponent(JSON.stringify(json))+"&proc=Proc_Admin_MembersQuery";
           request({
             method:"post",
-            url:"http://47.105.206.10:8077/Admin/main/ashx/UserJson.ashx?type="+params,
+            url:"HTSystemSetting/GetFunctionModule",
+            data:{
+              userName:this.form.user,
+              passWord:this.form.pass,
+            }
           }).then((res) => {
+            let {Success,Message,MsgCode} = res.data.models;
+            if (Success) {
+              this.$router.push({
+                path:"/home"
+              })
+            } else {
+              this.$message({
+                message:Message+MsgCode,
+                type: 'error'
+              });
+            }
             window.console.log(res)
           }).catch((err) => {
             window.console.log(err)
           });
         } else {
-          alert("补全字段")
-          return false;
+          this.$message({
+            message: '补全字段',
+            type: 'error'
+          });
         }
       });
     },
