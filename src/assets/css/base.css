@@ -1,4 +1,5 @@
 /* element默认样式修改 */
+/********************* 导航菜单相关样式 ************************/
 /* 修改navMenu默认样式 */
 /** 一级导航菜单的title */
 .el-submenu__title{
@@ -8,7 +9,7 @@
 .el-menu-item-group__title{
   display: none;
 }
-
+/********************* scrollbar相关样式 ************************/
 /* 解决scrollbar横向溢出 */
 .el-scrollbar__wrap{
   /* margin-right: -25px !important; */
@@ -21,6 +22,7 @@
   margin-bottom: 0 !important;
   border-bottom: none !important;
 }
+/********************* dialog相关样式 ************************/
 /* dialog设置上下居中 */
 .el-dialog{
   position: absolute !important;
@@ -31,6 +33,7 @@
   -webkit-transform: translate(-50%,-50%) !important;/*safari和chrome*/
   margin-top: 0 !important;
 }
+/********************* drawer相关样式 ************************/
 /* 注册表单drawer header content 和 footer */
 .el-drawer{
   min-width: 300px;
@@ -61,8 +64,15 @@
   padding: 0 20px;
 }
 
-/* 表格相关样式 */
+/********************* 表格相关样式 ************************/
 /** 扩展插槽的padding */
 .el-table__expanded-cell{
   padding: 0 0 0 50px !important;
+}
+/********************* 表单相关样式 ************************/
+/** form-item 容器 */
+.form-item-wrap{
+  display: flex;
+  padding: 0 0 0 20px;
+  box-sizing: border-box;
 }

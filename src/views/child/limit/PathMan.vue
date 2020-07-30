@@ -4,7 +4,7 @@
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['权限管理',$route.meta.title]">
       <template slot="controls">
         <el-button type="primary" icon="el-icon-circle-plus-outline"
-          @click="addDrawer = true">添加</el-button>
+          @click="handleAdd">添加</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
@@ -12,8 +12,8 @@
       <template>
         <el-select v-model="searchForm.isUsing" placeholder="是否启用" style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
-          <el-option label="已启用" value="1"></el-option>
-          <el-option label="未启用" value="2"></el-option>
+          <el-option label="已启用" value="2"></el-option>
+          <el-option label="未启用" value="1"></el-option>
         </el-select>
         <el-select v-model="searchForm.type" placeholder="类型" style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
@@ -26,19 +26,36 @@
       </template>
     </search-bar>
     <!-- 数据展示 -->
-    <el-scrollbar style="height:calc(100% - 130px)">
+    <el-scrollbar style="height:calc(100% - 90px)">
       <el-table
         :data="tableData"
-        stripe
         tooltip-effect="dark"
+        :row-style="{color:'#303133'}"
+        :row-key="getRowKeys"
         style="width: 100%">
-        <el-table-column type="expand">
+        <el-table-column
+          label="序号"
+          align="center"
+          type="index"
+          width="70">
+        </el-table-column>
+        <el-table-column 
+          type="expand"
+          label="展开"
+          align="center"
+          width="50">
           <template slot-scope="props">
             <el-table
               :data="props.row.childs"
               stripe
               tooltip-effect="dark"
               style="width: 100%">
+              <el-table-column
+                label="序号"
+                align="center"
+                type="index"
+                width="70">
+              </el-table-column>
               <el-table-column
                 align="center"
                 prop="name"
@@ -73,11 +90,11 @@
                 align="center">
                 <template slot-scope="scope">
                   <el-button type="danger" style="padding:2px 3px;" plain
-                    v-if="scope.row.isUsing == 1" @click="changeStatus(scope.row,2)">禁用</el-button>
+                    v-if="scope.row.isUsing == 2" @click="changeStatus(scope.row,1)">禁用</el-button>
                   <el-button type="success" style="padding:2px 3px;" plain
-                    v-else @click="changeStatus(scope.row,1)">启用</el-button>
+                    v-else @click="changeStatus(scope.row,2)">启用</el-button>
                   <el-button type="warning" style="padding:2px 3px;" plain>编辑</el-button>
-                  <el-button v-if="scope.row.isUsing == 2" type="danger" style="padding:2px 3px;" plain
+                  <el-button v-if="scope.row.isUsing == 1" type="danger" style="padding:2px 3px;" plain
                     @click="handleDel(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
@@ -118,19 +135,19 @@
           align="center">
           <template slot-scope="scope">
             <el-button type="danger" style="padding:2px 3px;" plain
-              v-if="scope.row.isUsing == 1" @click="changeStatus(scope.row,2)">禁用</el-button>
+              v-if="scope.row.isUsing == 2" @click="changeStatus(scope.row,1)">禁用</el-button>
             <el-button type="success" style="padding:2px 3px;" plain
-              v-else @click="changeStatus(scope.row,1)">启用</el-button>
+              v-else @click="changeStatus(scope.row,2)">启用</el-button>
             <el-button type="warning" style="padding:2px 3px;" plain>编辑</el-button>
-            <el-button v-if="scope.row.isUsing == 2" type="danger" style="padding:2px 3px;" plain
+            <el-button v-if="scope.row.isUsing == 1" type="danger" style="padding:2px 3px;" plain
               @click="handleDel(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
-      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
+    <!-- <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination> -->
     <!-- 添加路径 -->
     <el-drawer
       title=""
@@ -159,8 +176,13 @@
               <el-input v-model="addForm.path" clearable></el-input>
             </el-form-item>
             <el-form-item label="父级" prop="parentId">
-              <el-select v-model="addForm.parentId" placeholder="请选择" style="width:100%;" clearable>
+              <el-select v-model="addForm.parentId" placeholder="请选择" style="width:100%;">
                 <el-option label="一级路径" value="0"></el-option>
+                <el-option
+                  v-for="(item,index) in tableData"
+                  :key="index"
+                  :label="item.name" :value="item.id">
+                </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
@@ -181,13 +203,17 @@
 <script>
 //组件
 import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
+// import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 //网络
 import { request } from "@/request";
+//混入
+import { formatStatus } from "@/mixins/filters/formatStatus.js";
+import { mustFill } from "@/mixins/data/valid.js";//混入表单必填项
 
 export default {
   name: 'pathMan',
+  mixins:[formatStatus],
   data() {
     return {
       adminId:this.$store.state.adminId,
@@ -218,7 +244,13 @@ export default {
         sort:"",
       },
       /**表单规则 */
-      formRule:{},
+      formRule:{
+        type:[mustFill],
+        name:[mustFill],
+        path:[mustFill],
+        parentId:[mustFill],
+        sort:[mustFill],
+      },
       /**搜索表单 */
       searchForm:{
         isUsing:"99",
@@ -231,35 +263,15 @@ export default {
   },
   components: {
     crumbsBar,
-    Pagination,
+    // Pagination,
     SearchBar
   },
   mounted(){
     this.getTableData()
   },
   filters:{
-    /**转换tips状态 */
-    formatType(num){
-      switch (num) {
-        case 1:
-          return "success"    
-        case 2:
-          return "danger"
-        default:
-          break;
-      }
-    },
-    /**转换状态码 */
-    formatStatus(num){
-      switch (num) {
-        case 1:
-          return "启用中"
-        case 2:
-          return "禁用中"
-        default:
-          break;
-      }
-    }
+    /**使用混入 转换tips状态 */
+    /**使用混入 转换状态码 */
   },
   methods:{
     /**获取表格 */
@@ -388,6 +400,12 @@ export default {
       }
       this.addDrawer = true;
     },
+    /**新增路径 */
+    handleAdd(){
+      this.addDrawer = true;
+      this.addForm.type = "b2b";
+      this.addForm.parentId = "0";
+    },
     /**关闭drawer 清空表单信息 */
     clearForm(){
       this.$refs['addForm'].resetFields();
@@ -410,7 +428,7 @@ export default {
               sort:this.addForm.sort,
             },
           }).then((res) => {
-            let {Success} = res.data.models;
+            let {Success,MsgCode,Message} = res.data.models;
             if (Success) {
               //提示新增功能成功,关闭dialog,刷新数据
               this.$message({
@@ -419,6 +437,11 @@ export default {
               });
               this.clearForm();
               this.getTableData();
+            } else {
+              this.$message({
+                message: '新增失败'+MsgCode+Message,
+                type: 'error'
+              });
             }
             window.console.log(res)
           }).catch((err) => {
@@ -427,7 +450,7 @@ export default {
         } else {
           this.$message({
             message: '请补全信息',
-            type: 'danger'
+            type: 'warning'
           });
         }
       })
@@ -463,7 +486,12 @@ export default {
       }).catch((err) => {
         window.console.log(err);
       });
-    }
+    },
+
+    /**为表格加上唯一标识，提高渲染性能 */
+    getRowKeys(row) {
+      return row.id // 每条数据的唯一识别值
+    },
   }
 }
 </script>
@@ -473,8 +501,5 @@ export default {
   width: 100%;
   height: 100%;
 }
-/**表格扩展容器 */
-.expandTable{
-  background: burlywood;
-}
+
 </style>

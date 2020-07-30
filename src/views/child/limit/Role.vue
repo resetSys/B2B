@@ -4,8 +4,6 @@
     <!-- 面包屑导航 -->
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['权限管理',$route.meta.title]">
       <template slot="controls">
-        <el-button type="danger" icon="el-icon-delete"
-         :disabled="selectedList.length==0">批量删除</el-button>
         <el-button type="primary" icon="el-icon-circle-plus-outline"
           @click="handleAdd(false)">添加</el-button>
       </template>
@@ -38,21 +36,10 @@
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
-          type="selection"
-          align="center"
-          width="55">
-        </el-table-column>
-        <el-table-column
           align="center"
           prop="name"
           show-overflow-tooltip
-          label="姓名">
-        </el-table-column>
-        <el-table-column
-          prop="des"
-          align="center"
-          show-overflow-tooltip
-          label="描述">
+          label="名称">
         </el-table-column>
         <el-table-column
           prop="sort"
@@ -61,10 +48,16 @@
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="type"
-          label="类型"
+          prop="organ"
           align="center"
-          show-overflow-tooltip>
+          show-overflow-tooltip
+          label="机构名称">
+        </el-table-column>
+        <el-table-column
+          prop="des"
+          align="center"
+          show-overflow-tooltip
+          label="描述">
         </el-table-column>
         <el-table-column
           prop="status"
@@ -79,10 +72,14 @@
           label="操作"
           align="center">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status==1" type="danger" style="padding:2px 3px;" plain>禁用</el-button>
-            <el-button v-else type="success" style="padding:2px 3px;" plain>启用</el-button>
+            <el-button v-if="scope.row.status==2" type="danger" style="padding:2px 3px;" plain
+              @click="changeStatus(scope.row,1)">禁用</el-button>
+            <el-button v-else type="success" style="padding:2px 3px;" plain
+              @click="changeStatus(scope.row,2)">启用</el-button>
             <el-button type="warning" style="padding:2px 3px;" plain
-              @click="handleAdd(scope.row.id)">编辑</el-button>
+              @click="handleAdd(scope.row)">编辑</el-button>
+            <el-button v-if="scope.row.status == 1" type="danger" style="padding:2px 3px;" plain
+              @click="handleDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,41 +87,6 @@
     <!-- 分页 -->
     <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
       @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
-    <!-- 添加角色 -->
-    <el-drawer
-      title=""
-      :visible.sync="addDrawer"
-      :withHeader="false"
-      :close-on-press-escape="$store.state.closeOnPresEscape"
-      :wrapperClosable="$store.state.closeOnClickModal"
-      direction="rtl">
-      <div class="drawer-header">
-        信息注册
-      </div>
-      <el-scrollbar style="height:calc(100% - 90px);">
-        <div class="drawer-form-wrap">
-          <el-form :model="addForm" label-position="rigth" label-width="80px"
-            :rules="formRule" ref="addForm">
-            <el-form-item label="名称" prop="name">
-              <el-input v-model="addForm.name" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="描述" prop="des">
-              <el-input v-model="addForm.des" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="排序" prop="sort">
-              <el-input v-model="addForm.sort" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="类型" prop="type">
-              <el-input v-model="addForm.type" clearable></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-scrollbar>
-      <div class="drawer-footer">
-        <el-button type="primary">确定</el-button>
-        <el-button type="info" @click="clearForm">取消</el-button>
-      </div>
-    </el-drawer>
   </div>
 </template>
 
@@ -135,9 +97,12 @@ import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 //网络
 import { request } from "@/request";
+//混入
+import { formatStatus } from "@/mixins/filters/formatStatus.js";
 
 export default {
   name: 'role',
+  mixins:[formatStatus],
   data() {
     return {
       adminId:this.$store.state.adminId,
@@ -149,7 +114,7 @@ export default {
         name:"",
         des:"",
         sort:"",
-        type:"",
+        funId:"",
         organ:"",
         organId:"",
         status:""
@@ -158,17 +123,6 @@ export default {
       currPage:1,
       pageSize:20,
       allPage:0,
-      /**新增drawer */
-      addDrawer:false,
-      /**新增表单 */
-      addForm:{
-        name:"",
-        des:"",
-        sort:"",
-        type:""
-      },
-      /**表单规则 */
-      formRule:{},
       /**搜索表单 */
       searchForm:{
         name:"",
@@ -188,28 +142,8 @@ export default {
     this.getTableData();
   },
   filters:{
-    /**转换tips状态 */
-    formatType(num){
-      switch (num) {
-        case 1:
-          return "success"    
-        case 2:
-          return "danger"
-        default:
-          break;
-      }
-    },
-    /**转换状态码 */
-    formatStatus(num){
-      switch (num) {
-        case 1:
-          return "启用中"
-        case 2:
-          return "禁用中"
-        default:
-          break;
-      }
-    }
+    /**使用混入 转换tips状态 */
+    /**使用混入 转换状态码 */
   },
   methods:{
     /**获取表格 */
@@ -226,8 +160,8 @@ export default {
           pageSize:this.pageSize
         },
       }).then((res) => {
-        let {Success,Data,PageCount} = res.data.models;
-        this.allPage = PageCount;
+        let {Success,Data,RecordCount} = res.data.models;
+        this.allPage = RecordCount;
         this.tableData = [];
         if (Success) {
           for (let i = 0; i < Data.length; i++) {
@@ -236,7 +170,7 @@ export default {
               name:Data[i].RoleName,
               des:Data[i].Describe,
               sort:Data[i].Sort,
-              type:Data[i].MethodId,
+              funId:Data[i].MethodId,
               organ:Data[i].EntName,
               organId:Data[i].EntId,
               status:Data[i].Status
@@ -269,27 +203,56 @@ export default {
       window.console.log(section)
       this.selectedList = section;
     },
-    /**编辑表格数据 */
-    handleEdit(row){
-      for (const key in this.addForm) {
-        this.addForm[key] = row[key];
-      }
-      this.addDrawer = true;
-    },
-    /**关闭drawer 清空表单信息 */
-    clearForm(){
-      this.$refs['addForm'].resetFields();
-      this.addDrawer = false;
-    },
     /**新增角色 */
-    handleAdd(roleId){
+    handleAdd(row){
       this.$router.push({
         path:"addRole",
         query:{
-          roleId:roleId
+          row:row
         }
       });
     },
+    /**修改角色状态 */
+    changeStatus(row,status){
+      request({
+        url:"HTUserAdmin/UpdateRoleStatus",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+          listStr:row.id,
+          status:status,
+        },
+      }).then((res) => {
+        //提示成功，刷新数据
+        let {Success,Message,MsgCode} = res.data.models;
+        if (Success) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          this.getTableData();
+        } else {
+          this.$message({
+            message: '操作失败:'+Message+MsgCode,
+            type: 'error'
+          });
+        }
+        window.console.log(res)
+      }).catch((err) => {
+        window.console.log(err);
+      });
+    },
+    /**删除角色 */
+    handleDel(row){
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(() => {
+        this.changeStatus(row,0);
+      }).catch(() => {});
+    }
   }
 }
 </script>
