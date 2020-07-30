@@ -1,6 +1,6 @@
 <template>
   <div class="crumbsBar">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+    <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }"><i class="el-icon-s-home"></i>平台</el-breadcrumb-item>
       <el-breadcrumb-item v-for="(item,index) in crumbsList" :key="'b'+index"
         >{{item}}</el-breadcrumb-item>
@@ -61,21 +61,29 @@ export default {
 
 <style scoped>
 .crumbsBar{
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; */
+  display: inline-block;
+  position: relative;
   width: 100%;
   height: 40px;
   padding: 0 20px;
   box-sizing: border-box;
   border-bottom: 0.5px solid #dcdcdc;
 }
+.breadcrumb{
+  position: absolute;
+  left: 40px;
+  top: 13px;
+}
 .crumbs-controls{
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  position: absolute;
+  right: 40px;
   width: 500px;
   height: 100%;
+  text-align: right;
+  line-height: 37.5px;
 }
 .refreshAnima{
   transition: transform 1s;
