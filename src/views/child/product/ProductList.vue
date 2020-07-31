@@ -15,28 +15,28 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.attr" placeholder="商品属性" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select v-model="searchForm.attr" placeholder="商品属性" style="width:100px;margin-right:5px">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="已启用" value="已启用"></el-option>
           <el-option label="未启用" value="未启用"></el-option>
         </el-select>
-        <el-select v-model="searchForm.status" placeholder="商品状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select v-model="searchForm.status" placeholder="商品状态" style="width:100px;margin-right:5px">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
-        <el-select v-model="searchForm.activityArea" placeholder="活动专区" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select v-model="searchForm.activityArea" placeholder="活动专区" style="width:100px;margin-right:5px">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
-        <el-select v-model="searchForm.activityStatus" placeholder="活动状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select v-model="searchForm.activityStatus" placeholder="活动状态" style="width:100px;margin-right:5px">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
-        <el-select v-model="searchForm.classify" placeholder="商品分类" style="width:200px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select v-model="searchForm.classify" placeholder="商品分类" style="width:200px;margin-right:5px">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
@@ -60,7 +60,7 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="number"
+          prop="id"
           show-overflow-tooltip
           label="商品编号">
         </el-table-column>
@@ -113,11 +113,21 @@
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
+          prop="status"
+          label="状态"
+          align="center"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
           label="操作"
           align="center">
           <template slot-scope="scope">
             <el-button type="warning" style="padding:2px 3px;" plain
               @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="success" style="padding:2px 3px;" plain
+              @click="changeStatus(scope.row,2)">启用</el-button>
+            <el-button type="danger" style="padding:2px 3px;" plain
+              @click="changeStatus(scope.row,1)">禁用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -192,11 +202,7 @@
               <el-input class="form-input" v-model="goodForm.sort" clearable></el-input>
             </el-form-item>
             <el-form-item label="商品说明书" prop="des">
-              <quill-editor 
-                style="height:200px"
-                v-model="goodForm.des"
-                ref="myQuillEditor">
-              </quill-editor>
+              
             </el-form-item>
           </el-form>
         </div>
@@ -215,17 +221,20 @@ import crumbsBar from "@/components/CrumbsBar.vue";
 import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import ImgUpload from "@/components/ImgUpload.vue";
-
+//网络
+import { request } from "@/request";
 
 export default {
   name: 'productList',
   data() {
     return {
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       /**表格数据 */
-      //序号	商品编号	操作	商品名称	商品规格	包装单位	
+      //序号	商品id	操作	商品名称	商品规格	包装单位	
       //生产厂家	商品分类	库存	建议零售价	效期时间	操作备注
       tableData:[{
-        number:"商品编号",
+        id:"商品id",
         name:"商品名称",
         specification:"商品规格",
         packingNnit:"包装单位",
@@ -233,20 +242,22 @@ export default {
         classify:"商品分类",
         repertory:"库存",
         retailPrice:"建议零售价",
-        validTime:"效期时间"
+        validTime:"效期时间",
+        status:"状态",
+        sort:"排序"
       }],
       /**分页数据 */
       currPage:1,
-      pageSize:0,
+      pageSize:20,
       allPage:0,
       /**搜索表单 */
       //商品属性 商品状态 活动专区 活动状态 商品分类 商品名称
       searchForm:{
-        attr:"",
-        status:"",
-        activityArea:"",
-        activityStatus:"",
-        classify:"",
+        attr:"99",
+        status:"99",
+        activityArea:"99",
+        activityStatus:"99",
+        classify:"99",
         name:""
       },
       /** 商品表单drawer*/
@@ -306,10 +317,66 @@ export default {
     SearchBar,
     ImgUpload
   },
+  mounted(){
+    this.getTableData()
+  },
   methods:{
      /**获取表格 */
     getTableData(){
-      // this.$store.commit('handleLoding');
+      request({
+        url:"HTGoodsAdmin/GetGoodsList",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+          status:this.searchForm.status,
+          sqlValue:this.searchForm.name,
+          pageIndex:this.currPage,
+          pageSize:this.pageSize,
+          categoryId:this.searchForm.classify,
+          attribute:this.searchForm.attr,
+          promType:this.searchForm.activityArea,
+          promStatus:this.searchForm.activityStatus,
+        },
+      }).then((res) => {
+        let {Success,Data,RecordCount} = res.data.models;
+        this.allPage = RecordCount;
+        this.tableData = [];
+        if (Success) {
+          for (let i = 0; i < Data.length; i++) {
+            this.tableData.push({
+              // ArticleId: "114498"
+              // EntId: "E26FMM0XNYQ"
+              // EntName: "郑州时空"
+              // GoodsCode: "0100004"
+              // GoodsId: "0100004    "
+              // GoodsOrigin: ""
+              // Img_Url: "/UploadFile/goods/2020_1/132226198639948582.png"
+              // Min_Package: "6.00"
+              // Remarks: "2020-06-10 10:03:41进行了上架!原因："
+              // Stock_Quantity: "0.00"
+              // Valdate: ""
+
+              id:Data[i].ArticleId,
+              name:Data[i].Sub_Title,
+              specification:Data[i].Drug_Spec,
+              packingNnit:Data[i].Package_Unit,
+              producer:Data[i].Drug_Factory,
+              classify:Data[i].Category,
+              repertory:"库存",
+              retailPrice:Data[i].Price,
+              validTime:"效期时间",
+
+              status:Data[i].Status,
+              sort:Data[i].SortId
+            })
+          }
+        }
+        window.console.log(res);
+        
+      }).catch((err) => {
+        window.console.log(err);
+      });
     },
     /**刷新表格数据 */
     handleRefresh(){
@@ -318,10 +385,12 @@ export default {
     /**分页size改变 */
     hanSiChange(val){
       this.pageSize = val;
+      this.getTableData()
     },
     /**当前页改变 */
     hanCurrChange(val){
       this.currPage = val;
+      this.getTableData()
     },
 
     /**会员 selection change触发事件 */
@@ -372,6 +441,36 @@ export default {
             type: 'info'
           });
         }
+      });
+    },
+    changeStatus(row,status){
+      request({
+        url:"HTGoodsAdmin/UpdateGoodsStatus",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+          listStr:row.id,
+          status:status,
+        },
+      }).then((res) => {
+        //提示成功，刷新数据
+        let {Success,Message,MsgCode} = res.data.models;
+        if (Success) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          this.getTableData();
+        } else {
+          this.$message({
+            message: '操作失败:'+Message+MsgCode,
+            type: 'error'
+          });
+        }
+        window.console.log(res)
+      }).catch((err) => {
+        window.console.log(err);
       });
     },
 

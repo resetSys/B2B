@@ -1,5 +1,6 @@
 module.exports = {
   publicPath: "./",
+
   configureWebpack: {
     resolve: {
       alias: {
@@ -9,5 +10,7 @@ module.exports = {
         'request':"@/request",
       }
     }
-  }
+  },
+
+  lintOnSave: undefined
 }

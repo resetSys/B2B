@@ -7,24 +7,6 @@
         <i v-if="isCollapse" class="open iconfont icon-open" @click="changeCollapse(false)"></i>
         <i v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
         <el-scrollbar class="scrollbar">
-          <!-- 用户信息 -->
-          <!-- <div class="userInfo">
-            <el-avatar
-              class="userInfo-avg"
-              src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-            ></el-avatar>
-            <span class="userInfo-name">管理员</span>
-            <div class="userInfo-con">
-              <span>
-                <i class="el-icon-setting"></i>
-                设置
-              </span>
-              <span>
-                <i class="el-icon-suitcase"></i>
-                退出
-              </span>
-            </div>
-          </div>-->
           <!-- 导航菜单 -->
           <el-menu
             class
@@ -268,17 +250,9 @@
           <div class="header-con">
             <!-- 标签页 -->
             <div class="header-con-tabs">
-              <div class="tab-controls">
-                <span @click="changeOffset(-1)">
-                  <i class="el-icon-arrow-left"></i>
-                </span>
-                <span @click="changeOffset(1)">
-                  <i class="el-icon-arrow-right"></i>
-                </span>
-              </div>
               <el-tabs
                 class="tabs"
-                :style="{'margin-left': offsetLeft,transition: 'margin-left 0.3s','margin-top':'10px'}"
+                style="margin-top:10px"
                 type="card"
                 closable
                 v-model="activeTab"
@@ -327,8 +301,8 @@ export default {
   name: "Home",
   data() {
     return {
-      adminId:this.$store.state.adminId,
-      organId:this.$store.state.organId,
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       /**导航菜单数据 */
       navList: [
         {
@@ -760,16 +734,6 @@ export default {
       }
     },
 
-    /**改变tab偏移量 */
-    changeOffset(num) {
-      /**
-        offsetIndex限制不能小于0，不能大于list.length-4
-       */
-      this.offsetIndex += num;
-      this.offsetIndex = this.offsetIndex <= 0 ? 0 : this.offsetIndex;
-      this.offsetIndex =this.offsetIndex >= (this.tabList.length - 4)? (this.tabList.length - 4): this.offsetIndex;
-      this.offsetLeft = -120 * this.offsetIndex + "px";
-    },
     /**添加tab */
     handleMenu(item) {
       //将组件名称存储到keepAlive
@@ -785,12 +749,6 @@ export default {
         });
       }
       this.activeTab = item.path;
-      //2、调整tabs位置
-      if (this.tabList.length - 4 > 0) {
-        this.offsetIndex = this.tabList.length - 4;
-        this.offsetLeft = -120 * this.offsetIndex + "px";
-      }
-      //3、定位到当前activeTab
     },
     /**删除tab */
     removeTab(targetName) {
@@ -844,7 +802,7 @@ export default {
 .open {
   right: -22px;
 }
-/* //头部信息 */
+/******************* 头部信息 *******************/
 .home-header {
   position: relative;
   border-bottom: 0.5px solid #dcdcdc;
@@ -860,31 +818,11 @@ export default {
 /******************* tabs标签容器 *******************/
 .header-con-tabs {
   position: absolute;
-  left: 5px;
+  left: 20px;
   top: 0;
   height: 100%;
   width: 560px;
   overflow: hidden;
-}
-.tab-controls {
-  position: absolute;
-  right: 0;
-  display: flex;
-  align-items: center;
-  width: 60px;
-  height: 40px;
-  bottom: 0;
-  z-index: 9;
-  background-color: #fff;
-}
-.tab-controls > span {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  color: #000;
 }
 
 /******************* main菜单容器 *******************/

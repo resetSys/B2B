@@ -105,8 +105,8 @@ export default {
   mixins:[formatStatus],
   data() {
     return {
-      adminId:this.$store.state.adminId,
-      organId:this.$store.state.organId,
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       /**表格数据 */
       //id 名称	描述	排序	类型 机构名称 机构id 状态
       tableData:[{
@@ -205,12 +205,19 @@ export default {
     },
     /**新增角色 */
     handleAdd(row){
+      let prams = null;
+      if (row) {
+        prams = encodeURIComponent(JSON.stringify(row));
+      } else {
+        prams = row;
+      }
       this.$router.push({
         path:"addRole",
         query:{
-          row:row
+          row:prams
         }
       });
+      prams = null;
     },
     /**修改角色状态 */
     changeStatus(row,status){

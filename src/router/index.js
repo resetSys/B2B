@@ -1,6 +1,7 @@
 //导入插件
 import Vue from "vue";
 import VueRouter from "vue-router";
+
 //导入页面
 const Login = () =>import("@/views/Login.vue");
 const Home = () =>import("@/views/Home.vue");
@@ -558,6 +559,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next)=>{
+  //修改标题
   //从from跳转到to里面去
   next();//跳转，系统默认是加上的，如果不加会造成无法跳转
   //修改页面的title

@@ -69,6 +69,13 @@
 .el-table__expanded-cell{
   padding: 0 0 0 50px !important;
 }
+/** 解决解决 elementUI 在IE下 table 表格宽度不是100%的问题 */
+.el-table__header{
+  width: 100% !important;
+}
+.el-table__body{
+  width: 100% !important;
+}
 /********************* 表单相关样式 ************************/
 /** form-item 容器 */
 .form-item-wrap{

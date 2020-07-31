@@ -5,7 +5,7 @@
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['会员管理',$route.meta.title]">
       <template slot="controls">
         <el-button type="danger" icon="el-icon-delete"
-          :disabled="selectedList.length==0">批量删除</el-button>
+          :disabled="selectedList.length==0" @click="handleDel">批量删除</el-button>
         <el-button type="warning" icon="el-icon-s-check"
           :disabled="selectedList.length==0">批量审核</el-button>
       </template>
@@ -13,13 +13,14 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.type" placeholder="会员状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
-          <el-option label="已审核" value="已审核"></el-option>
-          <el-option label="未审核" value="未审核"></el-option>
+        <el-select v-model="searchForm.status" placeholder="会员状态" style="width:100px;margin-right:5px">
+          <el-option label="全部" value="99"></el-option>
+          <el-option label="已启用" value="2"></el-option>
+          <el-option label="未启用" value="1"></el-option>
         </el-select>
         <el-input v-model="searchForm.name" style="width:200px;margin-right:5px"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search"
+          @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -40,12 +41,6 @@
           align="center"
           show-overflow-tooltip
           label="用户名">
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态"
-          align="center"
-          show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           prop="name"
@@ -96,12 +91,24 @@
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
+          prop="status"
+          label="状态"
+          align="center"
+          show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.status|formatType">{{scope.row.status|formatStatus}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
           label="操作"
           align="center">
-          <template>
+          <template slot-scope="scope">
             <el-button type="warning" plain style="padding:2px 3px;"
               @click="couponDialog = true">优惠券发放</el-button>
-            <el-button type="danger" plain style="padding:2px 3px;">禁用</el-button>
+            <el-button type="danger" plain style="padding:2px 3px;"
+              v-if="scope.row.status == 2" @click="changeStatus(scope.row,1)">禁用</el-button>
+            <el-button type="success" plain style="padding:2px 3px;"
+              v-if="scope.row.status == 1" @click="changeStatus(scope.row,2)">启用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -277,11 +284,18 @@
 import crumbsBar from "@/components/CrumbsBar.vue";
 import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
+//网络
+import { request } from "@/request";
+//混入
+import { formatStatus } from "@/mixins/filters/formatStatus.js";
 
 export default {
   name: 'memList',
+  mixins:[formatStatus],
   data() {
     return {
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       /**表格数据 */
       // 用户名 操作 状态 性别 姓名 手机 单位编号 单位名称 客户级别 客户类型 机构 创建日期
       tableData:[{
@@ -295,11 +309,18 @@ export default {
         clientGrade:"客户等级",
         clientType:"客户类型",
         organiza:"机构",
-        create:"创建日期"
+        create:"创建日期",
+        userId:"用户id",
+        unitId:"单位id",
+        province:"省",
+        city:"市",
+        organId:"机构id",
+        birth:"出生",
+        point:"点",
       }],
       /**分页数据 */
       currPage:1,
-      pageSize:0,
+      pageSize:20,
       allPage:0,
       /**新增管理员drawer */
       addDrawer:false,
@@ -322,7 +343,7 @@ export default {
       },
       /**搜索表单 */
       searchForm:{
-        type:"",
+        status:"99",
         name:""
       },
       /**select选中项 */
@@ -364,10 +385,65 @@ export default {
     Pagination,
     SearchBar
   },
+  mounted(){
+    this.getTableData()
+  },
+  computed:{
+    memListStr(){
+      let idList = []; 
+      for (let i = 0; i < this.selectedList.length; i++) {
+        idList.push(this.selectedList[i].userId);
+      }
+      return idList.join();
+    }
+  },
   methods:{
     /**获取表格 */
     getTableData(){
-      // this.$store.commit('handleLoding');
+      request({
+        url:"HTUserAdmin/GetMemberList",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+          status:this.searchForm.status,
+          sqlValue:this.searchForm.name,
+          pageIndex:this.currPage,
+          pageSize:this.pageSize
+        },
+      }).then((res) => {
+        let {Success,Data,RecordCount} = res.data.models;
+        this.allPage = RecordCount;
+        this.tableData = [];
+        if (Success) {
+          for (let i = 0; i < Data.length; i++) {
+            this.tableData.push({
+              userId:Data[i].UserId,
+              unitId:Data[i].BusinessId,
+              province:Data[i].Province,
+              city:Data[i].City,
+              organId:Data[i].EntId,
+              birth:Data[i].Birthday,
+              point:Data[i].Point,
+
+              user:Data[i].UserName,
+              status:Data[i].Status,
+              name:Data[i].Name,
+              sex:Data[i].Sex,
+              tel:Data[i].Telphone,
+              unitNum:Data[i].BusinessCode,
+              unitName:Data[i].BusinessName,
+              clientGrade:"",
+              clientType:"",
+              organiza:"",
+              create:Data[i].AddTime
+            })
+          }
+        }
+        window.console.log(res)
+      }).catch((err) => {
+        window.console.log(err);
+      });
     },
     /**刷新表格数据 */
     handleRefresh(){
@@ -376,10 +452,12 @@ export default {
     /**分页size改变 */
     hanSiChange(val){
       this.pageSize = val;
+      this.getTableData();
     },
     /**当前页改变 */
     hanCurrChange(val){
       this.currPage = val;
+      this.getTableData();
     },
 
     /**会员 selection change触发事件 */
@@ -394,6 +472,47 @@ export default {
         this.addForm[key] = row[key];
       }
       this.addDrawer = true;
+    },
+    /**修改会员状态 */
+    changeStatus(row,status){
+      request({
+        url:"HTUserAdmin/UpdateMemberStatus",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+          listStr:row.userId,
+          status:status,
+        },
+      }).then((res) => {
+        //提示成功，刷新数据
+        let {Success,Message,MsgCode} = res.data.models;
+        if (Success) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          this.getTableData();
+        } else {
+          this.$message({
+            message: '操作失败:'+Message+MsgCode,
+            type: 'error'
+          });
+        }
+        window.console.log(res)
+      }).catch((err) => {
+        window.console.log(err);
+      });
+    },
+    /**点击批量删除 */
+    handleDel(){
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(() => {
+        this.changeStatus({userId:this.memListStr},0);
+      }).catch(() => {});
     },
     
     /**关闭drawer 清空表单信息 */

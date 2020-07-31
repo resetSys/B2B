@@ -30,9 +30,8 @@ export default {
 .pageHeader{
   width: 100%;
   height: 40px;
-  display: flex;
-  align-items: center;
-  padding: 20px;
+  padding-left: 20px;
+  padding-top: 8px;
   box-sizing: border-box;
   border-bottom: 0.5px solid #dcdcdc;
 }

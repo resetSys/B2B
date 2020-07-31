@@ -5,7 +5,7 @@
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['商品管理',$route.meta.title]">
       <template slot="controls">
         <el-button type="primary" icon="el-icon-circle-plus-outline"
-          @click="handleAdd">新增分类</el-button>
+          @click="handleAdd(false)">新增分类</el-button>
       </template>
     </crumbs-bar>
     <!-- 数据展示 -->
@@ -13,9 +13,72 @@
       <el-table
         :data="tableData"
         stripe
+        :row-style="{color:'#303133'}"
         tooltip-effect="dark"
         @selection-change="selectionChange"
         style="width: 100%">
+        <el-table-column
+          label="序号"
+          align="center"
+          type="index"
+          width="70">
+        </el-table-column>
+        <el-table-column 
+          type="expand"
+          label="展开"
+          align="center"
+          width="50">
+          <template slot-scope="props">
+            <el-table
+              :data="props.row.childs"
+              stripe
+              tooltip-effect="dark"
+              style="width: 100%">
+              <el-table-column
+                label="序号"
+                align="center"
+                width="70">
+                <template slot-scope="scope">
+                  <span>{{props.$index+1}}-{{scope.$index+1}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                align="center"
+                prop="number"
+                show-overflow-tooltip
+                label="编号">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                align="center"
+                show-overflow-tooltip
+                label="类别名称">
+              </el-table-column>
+              <el-table-column
+                prop="grade"
+                label="等级"
+                align="center"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                prop="sort"
+                label="排序"
+                align="center"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                label="操作"
+                align="center">
+                <template slot-scope="scope">
+                  <el-button type="warning" style="padding:2px 3px;" plain
+                    @click="handleAdd(scope.row)">编辑</el-button>
+                  <el-button type="danger" style="padding:2px 3px;" plain
+                    @click="handleDel">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
           prop="number"
@@ -23,7 +86,7 @@
           label="编号">
         </el-table-column>
         <el-table-column
-          prop="classify"
+          prop="name"
           align="center"
           show-overflow-tooltip
           label="类别名称">
@@ -44,10 +107,8 @@
           label="操作"
           align="center">
           <template slot-scope="scope">
-            <el-button type="primary" style="padding:2px 3px;" plain
-              @click="viewChild">查看子类</el-button>
             <el-button type="warning" style="padding:2px 3px;" plain
-              @click="handleEdit(scope.row)">编辑</el-button>
+              @click="handleAdd(scope.row)">编辑</el-button>
             <el-button type="danger" style="padding:2px 3px;" plain
               @click="handleDel">删除</el-button>
           </template>
@@ -103,65 +164,6 @@
         <el-button type="info" @click="clearForm">取消</el-button>
       </div>
     </el-drawer>
-    <!-- 子类数据dialog -->
-    <el-dialog
-      title="子类列表"
-      :visible.sync="childDialog"
-      :close-on-click-modal="$store.state.closeOnClickModal"
-      :close-on-press-escape="$store.state.closeOnPresEscape"
-      width="70%">
-      <search-bar>
-        <template>
-          <el-input v-model="searchForm2.name" style="width:200px;margin-right:5px"></el-input>
-          <el-button type="primary" icon="el-icon-search">搜索</el-button>
-        </template>
-      </search-bar>
-      <el-scrollbar style="height:300px">
-        <el-table
-          :data="childData"
-          stripe
-          tooltip-effect="dark"
-          style="width: 100%">
-          <el-table-column
-            prop="number"
-            label="编号"
-            align="center"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="类别名称"
-            align="center"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="grade"
-            label="级别"
-            align="center"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="sort"
-            label="排序"
-            align="center"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            align="center"
-            show-overflow-tooltip>
-            <template slot-scope="scope">
-              <el-button type="warning" plain style="padding:2px 3px;"
-                @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button type="danger" plain style="padding:2px 3px;"
-                @click="handleDel(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-scrollbar>
-      <pagination :allPage="allPage2" :pageSize="pageSize2" :currIndex="currPage2"
-        @hanSiChange="hanSiChange2" @hanCurrChange="hanCurrChange2"></pagination>
-    </el-dialog>
   </div>
 </template>
 
@@ -170,12 +172,15 @@
 import crumbsBar from "@/components/CrumbsBar.vue";
 import Pagination from "@/components/Pagination.vue";
 import ImgUpload from "@/components/ImgUpload";
-import SearchBar from "@/components/SearchBar.vue";
+//网络
+import { request } from "@/request";
 
 export default {
   name: 'productClassify',
   data() {
     return {
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       /**表格数据 */
       //序号	编号	类别名称	级别	排序	操作
       tableData:[{
@@ -183,7 +188,9 @@ export default {
         name:"类别名称",
         classify:"类别名称",
         grade:"级别",
-        sort:"排序"
+        sort:"排序",
+        imgUrl:"图片地址",
+        childs:[]
       }],
       /**分页数据 */
       currPage:1,
@@ -212,26 +219,7 @@ export default {
         alias:"",
         seoTit:"",
         seoDes:""
-      },
-      
-      /**子类dialog */
-      childDialog:false,
-      /**子类分页数据 */
-      currPage2:1,
-      pageSize2:0,
-      allPage2:0,
-      /**子类搜索表单 */
-      searchForm2:{
-        name:""
-      },
-      /**子类数据 */
-      //序号	编号	类别名称	级别	排序	操作
-      childData:[{
-        number:"编号",
-        name:"类别名称",
-        grade:"级别",
-        sort:"排序"
-      }],
+      }
       
     }
   },
@@ -239,13 +227,62 @@ export default {
     crumbsBar,
     Pagination,
     ImgUpload,
-    SearchBar
+  },
+  mounted(){
+    this.getTableData()
   },
   methods:{
     /**获取表格 */
     getTableData(){
-      // this.$store.commit('handleLoding');
+      request({
+        url:"HTGoodsAdmin/GetGoodsCheckBox",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+        },
+      }).then((res) => {
+        let {Success,Data,RecordCount} = res.data.models;
+        let categoryList = Data[0].CategoryList;
+        this.allPage = RecordCount;
+        this.tableData = [];
+        if (Success) {
+          this.recursion(categoryList);
+        }
+        window.console.log(res);
+      }).catch((err) => {
+        window.console.log(err);
+      });
     },
+    /**递归调用函数 */
+    recursion(list) {
+      //先传入一个list，如果list中的Smethods是数组，再调用自身传入数组
+      for (let i = 0; i < list.length; i++) {
+        this.tableData.push({
+          number:list[i].ParentId,
+          name:list[i].Title,
+          classify:list[i].CategoryId,
+          grade:list[i].ClassLayer,
+          sort:list[i].SortId,
+          imgUrl:list[i].Img_Url,
+          childs:[]
+        })
+        if (list[i].LowerList instanceof Array) {
+          for (let j = 0,childs = list[i].LowerList; j < childs.length; j++) {
+            this.tableData[i].childs.push({
+              number:list[i].ParentId,
+              name:list[i].Title,
+              classify:list[i].CategoryId,
+              grade:list[i].ClassLayer,
+              sort:list[i].SortId,
+              imgUrl:list[i].Img_Url,
+            })
+          }
+        }
+        
+      }
+    },
+
     /**刷新表格数据 */
     handleRefresh(){
       this.getTableData();
@@ -265,13 +302,7 @@ export default {
       window.console.log(section)
       this.selectedList = section;
     },
-    /**点击编辑 */
-    handleEdit(row){
-      for (const key in this.addForm) {
-        this.addForm[key] = row[key];
-      }
-      this.addDrawer = true;
-    },
+
     /**点击删除 */
     handleDel(){
       this.$confirm('确定删除该条数据吗', '提示', {
@@ -282,20 +313,31 @@ export default {
         
       }).catch(() => {});
     },
-    // 查看子类
-    viewChild(){
-      this.childDialog = true;
-    },
-    /**分页数据改变 */
-    hanSiChange2(val){
-      this.pageSize2 = val;
-    },
-    hanCurrChange2(val){
-      this.currPage2 = val;
-    },
-    /**新增分类 */
-    handleAdd(){
-      this.$router.push('addProClassify');
+
+    /**新增/编辑分类 */
+    handleAdd(row){
+      //将对象转为json再通过url传递
+      let prams = null;
+      if (row) {
+        prams = {
+          classify:row.classify,
+          grade: row.grade,
+          name: row.name,
+          number: row.number,
+          sort: row.sort,
+          imgUrl: row.imgUrl
+        }
+      } else {
+        prams = row;
+      }
+      
+      this.$router.push({
+        path:"addProClassify",
+        query:{
+          row:encodeURIComponent(JSON.stringify(prams))
+        }
+      });
+      prams = null;
     },
     /**关闭drawer 清空表单信息 */
     clearForm(){
@@ -315,21 +357,6 @@ export default {
           });
         }
       });
-    },
-
-    /**子类删除 */
-    handleDel2(){
-      this.$confirm('确定删除该条信息吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        
-      }).catch(() => {});
-    },
-    /**子类编辑 */
-    handleEdit2(){
-    
     },
   }
 }

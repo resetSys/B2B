@@ -66,8 +66,8 @@ export default {
   name: 'addRole',
   data() {
     return {
-      adminId:this.$store.state.adminId,
-      organId:this.$store.state.organId,
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       /**新增表单 */
       //角色名称 描述 角色机构id 功能id  排序 角色id
       addForm:{
@@ -91,7 +91,7 @@ export default {
   mounted(){
     window.console.log(this.$route.query.row);
     //接收role传递参数
-    let row = this.$route.query.row;
+    let row = JSON.parse(decodeURIComponent(this.$route.query.row));
     if (row) {
       //将row数据放进表单中
       for (const key in row) {
@@ -208,14 +208,14 @@ export default {
             if (Success) {
               //提示新增功能成功,关闭dialog,刷新数据
               this.$message({
-                message: '新增成功',
+                message: '操作成功',
                 type: 'success'
               });
               this.goBack();//返回上一页会自动重置表单
             } else {
               //失败提示
               this.$message({
-                message: '新增失败'+MsgCode+Message,
+                message: '操作失败'+MsgCode+Message,
                 type: 'error'
               });
             }

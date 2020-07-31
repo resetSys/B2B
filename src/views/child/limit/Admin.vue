@@ -178,8 +178,8 @@ export default {
   mixins:[formatStatus],
   data() {
     return {
-      adminId:this.$store.state.adminId,
-      organId:this.$store.state.organId,
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       /**表格数据 */
       //序号	用户名	真实姓名	手机号	机构	创建日期	状态	操作
       tableData:[{

@@ -1,6 +1,8 @@
 <template>
   <div class="login">
     <div class="form">
+      <div class="logo"></div>
+      <p class="form-tit">b2b后台管理系统</p>
       <el-form ref="form" :model="form" :rules="formRule">
         <el-form-item label="" prop="user">
           <el-input prefix-icon="el-icon-user" v-model="form.user"
@@ -19,7 +21,7 @@
         </el-form-item>
         <el-form-item label="">
           <div class="form-checked">
-            <el-checkbox v-model="form.checked">记住密码</el-checkbox>
+            <el-checkbox v-model="form.checked">保持登录</el-checkbox>
           </div>
         </el-form-item>
         <el-form-item label="">
@@ -73,25 +75,39 @@ export default {
     handleImgCode(){
       this.imgCodeUrl = "http://47.105.206.10:8077/Users/AdminImgCode?id="+new Date().getTime()
     },
-    /**
-      提交
-     */
+    /**提交*/
     submitFomr(){
       this.$refs.form.validate((valid) => {
         if (valid) {
           request({
             method:"post",
-            url:"HTSystemSetting/GetFunctionModule",
+            url:"HTUserAdmin/ManagerLogin",
             data:{
               userName:this.form.user,
               passWord:this.form.pass,
             }
           }).then((res) => {
-            let {Success,Message,MsgCode} = res.data.models;
+            let {Success,Message,MsgCode,Data} = res.data.models;
             if (Success) {
+              //成功后跳转
               this.$router.push({
                 path:"/home"
               })
+              //将管理员id和机构id修改到vuex中
+              this.$store.commit("changeId",{adminId:Data[0].userId,organId:Data[0].entId});
+              // add_time: null
+              // entId: "E26FMM0XNYQ"
+              // entname: null
+              // name: "zhang"
+              // password: "49ba59abbe56e057"
+              // role_id: 31
+              // role_type: 0
+              // rolename: null
+              // sex: "男"
+              // status: 2
+              // telphone: "159"
+              // userId: "AD0000028"
+              // username: "Administrator"
             } else {
               this.$message({
                 message:Message+MsgCode,
@@ -110,9 +126,7 @@ export default {
         }
       });
     },
-    /**
-      重置
-     */
+    /**重置*/
     resetForm() {
       this.$refs.form.resetFields();
     }
@@ -122,19 +136,54 @@ export default {
 
 <style scoped>
 .login{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   width: 100%;
   height: 100%;
-  
+  background: url("https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940") no-repeat center;
+  /* https://images.pexels.com/photos/36487/above-adventure-aerial-air.jpg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940 */
+  /* https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940 */
+  background-size: 100% auto;
 }
+/************** 表单样式 *****************/
 .form{
-  width:400px;
-  height: 250px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -190px;
+  margin-top: -135px;
+  width:340px;
+  height: 260px;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background: rgba(255, 255, 255, 0.19);
+}
+.logo{
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  margin-left: -50px;
+  width: 100px;
+  height: 100px;
+  background: url("~assets/logo.png") no-repeat center;
+  background-size: 100% 100%;
+}
+.form-tit{
+  text-align: center;
+  padding-bottom: 10px;
+  font-size: 14px;
+  color: #C0C4CC;
+}
+.form::before{
+  content: '';
+  display: inline-block;
+  position: absolute;
+  border: 10px solid transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.19);
+  left: 50%;
+  top: -20px;
+  margin-left: -10px;
+  z-index: 99;
+  width: 0;
+  height: 0;
 }
 .form-code{
   display: flex;
@@ -154,5 +203,9 @@ export default {
   justify-content: flex-start;
   padding-left: 3px;
   box-sizing: border-box;
+}
+/************** 登录框样式 *****************/
+.el-input>>>.el-input__inner{
+  background-color: rgba(255, 255, 255, 0.1);
 }
 </style>

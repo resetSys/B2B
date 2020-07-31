@@ -53,8 +53,10 @@
               <el-table-column
                 label="序号"
                 align="center"
-                type="index"
                 width="70">
+                <template slot-scope="scope">
+                  <span>{{props.$index+1}}-{{scope.$index+1}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 align="center"
@@ -93,7 +95,8 @@
                     v-if="scope.row.isUsing == 2" @click="changeStatus(scope.row,1)">禁用</el-button>
                   <el-button type="success" style="padding:2px 3px;" plain
                     v-else @click="changeStatus(scope.row,2)">启用</el-button>
-                  <el-button type="warning" style="padding:2px 3px;" plain>编辑</el-button>
+                  <el-button type="warning" style="padding:2px 3px;" plain
+                    @click="handleEdit(scope.row)">编辑</el-button>
                   <el-button v-if="scope.row.isUsing == 1" type="danger" style="padding:2px 3px;" plain
                     @click="handleDel(scope.row.id)">删除</el-button>
                 </template>
@@ -138,7 +141,8 @@
               v-if="scope.row.isUsing == 2" @click="changeStatus(scope.row,1)">禁用</el-button>
             <el-button type="success" style="padding:2px 3px;" plain
               v-else @click="changeStatus(scope.row,2)">启用</el-button>
-            <el-button type="warning" style="padding:2px 3px;" plain>编辑</el-button>
+            <el-button type="warning" style="padding:2px 3px;" plain
+              @click="handleEdit(scope.row)">编辑</el-button>
             <el-button v-if="scope.row.isUsing == 1" type="danger" style="padding:2px 3px;" plain
               @click="handleDel(scope.row.id)">删除</el-button>
           </template>
@@ -148,7 +152,7 @@
     <!-- 分页 -->
     <!-- <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
       @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination> -->
-    <!-- 添加路径 -->
+    <!-- 添加 -->
     <el-drawer
       title=""
       :visible.sync="addDrawer"
@@ -189,6 +193,9 @@
               <el-input-number v-model="addForm.sort" :controls="false" :min="0"
                 style="width:100%;text-align:left;"></el-input-number>
             </el-form-item>
+            <el-form-item label="图标" prop="icon">
+              <el-input v-model="addForm.icon" clearable></el-input>
+            </el-form-item>
           </el-form>
         </div>
       </el-scrollbar>
@@ -216,8 +223,8 @@ export default {
   mixins:[formatStatus],
   data() {
     return {
-      adminId:this.$store.state.adminId,
-      organId:this.$store.state.organId,
+      adminId:this.$store.state.userInfo.adminId,
+      organId:this.$store.state.userInfo.organId,
       //Id	权限名称	路径名称	父级Id	排序	是否启用 类型b2b/app	操作
       tableData:[{
         id:"Id",
@@ -237,11 +244,13 @@ export default {
       /**新增表单 */
       //分类 权限名称 路径地址 父级 排序
       addForm:{
+        id:"",
         type:"",
         name:"",
         path:"",
         parentId:"",
         sort:"",
+        icon:""
       },
       /**表单规则 */
       formRule:{
@@ -310,10 +319,11 @@ export default {
           id:list[i].Id,
           name:list[i].Title,
           path:list[i].Power,
-          parentId:list[i].FatherId,
+          parentId:list[i].FatherId+'',
           sort:list[i].Sort,
           isUsing:list[i].Status,
           type:list[i].Source,
+          icon:list[i].IcoAddress,
           childs:[]
         })
         if (list[i].SMethod instanceof Array) {
@@ -322,9 +332,10 @@ export default {
               id:childs[j].Id,
               name:childs[j].Title,
               path:childs[j].Power,
-              parentId:childs[j].FatherId,
+              parentId:childs[j].FatherId+'',
               sort:childs[j].Sort,
               isUsing:childs[j].Status,
+              icon:childs[j].IcoAddress,
               type:childs[j].Source,
               childs:[]
             })
@@ -409,6 +420,9 @@ export default {
     /**关闭drawer 清空表单信息 */
     clearForm(){
       this.$refs['addForm'].resetFields();
+      for (const key in this.addForm) {
+        this.addForm[key] = ""
+      }
       this.addDrawer = false;
     },
     /**提交表单 */
@@ -426,6 +440,8 @@ export default {
               power:this.addForm.path,
               fatherId:this.addForm.parentId,
               sort:this.addForm.sort,
+              gnId:this.addForm.id,
+              icoAddress:this.addForm.icon
             },
           }).then((res) => {
             let {Success,MsgCode,Message} = res.data.models;

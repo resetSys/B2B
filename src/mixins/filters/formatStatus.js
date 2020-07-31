@@ -7,6 +7,8 @@ var formatStatus = {
           return "danger"    
         case 2:
           return "success"
+        case 0:
+          return "info"
         default:
           break;
       }
@@ -18,6 +20,8 @@ var formatStatus = {
           return "禁用中"
         case 2:
           return "启用中"
+        case 0:
+          return "已删除"
         default:
           break;
       }

@@ -70,7 +70,7 @@ Vue.config.productionTip = false
 const vm = new Vue({
   render: h => h(App),
   router,
-  store
+  store,
 }).$mount('#app')
 
 //导出vm实例

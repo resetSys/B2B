@@ -23,6 +23,7 @@ body,html{
   width: 100%;
   height: 100%;
   min-width: 1200px;
+  min-height: 500px;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
