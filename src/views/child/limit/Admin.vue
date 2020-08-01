@@ -306,7 +306,6 @@ export default {
     /**selection change触发事件 */
     selectionChange(section){
       //存放选中的表格数据
-      window.console.log(section)
       this.selectedList = section;
     },
 
@@ -331,7 +330,6 @@ export default {
           }
           
         }
-        window.console.log(res);
       }).catch((err) => {
         window.console.log(err);
       });
@@ -356,7 +354,6 @@ export default {
           }
           
         }
-        window.console.log(res);
       }).catch((err) => {
         window.console.log(err);
       });
@@ -411,7 +408,6 @@ export default {
             type: 'error'
           });
         }
-        window.console.log(res)
       }).catch((err) => {
         window.console.log(err);
       });
@@ -451,7 +447,6 @@ export default {
                 type: 'error'
               });
             }
-            window.console.log(res)
           }).catch((err) => {
             window.console.log(err);
           });

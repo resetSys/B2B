@@ -149,9 +149,6 @@
         </el-table-column>
       </el-table>
     </el-scrollbar>
-    <!-- 分页 -->
-    <!-- <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
-      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination> -->
     <!-- 添加 -->
     <el-drawer
       title=""
@@ -210,7 +207,6 @@
 <script>
 //组件
 import crumbsBar from "@/components/CrumbsBar.vue";
-// import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
 //网络
 import { request } from "@/request";
@@ -272,7 +268,6 @@ export default {
   },
   components: {
     crumbsBar,
-    // Pagination,
     SearchBar
   },
   mounted(){
@@ -306,7 +301,6 @@ export default {
           /**递归函数 */
           this.recursion(Data);
         }
-        window.console.log(res)
       }).catch((err) => {
         window.console.log(err);
       });
@@ -401,7 +395,6 @@ export default {
     /**selection change触发事件 */
     selectionChange(section){
       //存放选中的表格数据
-      window.console.log(section)
       this.selectedList = section;
     },
     /**编辑表格数据 */
@@ -448,18 +441,17 @@ export default {
             if (Success) {
               //提示新增功能成功,关闭dialog,刷新数据
               this.$message({
-                message: '新增成功',
+                message: '操作成功',
                 type: 'success'
               });
               this.clearForm();
               this.getTableData();
             } else {
               this.$message({
-                message: '新增失败'+MsgCode+Message,
+                message: '操作失败'+MsgCode+Message,
                 type: 'error'
               });
             }
-            window.console.log(res)
           }).catch((err) => {
             window.console.log(err);
           });
@@ -498,7 +490,6 @@ export default {
             type: 'error'
           });
         }
-        window.console.log(res)
       }).catch((err) => {
         window.console.log(err);
       });

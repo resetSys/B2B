@@ -72,7 +72,7 @@ export default {
       //角色名称 描述 角色机构id 功能id  排序 角色id
       addForm:{
         name:"",
-        id:null,
+        id:"",
         des:"",
         funId:"",
         sort:"",
@@ -89,12 +89,11 @@ export default {
     PageHeader
   },
   mounted(){
-    window.console.log(this.$route.query.row);
     //接收role传递参数
     let row = JSON.parse(decodeURIComponent(this.$route.query.row));
     if (row) {
       //将row数据放进表单中
-      for (const key in row) {
+      for (const key in this.addForm) {
         this.addForm[key] = row[key];
       }
     } else {
@@ -129,7 +128,6 @@ export default {
           /**递归函数 */
           this.recursion(Data);
         }
-        window.console.log(res)
       }).catch((err) => {
         window.console.log(err);
       });
@@ -175,7 +173,6 @@ export default {
           //表单机构选择赋初值
           this.addForm.roleOrganId = this.organList[0].value;
         }
-        window.console.log(res);
       }).catch((err) => {
         window.console.log(err);
       });
@@ -201,7 +198,7 @@ export default {
               xEntId:this.addForm.roleOrganId,
               listStr:this.addForm.funId,
               sort:this.addForm.sort,
-              roleId:this.addForm.roleId,
+              roleId:this.addForm.id,
             },
           }).then((res) => {
             let {Success,MsgCode,Message} = res.data.models;
@@ -219,7 +216,6 @@ export default {
                 type: 'error'
               });
             }
-            window.console.log(res)
           }).catch((err) => {
             window.console.log(err);
           });
