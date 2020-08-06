@@ -53,18 +53,18 @@
       :close-on-press-escape="$store.state.closeOnPresEscape"
       width="500px">
       <el-form :model="formData" label-position="left" label-width="80px"
-        :rules="formRule">
+        :rules="formRule" ref="addForm">
         <el-form-item label="配置名称" prop="name">
           <el-input v-model="formData.name" clearable></el-input>
         </el-form-item>
         <el-form-item label="配置状态" prop="status">
-          <el-select v-model="formData.status" placeholder="请选择" clearable style="width:100%">
+          <el-select v-model="formData.status" placeholder="请选择" style="width:100%;">
             <el-option label="开启" value="开启"></el-option>
             <el-option label="关闭" value="关闭"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="金额" prop="money">
-          <el-input-number v-model="formData.money" controls-position="right"
+          <el-input-number v-model="formData.money" :controls="false" style="width:100%;"
             :min="1" :max="100"></el-input-number>
         </el-form-item>
         <el-form-item label="配置" prop="config">
@@ -72,8 +72,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button @click="resetForm">取 消</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -142,6 +142,23 @@ export default {
     handleRefresh(){
       this.getTableData();
     },
+
+    /**提交表单 */
+    submitForm(){
+      this.$refs['addForm'].validate((valid) => {
+        if (valid) {
+          this.$message({
+            message: '点击提交',
+            type: 'info'
+          });
+        }
+      });
+    },
+    /**重置表单 */
+    resetForm(){
+      this.$refs['addForm'].resetFields();
+      this.dialogVisible = false;
+    }
   },
 }
 </script>

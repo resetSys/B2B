@@ -1,7 +1,8 @@
 <template>
   <div class="floorSetting">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['系统配置',$route.meta.title]"></crumbs-bar>
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['系统配置',$route.meta.title]">
+    </crumbs-bar>
     <!-- 数据展示 -->
     <el-scrollbar style="height:calc(100% - 90px)">
       <el-table
@@ -48,8 +49,9 @@
         </el-table-column>
       </el-table>
     </el-scrollbar>
-    <!-- 分页组件 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <!-- 分页 -->
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
     <!-- 修改楼层名 -->
     <el-dialog
       title="修改楼层名"
@@ -58,13 +60,13 @@
       :close-on-press-escape="$store.state.closeOnPresEscape"
       width="500px">
       <el-form :model="formData" label-position="left" label-width="80px"
-        :rules="formRule">
+        :rules="formRule" ref="addForm">
         <el-form-item label="楼层名称" prop="name">
           <el-input v-model="formData.name" placeholder="请输入楼层名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="index">
-          <el-input-number v-model="formData.index" controls-position="right"
-            :min="1" :max="100"  placeholder="请输入排列序号"></el-input-number>
+          <el-input-number v-model="formData.index" :controls="false" style="width:100%;"
+            :min="1"  placeholder="请输入排列序号"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -103,13 +105,52 @@ export default {
         index:[
           {required:true,message:"请输入楼层顺序",trigger:'blur'}
         ]
-      }
+      },
+      /**分页数据 */
+      currPage:1,
+      pageSize:0,
+      allPage:0,
     }
   },
   components: {
     crumbsBar,
     Pagination
   },
+  methods:{
+    /**获取表格数据 */
+    getTableData(){
+    
+    },
+     /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+
+    /**提交表单 */
+    submitForm(){
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.$message({
+            message: '点击提交',
+            type: 'info'
+          });
+        }
+      });
+    },
+    /**重置表单 */
+    resetForm(){
+      this.$refs['addForm'].resetFields();
+      this.dialogVisible = false;
+    }
+  }
 }
 </script>
 

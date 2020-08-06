@@ -30,12 +30,18 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="APK文件" prop="file">
-            <upload @fileChange="fallback"></upload>
+            <upload @fileChange="fallback" :size="10240"></upload>
           </el-form-item>
         </div>
         <div class="form-item-wrap">
           <el-form-item label="更新说明" prop="des">
-            <el-input v-model="addForm.des" clearable style="width:200px;"></el-input>
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 8 }"
+              placeholder="请输入内容"
+              style="width:400px;"
+              v-model="addForm.des">
+            </el-input>
           </el-form-item>
         </div>
         <div class="form-item-wrap">

@@ -1,4 +1,5 @@
 <template>
+  <!-- 推荐专区 -->
   <div class="recommed">
     <!-- 面包屑导航 -->
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['系统配置',$route.meta.title]"></crumbs-bar>
@@ -61,18 +62,16 @@
       <el-form :model="formData" label-position="left" label-width="80px"
         :rules="formRule" ref="addForm">
         <el-form-item label="楼层名称" prop="name">
-          <el-input v-model="formData.name" placeholder="请输入楼层名称" clearable
-            style="width:200px;"></el-input>
+          <el-input v-model="formData.name" placeholder="请输入楼层名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="上传图片" prop="img">
-          <upload accept="image/*" @fileChange="fallback"></upload>
+          <upload accept="image/*" :size="1024" @fileChange="fallback"></upload>
         </el-form-item>
         <el-form-item label="跳转链接" prop="url">
-          <el-input v-model="formData.url" placeholder="电脑端跳转链接地址" clearable
-            style="width:200px;"></el-input>
+          <el-input v-model="formData.url" placeholder="电脑端跳转链接地址" clearable></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input-number v-model="formData.sort" :controls="false" style="width:200px;"
+          <el-input-number v-model="formData.sort" :controls="false" style="width:100%;"
             :min="1" placeholder="请输入排列序号"></el-input-number>
         </el-form-item>
       </el-form>
@@ -136,7 +135,7 @@ export default {
   methods:{
     /**文件上传回调 */
     fallback(file){
-      this.formData.img = file
+      this.formData.img = file;
     },
 
     /**获取表格数据 */

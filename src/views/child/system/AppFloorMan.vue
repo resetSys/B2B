@@ -59,7 +59,7 @@
               <el-input v-model="addForm.name" clearable></el-input>
             </el-form-item>
             <el-form-item label="图片" prop="image">
-              <el-input v-model="addForm.image" clearable></el-input>
+              <upload accept="image/*" :size="1024" @fileChange="fallback"></upload>
             </el-form-item>
             <el-form-item label="电脑端跳转链接" prop="PCLink">
               <el-input v-model="addForm.PCLink" clearable></el-input>
@@ -98,6 +98,7 @@
 //组件
 import crumbsBar from "@/components/CrumbsBar.vue";
 import Pagination from "@/components/Pagination.vue";
+import Upload from "@/components/Upload.vue";
 
 export default {
   name: 'appFloorMan',
@@ -133,6 +134,7 @@ export default {
   components: {
     crumbsBar,
     Pagination,
+    Upload
   },
   methods:{
     /**获取表格 */
@@ -160,7 +162,12 @@ export default {
     clearForm(){
       this.$refs['addForm'].resetFields();
       this.addDrawer = false;
-    }
+    },
+
+    /**文件上传回调 */
+    fallback(file){
+      this.formData.image = file;
+    },
   }
 }
 </script>

@@ -6,7 +6,7 @@
     </crumbs-bar>
     <!-- 表单容器 -->
     <el-scrollbar style="height:calc(100% - 60px);padding-top:20px;box-sizing:border-box;">
-      <el-form :model="addForm" label-position="rigth" label-width="100px"
+      <el-form :model="addForm" label-position="rigth" label-width="120px"
         :rules="addFormRule" ref="addForm"> 
         <div class="form-item-wrap">
           <el-form-item label="开始日期" prop="startTime">
@@ -67,6 +67,8 @@
 //组件
 import CrumbsBar from "@/components/CrumbsBar.vue";
 import Upload from "@/components/Upload"
+//混入
+import { mustFill,mustNumber } from "@/mixins/data/valid.js"
 
 export default {
   name: 'advertising',
@@ -83,7 +85,19 @@ export default {
         image:""
       },
       /**新增表单规则 */
-      addFormRule:{}
+      addFormRule:{
+        width:[
+          mustFill,
+          mustNumber
+        ],
+        height:[
+          mustFill,
+          mustNumber
+        ],
+        image:[
+          mustFill
+        ]
+      }
     }
   },
   components: {
