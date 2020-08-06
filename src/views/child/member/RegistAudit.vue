@@ -1,4 +1,5 @@
 <template>
+  <!-- 注册审核管理 -->
   <div class="registAudit">
     <!-- 面包屑导航 -->
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['会员管理',$route.meta.title]">
@@ -75,9 +76,9 @@
         <el-table-column
           label="操作"
           align="center">
-          <template>
+          <template slot-scope="scope">
             <el-button type="warning" plain style="padding:2px 3px"
-              @click="handleAduit">审核</el-button>
+              @click="handleAduit(scope.row)">审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -85,16 +86,6 @@
     <!-- 分页 -->
     <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
       @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
-    <el-dialog
-      title="用户审核"
-      :visible.sync="aduitDialog"
-      :close-on-click-modal="$store.state.closeOnClickModal"
-      :close-on-press-escape="$store.state.closeOnPresEscape"
-      width="70%">
-      <el-scrollbar style="height:400px">
-      
-      </el-scrollbar>
-    </el-dialog>
   </div>
 </template>
 
@@ -130,8 +121,6 @@ export default {
       pageSize:0,
       allPage:0,
 
-      /**审核dialog */
-      aduitDialog:false
     }
   },
   components: {
@@ -159,7 +148,19 @@ export default {
 
     /**点击审核按钮 */
     handleAduit(){
-      this.aduitDialog = true;
+      let prams = null;
+      // if (row) {
+      //   prams = encodeURIComponent(JSON.stringify(row));
+      // } else {
+      //   prams = row;
+      // }
+      this.$router.push({
+        path:"aduit",
+        query:{
+          row:prams
+        }
+      });
+      prams = null;
     }
   }
 }

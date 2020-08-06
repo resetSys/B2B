@@ -5,9 +5,9 @@
     <crumbs-bar @refresh="handleRefresh" :crumbsList="['会员管理',$route.meta.title]">
       <template slot="controls">
         <el-button type="danger" icon="el-icon-delete"
-          :disabled="selectedList.length == 0">批量删除</el-button>
+          :disabled="selectedList.length == 0" @click="handleDel">批量删除</el-button>
         <el-button type="primary" icon="el-icon-link"
-          :disabled="selectedList.length == 0" @click="erpDialog = true">绑定ERP分类</el-button>
+          :disabled="selectedList.length == 0" @click="handleBind">绑定ERP分类</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
@@ -70,8 +70,9 @@
         <el-table-column
           label="操作"
           align="center">
-          <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>资质管理</el-button>
+          <template slot-scope="scope">
+            <el-button type="primary" style="padding:2px 3px;" plain
+              @click="handleCerti(scope.row)">资质管理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -86,28 +87,25 @@
       :close-on-click-modal="$store.state.closeOnClickModal"
       :close-on-press-escape="$store.state.closeOnPresEscape"
       width="40%">
-      <el-form :model="erpForm" label-width="100px" label-position="right">
-        <el-form-item prop="" label="类型">
-          <el-select v-model="searchForm.type" placeholder="状态" clearable>
+      <el-form :model="erpForm" label-width="150px" label-position="right" ref="erpForm">
+        <el-form-item prop="type" label="类型">
+          <el-select v-model="erpForm.type" placeholder="状态" clearable style="width:80%;">
             <el-option label="全部" value="全部"></el-option>
-            <el-option label="正常" value="正常"></el-option>
-            <el-option label="已删除" value="已删除"></el-option>
+            <el-option label="医疗机构" value=""></el-option>
+            <el-option label="零售药店" value=""></el-option>
+            <el-option label="生产企业" value=""></el-option>
+            <el-option label="商业公司" value=""></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="" label="ERP分类名称">
-          <el-select v-model="searchForm.name" placeholder="状态" clearable>
-            <el-option label="全部" value="全部"></el-option>
-            <el-option label="正常" value="正常"></el-option>
-            <el-option label="已删除" value="已删除"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary">提交</el-button>
-          <el-button type="info" @click="erpDialog = false">取消</el-button>
+        <el-form-item prop="name" label="ERP分类名称">
+          <el-input v-model="erpForm.name" clearable style="width:80%;"></el-input>
         </el-form-item>
       </el-form>
+      <span slot="footer">
+        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button type="info" @click="resetForm">取消</el-button>
+      </span>
     </el-dialog>
-    <!-- 资质管理 -->
   </div>
 </template>
 
@@ -142,10 +140,9 @@ export default {
       /**select选中项 */
       selectedList:[],
 
-      /**----------------- */
-      // erpdialog
+      /**绑定erpdialog */
       erpDialog:false,
-      // 绑定ERP分类
+      /**绑定erp表单 */
       erpForm:{
         type:"",
         name:""
@@ -180,6 +177,53 @@ export default {
       window.console.log(section)
       this.selectedList = section;
     },
+
+    /**点击注册资质 */
+    handleCerti(){
+      let prams = null;
+      // if (row) {
+      //   prams = encodeURIComponent(JSON.stringify(row));
+      // } else {
+      //   prams = row;
+      // }
+      this.$router.push({
+        path:"certificate",
+        query:{
+          row:prams
+        }
+      });
+      prams = null;
+    },
+    /**点击批量删除 */
+    handleDel(){
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(() => {
+        
+      }).catch(() => {});
+    },
+    /**点击绑定erp分类 */
+    handleBind(){
+      this.erpDialog = true;
+    },
+    /**提交绑定erp表单 */
+    submitForm(){
+      this.$refs['erpForm'].validate((valid) => {
+        if (valid) {
+          this.$message({
+            message: '执行提交',
+            type: 'info'
+          });
+        }
+      });
+    },
+    /**重置表单 */
+    resetForm(){
+      this.$refs['erpForm'].resetFields();
+      this.erpDialog = false
+    }
   }
 }
 </script>
