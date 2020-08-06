@@ -37,6 +37,9 @@
 .el-dialog__body{
   padding: 10px 20px !important;
 }
+.el-dialog__footer{
+  text-align: center !important;
+}
 /********************* drawer相关样式 ************************/
 /* 注册表单drawer header content 和 footer */
 .el-drawer{
