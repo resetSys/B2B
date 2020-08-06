@@ -36,7 +36,10 @@ const SignFun = () => import("@/views/child/sign/SignFun.vue");
 const ThemeTem = () => import("@/views/child/theme/ThemeTem.vue");
 const ThemePro = () => import("@/views/child/theme/ThemePro.vue");
 const Template = () => import("@/views/child/theme/Template.vue");
+const AddTemplate = () => import("@/views/child/theme/AddTemplate.vue");
+const AddTemPro = () => import("@/views/child/theme/AddTemPro.vue");
 //商品管理
+const AddProduct = () => import("@/views/child/product/AddProduct.vue");
 const ProductList = () => import("@/views/child/product/ProductList.vue");
 const ProductClassify = () => import("@/views/child/product/ProductClassify.vue");
 const GiftList = () => import("@/views/child/product/GiftList.vue");
@@ -272,10 +275,28 @@ const routes = [
           title:"模板绑定"
         }
       },{
+        path:"addTemplate",
+        component:AddTemplate,
+        meta:{
+          title:"模板管理"
+        }
+      },{
+        path:"addTemPro",
+        component:AddTemPro,
+        meta:{
+          title:"绑定商品"
+        }
+      },{
         path:"productList",
         component:ProductList,
         meta:{
           title:"商品列表"
+        }
+      },{
+        path:"addProduct",
+        component:AddProduct,
+        meta:{
+          title:"商品管理"
         }
       },{
         path:"productClassify",
