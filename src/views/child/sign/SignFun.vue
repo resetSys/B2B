@@ -23,11 +23,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="内容编辑" prop="text">
-          
+          <wang-editor :value="formData.text" @change="change" style="width:800px"></wang-editor>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">立即创建</el-button>
-          <el-button>重置</el-button>
+          <el-button type="primary" @click="submitForm">立即创建</el-button>
+          <el-button type="info" @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
     </el-scrollbar>
@@ -37,7 +37,9 @@
 <script>
 //组件
 import crumbsBar from "@/components/CrumbsBar.vue";
-
+import WangEditor from "@/components/WangEditor.vue";
+//混入
+import { mustFill } from "@/mixins/data/valid";
 
 export default {
   name: "signRule",
@@ -51,16 +53,16 @@ export default {
       },
       formRule:{
         name:[
-          {required:true,message:'请输入方案名称',trigger: 'blur'}
+          mustFill
         ],
         clientType:[
-          {required:true,message:'请选择客户类型',trigger: 'blur'}
+          mustFill
         ],
         checkPattern:[
-          {required:true,message:'请选择签到模式',trigger: 'blur'}
+          mustFill
         ],
         text:[
-          {required:true,message:'请编辑规则说明',trigger: 'blur'}
+          mustFill
         ]
       },
       myConfig: {
@@ -75,6 +77,7 @@ export default {
   },
   components: {
     crumbsBar,
+    WangEditor
   },
   computed: {
     editor() {
@@ -85,6 +88,27 @@ export default {
     
   },
   methods: {
+    /**富文本编辑内容改变回调 */
+    change(val) {
+      this.formData.text = val
+    },
+
+    /**提交表单 */
+    submitForm(){
+      this.$refs['checkForm'].validate((valid) => {
+        if (valid) {
+          this.$message({
+            message: '点击提交',
+            type: 'info'
+          });
+        }
+      });
+    },
+    /**重置表单 */
+    resetForm(){
+      this.$refs['checkForm'].resetFields();
+      this.dialogVisible = false;
+    }
     
   },
 };
