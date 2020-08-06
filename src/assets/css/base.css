@@ -32,6 +32,10 @@
   -ms-transform: translate(-50%,-50%) !important;/*IE9*/
   -webkit-transform: translate(-50%,-50%) !important;/*safari和chrome*/
   margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.el-dialog__body{
+  padding: 10px 20px !important;
 }
 /********************* drawer相关样式 ************************/
 /* 注册表单drawer header content 和 footer */
