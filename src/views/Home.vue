@@ -283,9 +283,11 @@
         </el-header>
         <!-- 菜单页面容器 -->
         <div class="main-con">
-          <!-- <keep-alive :include="keepAliveStr"> -->
-            <router-view></router-view>
-          <!-- </keep-alive> -->
+          <transition name="fade">
+            <keep-alive :include="keepAliveStr">
+                <router-view></router-view>
+            </keep-alive>
+          </transition>
         </div>
         
       </div>
@@ -842,5 +844,11 @@ export default {
 .scrollbar {
   height: 100%;
 }
-
+/******************* 过渡动画 *******************/
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>
