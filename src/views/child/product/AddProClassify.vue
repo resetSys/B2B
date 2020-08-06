@@ -101,7 +101,7 @@ export default {
     let row = JSON.parse(decodeURIComponent(this.$route.query.row));
     if (row) {
       //将row数据放进表单中
-      for (const key in row) {
+      for (const key in this.addForm) {
         this.addForm[key] = row[key];
       }
     } else {

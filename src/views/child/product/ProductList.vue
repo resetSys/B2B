@@ -9,7 +9,7 @@
         <el-button type="primary" icon="el-icon-s-order"
           :disabled="selectedList.length==0" @click="handlePut">批量上架</el-button>
         <el-button type="primary" icon="el-icon-circle-plus-outline"
-          @click="handleAdd">添加商品</el-button>
+          @click="handleAdd(false)">添加商品</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
@@ -17,8 +17,12 @@
       <template>
         <el-select v-model="searchForm.attr" placeholder="商品属性" style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
-          <el-option label="已启用" value="已启用"></el-option>
-          <el-option label="未启用" value="未启用"></el-option>
+          <el-option
+            v-for="(item,index) in attrList"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
         </el-select>
         <el-select v-model="searchForm.status" placeholder="商品状态" style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
@@ -35,14 +39,18 @@
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
-        <el-select v-model="searchForm.classify" placeholder="商品分类" style="width:200px;margin-right:5px">
+        <el-select v-model="searchForm.classify" placeholder="商品分类" style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
-          <el-option label="商城后台" value="商城后台"></el-option>
-          <el-option label="业务通APP" value="业务通APP"></el-option>
+          <el-option
+            v-for="(item,index) in classifyList"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
         </el-select>
         <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable
           placeholder="输入编号/名称"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -117,17 +125,20 @@
           label="状态"
           align="center"
           show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.status|formatType">{{scope.row.status|formatStatus}}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
           label="操作"
           align="center">
           <template slot-scope="scope">
             <el-button type="warning" style="padding:2px 3px;" plain
-              @click="handleEdit(scope.row)">编辑</el-button>
+              @click="handleAdd(scope.row)">编辑</el-button>
             <el-button type="success" style="padding:2px 3px;" plain
-              @click="changeStatus(scope.row,2)">启用</el-button>
+              @click="changeStatus(scope.row,2)" v-if="scope.row.status == 1">启用</el-button>
             <el-button type="danger" style="padding:2px 3px;" plain
-              @click="changeStatus(scope.row,1)">禁用</el-button>
+              @click="changeStatus(scope.row,1)" v-else>禁用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -135,83 +146,6 @@
     <!-- 分页 -->
     <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
       @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
-    <!-- 商品编辑 -->
-    <el-dialog
-      title="商品编辑"
-      :visible.sync="addDialog"
-      :close-on-click-modal="$store.state.closeOnClickModal"
-      :close-on-press-escape="$store.state.closeOnPresEscape"
-      @close="clearForm"
-      width="70%">
-      <el-scrollbar style="height:300px;">
-        <div class="drawer-form-wrap">
-          <el-form :model="goodForm" label-position="rigth" 
-            label-width="100px" ref="goodForm">
-            <el-form-item label="所属分类" prop="classify">
-              <el-input class="form-input" v-model="goodForm.classify" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="推荐类型" prop="commendType">
-              <el-input class="form-input" v-model="goodForm.commendType" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="商品名称" prop="name">
-              <el-input class="form-input" v-model="goodForm.name" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="助记码" prop="mnemonicsCode">
-              <el-input class="form-input" v-model="goodForm.mnemonicsCode" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="通用名" prop="commonName">
-              <el-input class="form-input" v-model="goodForm.commonName" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="商品规格" prop="specification">
-              <el-input class="form-input" v-model="goodForm.specification" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="包装单位" prop="package">
-              <el-input class="form-input" v-model="goodForm.package" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="中包装" prop="mediumPackage">
-              <el-input class="form-input" v-model="goodForm.mediumPackage" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="计量规格" prop="metrologicalSpecification">
-              <el-input class="form-input" v-model="goodForm.metrologicalSpecification" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="生产厂家" prop="producer">
-              <el-input class="form-input" v-model="goodForm.producer" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="批准文号" prop="approvalNumber">
-              <el-input class="form-input" v-model="goodForm.approvalNumber" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="剂型" prop="dosageForm">
-              <el-input class="form-input" v-model="goodForm.dosageForm" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="类别" prop="type">
-              <el-input class="form-input" v-model="goodForm.type" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="存储条件" prop="storageCondition">
-              <el-input class="form-input" v-model="goodForm.storageCondition" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="建议零售价" prop="suggestedPrice">
-              <el-input class="form-input" v-model="goodForm.suggestedPrice" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="品牌" prop="brand">
-              <el-input class="form-input" v-model="goodForm.brand" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="封面图片" prop="cover">
-              <img-upload action="https://jsonplaceholder.typicode.com/posts/" @fallback="imgFallback"></img-upload>
-            </el-form-item>
-            <el-form-item label="排序值" prop="sort">
-              <el-input class="form-input" v-model="goodForm.sort" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="商品说明书" prop="des">
-              
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-scrollbar>
-      <div slot="footer" style="text-align:center;">
-        <el-button type="primary" @click="submit">确定</el-button>
-        <el-button type="info" @click="clearForm">取消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -220,12 +154,14 @@
 import crumbsBar from "@/components/CrumbsBar.vue";
 import Pagination from "@/components/Pagination.vue";
 import SearchBar from "@/components/SearchBar.vue";
-import ImgUpload from "@/components/ImgUpload.vue";
 //网络
 import { request } from "@/request";
+//混入
+import { formatStatus } from "@/mixins/filters/formatStatus.js";
 
 export default {
   name: 'productList',
+  mixins:[formatStatus],
   data() {
     return {
       adminId:this.$store.state.userInfo.adminId,
@@ -260,65 +196,21 @@ export default {
         classify:"99",
         name:""
       },
-      /** 商品表单drawer*/
-      addDialog:false,
-      /**商品表单 */
-      //所属分类 推荐类型 商品名称 助记码 通用名 商品规格 包装单位 中包装 计量规格
-      //生产厂家 批准文号 剂型 类别 存储条件 建议零售价 品牌 封面图片 排序值 商品说明书
-      goodForm:{
-        classify:"",
-        commendType:"",
-        name:"",
-        mnemonicsCode:"",
-        commonName:"",
-        specification:"",
-        package:"",
-        mediumPackage:"",
-        metrologicalSpecification:"",
-        producer:"",
-        approvalNumber:"",
-        dosageForm:"",
-        type:"",
-        storageCondition:"",
-        suggestedPrice:"",
-        brand:"",
-        cover:"",
-        sort:"",
-        des:""
-      },
-      goodFormRule:{
-        classify:[],
-        commendType:[],
-        name:[],
-        mnemonicsCode:[],
-        commonName:[],
-        specification:[],
-        package:[],
-        mediumPackage:[],
-        metrologicalSpecification:[],
-        producer:[],
-        approvalNumber:[],
-        dosageForm:[],
-        type:[],
-        storageCondition:[],
-        suggestedPrice:[],
-        brand:[],
-        cover:[],
-        sort:[],
-        des:[]
-      },
       /**select选中项 */
       selectedList:[],
+      /**搜索下拉数据 */
+      attrList:[],//商品属性列表
+      classifyList:[],//商品分类别表
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar,
-    ImgUpload
   },
   mounted(){
     this.getTableData()
+    this.getClassifyList()
   },
   methods:{
      /**获取表格 */
@@ -393,22 +285,68 @@ export default {
       this.getTableData()
     },
 
-    /**会员 selection change触发事件 */
+    /**获取检索条件数据 */
+    //获取分类和属性
+    getClassifyList(){
+      request({
+        url:"HTGoodsAdmin/GetGoodsCheckBox",
+        method:"post",
+        data:{
+          entId:this.organId,
+          userId:this.adminId,
+        },
+      }).then((res) => {
+        let {Success,Data} = res.data.models;
+        let categoryList = Data[0].CategoryList;
+        let attributeList = Data[0].AttributeList;
+        this.classifyList = [];
+        this.attrList = [];
+        if (Success) {
+          this.recursion(categoryList)
+          attributeList.forEach(ele => {
+            this.attrList.push({
+              value:ele.AttributeId,
+              label:ele.Title
+            })
+          });
+        }
+      }).catch((err) => {
+        window.console.log(err);
+      });
+    },
+    //数组降级
+    recursion(list){
+      list.forEach(ele => {
+        this.classifyList.push({
+          value:ele.CategoryId,
+          label:ele.Title
+        })
+        if (ele.LowerList instanceof Array) {
+          this.recursion(ele.LowerList);
+        }
+      });
+    },
+    
+    /**selection change触发事件 */
     selectionChange(section){
       //存放选中的表格数据
-      window.console.log(section)
       this.selectedList = section;
-    },
-    /**编辑商品数据 */
-    handleEdit(){
-      this.addDialog = true;
     },
     /**批量删除 */
     handleDel(){
-      this.$message({
-        message: '批量删除',
-        type: 'info'
+      //将selected选中的list转化为字符串
+      let idList = [];
+      this.selectedList.forEach(ele => {
+        idList.push(ele.id);
       });
+      idList = idList.join();
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(() => {
+        this.changeStatus({id:idList},0);
+      }).catch(() => {});
     },
     /**批量上架 */
     handlePut(){
@@ -417,12 +355,21 @@ export default {
         type: 'info'
       });
     },
-    /**添加新增 */
-    handleAdd(){
-      this.$message({
-        message: '添加新增按钮',
-        type: 'info'
+    /**点击新增/编辑 */
+    handleAdd(row){
+      let prams = null;
+      if (row) {
+        prams = encodeURIComponent(JSON.stringify(row));
+      } else {
+        prams = row;
+      }
+      this.$router.push({
+        path:"addProduct",
+        query:{
+          row:prams
+        }
       });
+      prams = null;
     },
     /**清空表单信息 */
     clearForm(){
@@ -468,16 +415,10 @@ export default {
             type: 'error'
           });
         }
-        window.console.log(res)
       }).catch((err) => {
         window.console.log(err);
       });
     },
-
-    /**图片上传成功返回url */
-    imgFallback(src){
-      this.goodForm.cover = src;
-    }
   }
 }
 </script>
@@ -486,9 +427,5 @@ export default {
 .productList{
   width: 100%;
   height: 100%;
-}
-/* 编辑表单中的input */
-.form-input{
-  width: 200px;
 }
 </style>
