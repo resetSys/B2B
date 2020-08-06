@@ -94,20 +94,7 @@ export default {
                 path:"/home"
               })
               //将管理员id和机构id修改到vuex中
-              this.$store.commit("changeId",{adminId:Data[0].userId,organId:Data[0].entId});
-              // add_time: null
-              // entId: "E26FMM0XNYQ"
-              // entname: null
-              // name: "zhang"
-              // password: "49ba59abbe56e057"
-              // role_id: 31
-              // role_type: 0
-              // rolename: null
-              // sex: "男"
-              // status: 2
-              // telphone: "159"
-              // userId: "AD0000028"
-              // username: "Administrator"
+              this.$store.commit("changeId",{userInfo:Data[0]});
             } else {
               this.$message({
                 message:Message+MsgCode,
