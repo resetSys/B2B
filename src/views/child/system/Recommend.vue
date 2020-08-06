@@ -1,7 +1,7 @@
 <template>
   <div class="recommed">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['系统配置','推荐专区']"></crumbs-bar>
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['系统配置',$route.meta.title]"></crumbs-bar>
     <!-- 数据展示 -->
     <el-scrollbar style="height:calc(100% - 90px)">
       <el-table
@@ -48,7 +48,9 @@
         </el-table-column>
       </el-table>
     </el-scrollbar>
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <!-- 分页 -->
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
     <!-- 修改楼层名 -->
     <el-dialog
       title="修改楼层名"
@@ -57,24 +59,26 @@
       :close-on-press-escape="$store.state.closeOnPresEscape"
       width="500px">
       <el-form :model="formData" label-position="left" label-width="80px"
-        :rules="formRule">
+        :rules="formRule" ref="addForm">
         <el-form-item label="楼层名称" prop="name">
-          <el-input v-model="formData.name" placeholder="请输入楼层名称" clearable></el-input>
+          <el-input v-model="formData.name" placeholder="请输入楼层名称" clearable
+            style="width:200px;"></el-input>
         </el-form-item>
         <el-form-item label="上传图片" prop="img">
-          <img-upload action="https://jsonplaceholder.typicode.com/posts/" @fallback="imgFallback"></img-upload>
+          <upload accept="image/*" @fileChange="fallback"></upload>
         </el-form-item>
         <el-form-item label="跳转链接" prop="url">
-          <el-input v-model="formData.url" placeholder="电脑端跳转链接地址" clearable></el-input>
+          <el-input v-model="formData.url" placeholder="电脑端跳转链接地址" clearable
+            style="width:200px;"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input-number v-model="formData.sort" controls-position="right"
-            :min="1" :max="100" placeholder="请输入排列序号"></el-input-number>
+          <el-input-number v-model="formData.sort" :controls="false" style="width:200px;"
+            :min="1" placeholder="请输入排列序号"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="resetForm">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -84,7 +88,7 @@
 //组件
 import crumbsBar from "@/components/CrumbsBar.vue";
 import Pagination from "@/components/Pagination.vue";
-import ImgUpload from "@/components/ImgUpload.vue";
+import Upload from "@/components/Upload.vue";
 
 export default {
   name: 'recommend',
@@ -118,18 +122,55 @@ export default {
           {required:true,message:"请输入楼层顺序",trigger:'blur'}
         ]
       },
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
     }
   },
   components: {
     crumbsBar,
     Pagination,
-    ImgUpload
+    Upload
   },
   methods:{
-    /**图片上传成功返回url */
-    imgFallback(src){
-      this.formData.img = src;
-    }
+    /**文件上传回调 */
+    fallback(file){
+      this.formData.img = file
+    },
+
+    /**获取表格数据 */
+    getTableData(){},
+    /**提交表单 */
+    submitForm(){
+      this.$refs['addForm'].validate((valid)=>{
+        if (valid) {
+          this.$message({
+            message: '点击提交',
+            type: 'success'
+          });
+        }
+      })
+    },
+    /**重置表单 */
+    resetForm(){
+      this.$refs['addForm'].resetFields();
+      this.dialogVisible = false;
+    },
+    /**重置表单|刷新页面 */
+    handleRefresh(){
+      this.resetForm();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
   },
 }
 </script>

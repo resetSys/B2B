@@ -2,7 +2,7 @@
   <!-- 签到功能 -->
   <div class="signRule">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['签到管理','签到功能']">
+    <crumbs-bar :crumbsList="['签到管理',$route.meta.title]">
     </crumbs-bar>
     <el-scrollbar style="height:calc(100% - 60px);margin-top:20px">
       <el-form :model="formData" ref="checkForm" :rules="formRule"
@@ -23,15 +23,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="内容编辑" prop="text">
-          <quill-editor
-            class="editer"
-            v-model="formData.text"
-            ref="myQuillEditor"
-            :options="editorOption"
-            @blur="onEditorBlur($event)"
-            @focus="onEditorFocus($event)"
-            @change="onEditorChange($event)">
-          </quill-editor>
+          
         </el-form-item>
         <el-form-item>
           <el-button type="primary">立即创建</el-button>
@@ -46,12 +38,11 @@
 //组件
 import crumbsBar from "@/components/CrumbsBar.vue";
 
+
 export default {
   name: "signRule",
   data() {
     return {
-      /**vue-quill-editor配置选项 */
-      editorOption: {},
       formData:{
         name:"",
         clientType:"",
@@ -71,27 +62,30 @@ export default {
         text:[
           {required:true,message:'请编辑规则说明',trigger: 'blur'}
         ]
+      },
+      myConfig: {
+        autoHeightEnabled: false,
+        initialFrameHeight: 200,
+        initialFrameWidth: 850,
+        UEDITOR_HOME_URL: '/UEditor/',
+        serverUrl: 'http://35.201.165.105:8000/controller.php',
+        enableAutoSave: false // 开启从草稿箱恢复功能需要手动设置固定的 editorId，否则组件会默认随机一个，如果页面刷新，下次渲染的时候 editorId 会重新随机，导致无法加载草稿箱数据
       }
     };
   },
   components: {
-    crumbsBar
+    crumbsBar,
   },
   computed: {
     editor() {
       return this.$refs.myQuillEditor.quill;
     },
   },
+  mounted(){
+    
+  },
   methods: {
-    onEditorReady() {
-      // 准备编辑器
-    },
-    onEditorBlur() {}, // 失去焦点事件
-    onEditorFocus() {}, // 获得焦点事件
-    onEditorChange() {}, // 内容改变事件
-    saveHtml: function() {
-      
-    },
+    
   },
 };
 </script>

@@ -30,11 +30,7 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="APK文件" prop="file">
-            <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
-              multiple>
-              <el-button type="primary">点击上传</el-button>
-            </el-upload>
+            <upload @fileChange="fallback"></upload>
           </el-form-item>
         </div>
         <div class="form-item-wrap">
@@ -44,8 +40,8 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="" prop="">
-            <el-button type="primary" @click="submit">提交</el-button>
-            <el-button type="info" @click="handleRefresh">重置</el-button>
+            <el-button type="primary" @click="submitForm">提交</el-button>
+            <el-button type="info" @click="resetForm">重置</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -56,6 +52,7 @@
 <script>
 //组件
 import CrumbsBar from "@/components/CrumbsBar.vue";
+import Upload from "@/components/Upload.vue";
 
 export default {
   name: 'appMan',
@@ -76,14 +73,15 @@ export default {
     }
   },
   components: {
-    CrumbsBar
+    CrumbsBar,
+    Upload
   },
   methods:{
     /**重置表单|刷新页面 */
     handleRefresh(){
-      this.$refs['addForm'].resetFields();
+      this.resetForm();
     },
-    submit(){
+    submitForm(){
       this.$refs['addForm'].validate((valid)=>{
         if (valid) {
           this.$message({
@@ -92,7 +90,15 @@ export default {
           });
         }
       })
-    }
+    },
+    /**重置表单 */
+    resetForm(){
+      this.$refs['addForm'].resetFields();
+    },
+    /**文件上传回调 */
+    fallback(file){
+      this.addForm.file = file
+    },
   }
 }
 </script>
@@ -101,10 +107,5 @@ export default {
 .appMan{
   width: 100%;
   height: 100%;
-}
-.form-item-wrap{
-  display: flex;
-  padding: 0 0 0 20px;
-  box-sizing: border-box;
 }
 </style>

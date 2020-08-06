@@ -49,7 +49,7 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="广告图" prop="image">
-            <img-upload action="" @fallback="imgFallback"></img-upload>
+            <upload accept="image/*" @fileChange="fileChange"></upload>
           </el-form-item>
         </div>
         <div class="form-item-wrap">
@@ -66,7 +66,7 @@
 <script>
 //组件
 import CrumbsBar from "@/components/CrumbsBar.vue";
-import ImgUpload from "@/components/ImgUpload";
+import Upload from "@/components/Upload"
 
 export default {
   name: 'advertising',
@@ -88,12 +88,12 @@ export default {
   },
   components: {
     CrumbsBar,
-    ImgUpload
+    Upload
   },
   methods:{
-    /**图片成功上传回调 */
-    imgFallback(url){
-      this.addForm.image = url;
+    /**upload上传回调 */
+    fileChange(files){
+      this.addForm.image = files;
     },
     /**重置表单|刷新页面 */
     handleRefresh(){
@@ -104,9 +104,10 @@ export default {
       this.$refs['addForm'].validate((valid)=>{
         if (valid) {
           this.$message({
-            message: '点击提交',
-            type: 'success'
+            message: '提交',
+            type: 'info'
           });
+          console.log(this.addForm);
         } else {
           this.$message({
             message: '请补全信息',
@@ -124,10 +125,5 @@ export default {
 .advertising{
   width: 100%;
   height: 100%;
-}
-.form-item-wrap{
-  display: flex;
-  padding: 0 0 0 20px;
-  box-sizing: border-box;
 }
 </style>

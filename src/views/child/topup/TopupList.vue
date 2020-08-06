@@ -2,9 +2,10 @@
   <!-- 充值活动列表 -->
   <div class="topupList">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['权限管理','角色管理']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['权限管理',$route.meta.title]">
       <template slot="controls">
-        <el-button type="primary" icon="el-icon-document-add">新增充值金额</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline"
+          @click="handleAdd">新增充值金额</el-button>
         <el-button type="primary" icon="el-icon-document-add">批量上架</el-button>
         <el-button type="warning" icon="el-icon-document-remove">批量下架</el-button>
         <el-button type="danger" icon="el-icon-document-delete">批量删除</el-button>
@@ -22,12 +23,6 @@
           align="center"
           width="55">
         </el-table-column>
-        :"",
-        :"",
-        :"900",
-        :"",
-        :"",
-        status:""
         <el-table-column
           align="center"
           prop="organNum"
@@ -86,7 +81,46 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
+    <!-- 充值管理 -->
+    <el-drawer
+      title=""
+      :visible.sync="addDrawer"
+      :withHeader="false"
+      :close-on-press-escape="$store.state.closeOnPresEscape"
+      :wrapperClosable="$store.state.closeOnClickModal"
+      direction="rtl">
+      <div class="drawer-header">
+        充值管理
+      </div>
+      <el-scrollbar style="height:calc(100% - 90px);">
+        <div class="drawer-form-wrap">
+          <el-form :model="addForm" label-position="rigth" label-width="80px"
+            :rules="formRule" ref="addForm">
+            <el-form-item label="商品名" prop="type">
+              <el-input v-model="addForm.name" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="充值类型" prop="type">
+              <el-select v-model="addForm.type" placeholder="请选择" clearable style="width:100%">
+                <el-option label="固定金额" value="固定金额"></el-option>
+                <el-option label="自定义金额" value="自定义金额"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="充值金额" prop="money">
+              <el-input v-model="addForm.money" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="des">
+              <el-input v-model="addForm.des" clearable></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-scrollbar>
+      <div class="drawer-footer">
+        <el-button type="primary" @click="submitForm">确定</el-button>
+        <el-button type="info" @click="clearForm">取消</el-button>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
@@ -110,11 +144,74 @@ export default {
         create:"添加时间",
         status:"状态"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      addDrawer:false,/**新增drawer */
+      /**表单数据 */
+      //机构id 用户名 密码 角色id 联系方式 性别 修改时该管理员id
+      addForm:{
+        name:"",
+        type:"",
+        money:"",
+        des:""
+      },
+      formRule:{/**表单验证 */
+        
+      },
     }
   },
   components: {
     crumbsBar,
     Pagination
+  },
+  methods:{
+    /**获取表格数据 */
+    getTableData(){
+    
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+    },
+    /**刷新数据 */
+    handleRefresh(){
+      this.getTableData()
+    },
+
+    /**新增管理员 */
+    handleAdd(){
+      this.addDrawer = true;
+    },
+    /**提交表单 */
+    submitForm(){
+      this.$refs['addForm'].validate((valid)=>{
+        if (valid) {
+          this.$message({
+            message: '点击提交',
+            type: 'info'
+          });
+        } else {
+          this.$message({
+            message: '请补全信息',
+            type: 'warning'
+          });
+        }
+      })
+    },
+    /**关闭drawer 清空表单信息 */
+    clearForm(){
+      this.$refs['addForm'].resetFields();
+      for (const key in this.addForm) {
+        this.addForm[key] = null;
+      }
+      this.addDrawer = false;
+    },
   }
 }
 </script>
