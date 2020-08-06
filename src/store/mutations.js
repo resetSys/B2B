@@ -9,10 +9,18 @@ export default {
   /**
    * 
    * @param {状态} state 
-   * @param {管理员id，机构id} payload 
+   * @param {用户信息} payload 
    */
   changeId(state,payload){
-    state.adminId = payload.adminId; 
-    state.organId = payload.organId;
+    state.userInfo.adminId = payload.userInfo.userId
+    state.userInfo.organId = payload.userInfo.entId
+    state.userInfo.userName = payload.userInfo.username
+    state.userInfo.pass = payload.userInfo.password
+    state.userInfo.name = payload.userInfo.name
+    state.userInfo.roleId = payload.userInfo.role_id
+    state.userInfo.roleType = payload.userInfo.role_type
+    state.userInfo.sex = payload.userInfo.sex
+    state.userInfo.status = payload.userInfo.status
+    state.userInfo.tel = payload.userInfo.telphone
   },
 }
