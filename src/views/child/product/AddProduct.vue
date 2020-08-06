@@ -14,7 +14,7 @@
           </el-form-item>
           <el-form-item label="推荐类型" prop="commendType">
             <el-input class="form-input" v-model="goodForm.commendType" clearable
-              style="width:200px;">></el-input>
+              style="width:200px;"></el-input>
           </el-form-item>
         </div>
         <div class="form-item-wrap">
