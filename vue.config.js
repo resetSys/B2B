@@ -8,6 +8,7 @@ module.exports = {
         'components':'@/components',
         'views':"@/views",
         'request':"@/request",
+        'utils':"@/utils"
       }
     }
   },

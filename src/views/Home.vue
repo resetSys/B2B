@@ -372,6 +372,10 @@ export default {
               path: "memList",
             },
             {
+              title: "机构管理",
+              path: "organMan",
+            },
+            {
               title: "证书过期管理",
               path: "certExpired",
             },

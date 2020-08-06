@@ -21,10 +21,13 @@ const Role = () => import("@/views/child/limit/Role.vue");
 const PathMan = () => import("@/views/child/limit/PathMan.vue");
 const AddRole = () => import("@/views/child/limit/AddRole.vue");
 //会员管理
+const Audit = () => import("@/views/child/member/Audit.vue");
 const MemList = () => import("@/views/child/member/MemList.vue");
+const OrganMan = () => import("@/views/child/member/OrganMan.vue");
 const CertExpired = () => import("@/views/child/member/CertExpired.vue");
 const RegistAudit = () => import("@/views/child/member/RegistAudit.vue");
 const RegistCertificate = () => import("@/views/child/member/RegistCertificate.vue");
+const Certificate = () => import("@/views/child/member/Certificate.vue");
 const MemClassify = () => import("@/views/child/member/MemClassify.vue");
 //充值管理
 const TopupList = () => import("@/views/child/topup/TopupList.vue");
@@ -203,10 +206,22 @@ const routes = [
           title:"信息管理"
         }
       },{
+        path:"aduit",
+        component:Audit,
+        meta:{
+          title:"注册审核"
+        }
+      },{
         path:"memList",
         component:MemList,
         meta:{
           title:"会员列表"
+        }
+      },{
+        path:"organMan",
+        component:OrganMan,
+        meta:{
+          title:"机构管理"
         }
       },{
         path:"certExpired",
@@ -225,6 +240,12 @@ const routes = [
         component:RegistCertificate,
         meta:{
           title:"注册资质管理"
+        }
+      },{
+        path:"certificate",
+        component:Certificate,
+        meta:{
+          title:"注册资质"
         }
       },{
         path:"memClassify",
