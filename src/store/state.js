@@ -10,15 +10,13 @@ export default {
   userInfo:{//用户信息
     adminId:"AD0000022",//管理员ID
     organId:"E26FMM0XNYQ",//机构ID
-    // entId: "E26FMM0XNYQ"
-    // name: "zhang"
-    // password: "49ba59abbe56e057"
-    // role_id: 31
-    // role_type: 0
-    // sex: "男"
-    // status: 2
-    // telphone: "159"
-    // userId: "AD0000028"
-    // username: "Administrator"
+    userName:"",
+    pass:"",
+    name:"",
+    roleId:"",
+    roleType:"",
+    sex:"",
+    status:"",
+    tel:""
   }
 }
