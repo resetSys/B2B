@@ -2,21 +2,22 @@
   <!-- 主题活动模板 -->
   <div class="themeTem">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['模板管理','活动模板']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['模板管理',$route.meta.title]">
       <template slot="controls">
-        <el-button type="danger" icon="el-icon-document-delete">批量删除</el-button>
-        <el-button type="primary" icon="el-icon-document-add">添加模板</el-button>
+        <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline"
+          @click="handleAdd(false)">添加模板</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="模板状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
-          <el-option label="已上架" value="已上架"></el-option>
-          <el-option label="未上架" value="未上架"></el-option>
+        <el-select placeholder="模板状态" v-model="searchForm.status" style="width:100px;margin-right:5px">
+          <el-option label="全部" value="99"></el-option>
+          <el-option label="已上架" value="2"></el-option>
+          <el-option label="未上架" value="1"></el-option>
         </el-select>
-        <el-input style="width:200px;margin-right:5px" clearable
+        <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable
           placeholder="活动名称"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
@@ -54,15 +55,17 @@
         <el-table-column
           label="操作"
           align="center">
-          <template>
+          <template slot-scope="scope">
             <el-button type="primary" style="padding:2px 3px;" plain>上架</el-button>
-            <el-button type="warning" style="padding:2px 3px;" plain>编辑</el-button>
+            <el-button type="warning" style="padding:2px 3px;" plain
+              @click="handleAdd(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -83,12 +86,58 @@ export default {
         tem:"模板",
         status:"状态"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      /**搜索表单 */
+      searchForm:{
+        status:"99",
+        name:""
+      }
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+    /**获取表格数据 */
+    getTableData(){},
+     /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+
+    /**点击新增/编辑 */
+    handleAdd(row){
+      let prams = null;
+      if (row) {
+        prams = encodeURIComponent(JSON.stringify(row));
+      } else {
+        prams = row;
+      }
+      this.$router.push({
+        path:"addTemplate",
+        query:{
+          row:prams
+        }
+      });
+      prams = null;
+    },
+    /**改变状态 */
+    changeStatus(){},
   }
 }
 </script>

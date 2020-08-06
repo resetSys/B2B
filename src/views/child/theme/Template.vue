@@ -2,28 +2,33 @@
   <!-- 模板绑定 -->
   <div class="template">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['权限管理','角色管理']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['权限管理',$route.meta.title]">
       <template slot="controls">
-        <el-button type="danger" icon="el-icon-document-delete">批量删除</el-button>
+        <el-button type="danger" icon="el-icon-delete"
+          :disabled="selectedList.length==0">批量删除</el-button>
         <el-button type="primary" icon="el-icon-document-add">添加模板绑定</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="是否启用" style="width:100px;margin-right:5px" clearable>
+        <el-select placeholder="是否启用" 
+          style="width:100px;margin-right:5px" clearable
+          v-model="searchForm.isUsing">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已上架" value="已上架"></el-option>
           <el-option label="未上架" value="未上架"></el-option>
         </el-select>
-        <el-select placeholder="类型" style="width:100px;margin-right:5px" clearable>
+        <el-select placeholder="类型" 
+          style="width:100px;margin-right:5px" clearable
+          v-model="searchForm.status">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="商品组合" value="商品组合"></el-option>
           <el-option label="商品分类" value="商品分类"></el-option>
         </el-select>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入名称"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          placeholder="输入名称" v-model="searchForm.name"></el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -31,6 +36,7 @@
       <el-table
         :data="tableData"
         stripe
+        @selection-change="selectionChange"
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
@@ -93,7 +99,8 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -118,12 +125,46 @@ export default {
         status:"状态",
         sort:"排序"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      searchForm:{/**搜索表单 */
+        isUsing:"",
+        type:"",
+        name:""
+      },
+      /**select选中项 */
+      selectedList:[],
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+    /**获取管理员数据 */
+    getTableData(){},
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**会员 selection change触发事件 */
+    selectionChange(section){
+      //存放选中的表格数据
+      this.selectedList = section;
+    },
   }
 }
 </script>
