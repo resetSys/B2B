@@ -83,6 +83,10 @@
 .el-table__body{
   width: 100% !important;
 }
+/** 自定义表格操作按钮样式 */
+.my-table-button{
+  padding:2px 3px !important;
+}
 /********************* 表单相关样式 ************************/
 /** form-item 容器 */
 .form-item-wrap{
