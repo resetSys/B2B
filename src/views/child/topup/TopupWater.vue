@@ -12,7 +12,7 @@
           v-model="searchForm.status" 
           style="width:100px;margin-right:5px" 
           clearable>
-          <el-option label="全部" value="全部"></el-option>
+          <el-option label="全部" value="99"></el-option>
           <el-option label="成功" value="成功"></el-option>
           <el-option label="失败" value="失败"></el-option>
         </el-select>
@@ -21,7 +21,7 @@
           v-model="searchForm.actionStatus" 
           style="width:100px;margin-right:5px" 
           clearable>
-          <el-option label="全部" value="全部"></el-option>
+          <el-option label="全部" value="99"></el-option>
           <el-option label="参与" value="参与"></el-option>
           <el-option label="不参与" value="不参与"></el-option>
         </el-select>
@@ -140,8 +140,8 @@ export default {
         goods:"商品"
       }],
       searchForm:{/**搜素表单 */
-        status:"",
-        actionStatus:"",
+        status:"99",
+        actionStatus:"99",
         start:"",
         end:"",
         name:""

@@ -6,9 +6,11 @@
       <template slot="controls">
         <el-button type="primary" icon="el-icon-circle-plus-outline"
           @click="handleAdd">新增充值金额</el-button>
-        <el-button type="primary" icon="el-icon-document-add">批量上架</el-button>
-        <el-button type="warning" icon="el-icon-document-remove">批量下架</el-button>
-        <el-button type="danger" icon="el-icon-document-delete">批量删除</el-button>
+        <el-button type="success" icon="el-icon-circle-check"
+          :disabled="selectedList.length==0">批量上架</el-button>
+        <el-button type="warning" icon="el-icon-circle-close"
+          :disabled="selectedList.length==0">批量下架</el-button>
+        <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
       </template>
     </crumbs-bar>
     <!-- 数据展示 -->
@@ -17,11 +19,18 @@
         :data="tableData"
         stripe
         tooltip-effect="dark"
+        @selection-change="selectionChange"
         style="width: 100%">
         <el-table-column
           type="selection"
           align="center"
           width="55">
+        </el-table-column>
+        <el-table-column
+          label="序号"
+          type="index"
+          align="center"
+          width="50">
         </el-table-column>
         <el-table-column
           align="center"
@@ -34,12 +43,6 @@
           align="center"
           show-overflow-tooltip
           label="商品名称">
-        </el-table-column>
-        <el-table-column
-          prop="type"
-          label="类型"
-          align="center"
-          show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           prop="type"
@@ -75,7 +78,8 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>活动规则</el-button>
+            <el-button type="primary" style="padding:2px 3px;" 
+              plain @click="handleActive">活动规则</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -83,7 +87,7 @@
     <!-- 分页 -->
     <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
       @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
-    <!-- 充值管理 -->
+    <!-- 新增充值 -->
     <el-drawer
       title=""
       :visible.sync="addDrawer"
@@ -108,7 +112,12 @@
               </el-select>
             </el-form-item>
             <el-form-item label="充值金额" prop="money">
-              <el-input v-model="addForm.money" clearable></el-input>
+              <el-input-number 
+                v-model="addForm.money" 
+                clearable 
+                style="width:100%;"
+                :controls="false">
+              </el-input-number>
             </el-form-item>
             <el-form-item label="备注" prop="des">
               <el-input v-model="addForm.des" clearable></el-input>
@@ -121,6 +130,61 @@
         <el-button type="info" @click="clearForm">取消</el-button>
       </div>
     </el-drawer>
+    <!-- 充值规则设置 -->
+    <el-dialog
+      title="活动规则"
+      :visible.sync="ruleDialog"
+      :close-on-click-modal="$store.state.closeOnClickModal"
+      :close-on-press-escape="$store.state.closeOnPresEscape"
+      width="40%">
+      <el-form :model="topupForm" label-position="rigth" label-width="80px"
+        :rules="topupFormRule" ref="topupForm">
+        <el-form-item label="活动状态" prop="status">
+          <el-select v-model="topupForm.status" placeholder="请选择" clearable style="width:100%">
+            <el-option label="开启" value="开启"></el-option>
+            <el-option label="关闭" value="关闭"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="红包金额" prop="money">
+          <el-input-number 
+            v-model="topupForm.money" 
+            clearable
+            :min="1"
+            style="width:50%;"
+            :controls="false">
+          </el-input-number>
+        </el-form-item>
+        <el-form-item label="红包个数" prop="number">
+          <el-input-number 
+            v-model="topupForm.number" 
+            clearable
+            :min="1"
+            style="width:50%;"
+            :controls="false">
+          </el-input-number>
+        </el-form-item>
+        <el-form-item label="开始时间" prop="start">
+          <el-date-picker
+            v-model="topupForm.start"
+            style="width:100%;"
+            placeholder="请选择起始日期"
+            type="date">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束时间" prop="end">
+          <el-date-picker
+            v-model="topupForm.end"
+            style="width:100%;"
+            placeholder="请选择截至日期"
+            type="date">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button type="primary" @click="submitRule">取 消</el-button>
+        <el-button type="info" @click="resetRule">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -158,8 +222,17 @@ export default {
         des:""
       },
       formRule:{/**表单验证 */
-        
       },
+      selectedList:[],/**select选中项 */
+      ruleDialog:false,/**活动规则设置dialog */
+      topupForm:{/**充值规则表单 */
+        status:"",
+        money:"",
+        number:"",
+        start:"",
+        end:""
+      },
+      topupFormRule:{}/**充值规则表单规则 */
     }
   },
   components: {
@@ -168,23 +241,30 @@ export default {
   },
   methods:{
     /**获取表格数据 */
-    getTableData(){
-    
-    },
+    getTableData(){},
     /**分页size改变 */
     hanSiChange(val){
       this.pageSize = val;
+      this.getTableData();
     },
     /**当前页改变 */
     hanCurrChange(val){
       this.currPage = val;
+      this.getTableData();
     },
     /**刷新数据 */
     handleRefresh(){
       this.getTableData()
     },
 
-    /**新增管理员 */
+    /**selection change触发事件 */
+    selectionChange(section){
+      //存放选中的表格数据
+      this.selectedList = section;
+    },
+
+    /*********** 新增充值金额 ************/
+    /**新增充值金额 */
     handleAdd(){
       this.addDrawer = true;
     },
@@ -212,6 +292,36 @@ export default {
       }
       this.addDrawer = false;
     },
+
+    /*********** 活动规则设置 ************/
+    /**点击活动规则 */
+    handleActive(){
+      this.ruleDialog = true;
+    },
+    /**提交活动规则 */
+    submitRule(){
+      this.$refs['topupForm'].validate((valid)=>{
+        if (valid) {
+          this.$message({
+            message: '点击提交',
+            type: 'info'
+          });
+        } else {
+          this.$message({
+            message: '请补全信息',
+            type: 'warning'
+          });
+        }
+      })
+    },
+    /**关闭取消规则 */
+    resetRule(){
+      this.$refs['topupForm'].resetFields();
+      for (const key in this.addForm) {
+        this.topupForm[key] = null;
+      }
+      this.ruleDialog = false;
+    }
   }
 }
 </script>

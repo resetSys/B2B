@@ -2,7 +2,7 @@
   <!-- 签到规则 -->
   <div class="signRule">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['签到管理','签到规则']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['签到管理',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
@@ -70,13 +70,15 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>规则设置</el-button>
+            <el-button type="success" style="padding:2px 3px;" plain>启用</el-button>
+            <el-button type="danger" style="padding:2px 3px;" plain>禁用</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -101,12 +103,34 @@ export default {
         isUseing:"是否启用",
         create:"创建日期"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar,
+  },
+  methods:{
+    /**获取表格数据 */
+    getTableData(){},
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
   }
 }
 </script>

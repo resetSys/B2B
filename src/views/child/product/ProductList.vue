@@ -62,6 +62,14 @@
         @selection-change="selectionChange"
         style="width: 100%">
         <el-table-column
+          label="序号"
+          align="center"
+          width="50">
+          <template scope="scope">
+            <span>{{(currPage - 1) * pageSize + scope.$index + 1}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           type="selection"
           align="center"
           width="55">

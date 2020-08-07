@@ -2,31 +2,34 @@
   <!-- 优惠券下发 -->
   <div class="giveOut">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['优惠券','优惠券下发']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['优惠券',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="设备类型" style="width:100px;margin-right:5px" clearable>
-          <el-option label="通用" value="全部"></el-option>
+        <el-select placeholder="设备类型" style="width:100px;margin-right:5px"
+          v-model="searchForm.deviceType">
+          <el-option label="通用" value="99"></el-option>
           <el-option label="电脑端" value=""></el-option>
           <el-option label="安卓" value=""></el-option>
           <el-option label="苹果" value=""></el-option>
         </el-select>
-        <el-select placeholder="规则范围" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select placeholder="规则范围" style="width:100px;margin-right:5px"
+          v-model="searchForm.range">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="全部商品" value=""></el-option>
           <el-option label="分类商品" value=""></el-option>
           <el-option label="独立商品" value=""></el-option>
           <el-option label="品牌商品" value=""></el-option>
         </el-select>
-        <el-select placeholder="规则类型" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value=""></el-option>
+        <el-select placeholder="规则类型" style="width:100px;margin-right:5px"
+          v-model="searchForm.ruleType">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="无门槛" value=""></el-option>
           <el-option label="满减" value=""></el-option>
         </el-select>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入名称"></el-input>
+          placeholder="输入名称" v-model="searchForm.name"></el-input>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </template>
     </search-bar>
@@ -41,6 +44,14 @@
           type="selection"
           align="center"
           width="55">
+        </el-table-column>
+        <el-table-column
+          label="序号"
+          align="center"
+          width="50">
+          <template scope="scope">
+            <span>{{(currPage - 1) * pageSize + scope.$index + 1}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -106,13 +117,14 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="danger" style="padding:2px 3px;" plain>下架</el-button>
+            <el-button type="danger" style="padding:2px 3px;" plain>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -141,12 +153,43 @@ export default {
         start:"开始时间",
         end:"结束时间"
       }],
+      /**搜索表单 */
+      //设备类型 规则范围 规则类型 优惠券名称
+      searchForm:{
+        deviceType:"99",
+        range:"99",
+        ruleType:"99",
+        name:""
+      },
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+    /**获取表格数据 */
+    getTableData(){},
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+
   }
 }
 </script>
