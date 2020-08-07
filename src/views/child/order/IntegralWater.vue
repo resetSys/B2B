@@ -2,24 +2,28 @@
   <!-- 积分流水列表 -->
   <div class="integralWater">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['权限管理',$route.meta.title]">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['权限管理',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
         <el-date-picker
           type="date"
+          v-model="searchForm.start"
+          clearable 
           style="width:200px;margin-right:5px"
           placeholder="选择开始日期">
         </el-date-picker>
         <el-date-picker
           type="date"
+          v-model="searchForm.end"
+          clearable
           style="width:200px;margin-right:5px"
           placeholder="选择结束日期">
         </el-date-picker>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入编号/名称"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          placeholder="输入编号/名称" v-model="searchForm.name"></el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -30,9 +34,12 @@
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
-          type="selection"
+          label="序号"
           align="center"
-          width="55">
+          width="50">
+          <template scope="scope">
+            <span>{{(currPage - 1) * pageSize + scope.$index + 1}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -91,7 +98,8 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -117,13 +125,42 @@ export default {
         time:"改动时间",
         numbers:"电商单号",
         ERP:"ERP单号"
-      }]
+      }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      /**搜索表单 */
+      searchForm:{
+        start:"",
+        end:"",
+        name:""
+      }
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+    /**获取表格 */
+    getTableData(){
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
   }
 }
 </script>

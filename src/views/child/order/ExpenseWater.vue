@@ -9,17 +9,21 @@
       <template>
         <el-date-picker
           type="date"
+          clearable
+          v-model="searchForm.start"
           style="width:200px;margin-right:5px"
           placeholder="选择开始日期">
         </el-date-picker>
         <el-date-picker
           type="date"
+          clearable
+          v-model="searchForm.end"
           style="width:200px;margin-right:5px"
           placeholder="选择结束日期">
         </el-date-picker>
         <el-input style="width:200px;margin-right:5px" clearable
           placeholder="输入订单号/收货地址"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -29,6 +33,14 @@
         stripe
         tooltip-effect="dark"
         style="width: 100%">
+        <el-table-column
+          label="序号"
+          align="center"
+          width="50">
+          <template scope="scope">
+            <span>{{(currPage - 1) * pageSize + scope.$index + 1}}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
           prop="orderNum"
@@ -86,7 +98,8 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -112,6 +125,17 @@ export default {
         waterType:"流水类型",
         time:"消费时间"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      /**搜索表单 */
+      //开始时间 结束时间 模糊查询
+      searchForm:{
+        start:"",
+        end:"",
+        content:""
+      }
     }
   },
   components: {
@@ -121,6 +145,25 @@ export default {
   },
   mounted(){
 
+  },
+  methods:{
+    /**获取表格 */
+    getTableData(){
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
   }
 }
 </script>

@@ -1,24 +1,21 @@
 <template>
   <!-- 退款单请求 -->
   <div class="refundRequest">
-     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['订单管理',$route.meta.title]">
-      <template slot="controls">
-        <el-button type="primary" icon="el-icon-document-add">导出</el-button>
-      </template>
+    <!-- 面包屑导航 -->
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['订单管理',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="订单状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select placeholder="订单状态" style="width:100px;margin-right:5px" v-model="searchForm.status">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="待审核" value=""></el-option>
           <el-option label="已通过" value=""></el-option>
           <el-option label="已反驳" value=""></el-option>
         </el-select>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入订单号/收货公司"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          placeholder="输入订单号/收货公司" v-model="searchForm.name"></el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -28,6 +25,14 @@
         stripe
         tooltip-effect="dark"
         style="width: 100%">
+        <el-table-column
+          label="序号"
+          align="center"
+          width="50">
+          <template scope="scope">
+            <span>{{(currPage - 1) * pageSize + scope.$index + 1}}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
           prop="name"
@@ -86,13 +91,14 @@
           label="操作"
           align="center">
           <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>规则设置</el-button>
+            <el-button type="primary" style="padding:2px 3px;" plain>操作</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -117,12 +123,40 @@ export default {
         time:"时间",
         status:"状态"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      /**搜索表单 */
+      searchForm:{
+        status:"99",
+        name:""
+      }
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+    /**获取表格数据 */
+    getTableData(){
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
   }
 }
 </script>

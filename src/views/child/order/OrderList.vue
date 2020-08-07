@@ -2,31 +2,34 @@
   <!-- 订单列表 -->
   <div class="orderList">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['订单管理','订单列表']">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['订单管理',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="单据状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value=""></el-option>
+        <el-select placeholder="单据状态" style="width:100px;margin-right:5px"
+          v-model="searchForm.orderStatus">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="未支付" value=""></el-option>
           <el-option label="已支付" value=""></el-option>
           <el-option label="已出库" value=""></el-option>
-          <el-option label="已收获" value=""></el-option>
+          <el-option label="已收货" value=""></el-option>
         </el-select>
         <el-date-picker
           type="date"
+          v-model="searchForm.start"
           style="width:200px;margin-right:5px"
           placeholder="选择开始日期">
         </el-date-picker>
         <el-date-picker
           type="date"
+          v-model="searchForm.end"
           style="width:200px;margin-right:5px"
           placeholder="选择结束日期">
         </el-date-picker>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入订单号/收货地址"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          placeholder="输入订单号/收货地址" v-model="searchForm.content"></el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -111,7 +114,8 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -142,12 +146,42 @@ export default {
         source:"来源",
         create:"下单日期"
       }],
+      /**搜索表单 */
+      //单据状态 开始日期 截止日期 模糊查询
+      searchForm:{
+        orderStatus:"",
+        start:"",
+        end:"",
+        content:""
+      },
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+     /**获取表格 */
+    getTableData(){},
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
   }
 }
 </script>

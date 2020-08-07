@@ -4,21 +4,22 @@
     <!-- 面包屑导航 -->
     <crumbs-bar :crumbsList="['订单管理',$route.meta.title]">
       <template slot="controls">
-        <el-button type="primary" icon="el-icon-document-add">导出</el-button>
+        <el-button type="primary" icon="el-icon-download" @click="handleExport">导出退货单</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="订单状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value="全部"></el-option>
+        <el-select placeholder="订单状态" style="width:100px;margin-right:5px"
+          v-model="searchForm.status">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="待审核" value=""></el-option>
           <el-option label="已通过" value=""></el-option>
           <el-option label="已反驳" value=""></el-option>
         </el-select>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入订单号/收货公司"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          placeholder="输入订单号/收货公司" v-model="searchForm.name"></el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -98,7 +99,8 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -127,12 +129,48 @@ export default {
         refundTime:"退货时间",
         status:"状态"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      /**搜索表单 */
+      searchForm:{
+        status:"99",
+        name:""
+      }
     }
   },
   components: {
     crumbsBar,
     Pagination,
     SearchBar
+  },
+  methods:{
+    /**获取表格 */
+    getTableData(){
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
+
+    /**点击导出 */
+    handleExport(){
+      this.$message({
+        message: '点击导出',
+        type: 'info'
+      });
+    }
   }
 }
 </script>
