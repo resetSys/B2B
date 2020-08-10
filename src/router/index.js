@@ -69,10 +69,12 @@ const IntegralList = () => import("@/views/child/order/IntegralList.vue");
 const IntegralWater = () => import("@/views/child/order/IntegralWater.vue");
 const RetreatAudit = () => import("@/views/child/order/RetreatAudit.vue");
 const RefundRequest = () => import("@/views/child/order/RefundRequest.vue");
-//专区及品牌维护
-const CommentAduit = () => import("@/views/child/comment/CommentAduit.vue");
+const PayQuery = () => import("@/views/child/order/PayQuery.vue");
 //评论管理
+const CommentAduit = () => import("@/views/child/comment/CommentAduit.vue");
+//专区及品牌维护
 const PrefectureList = () => import("@/views/child/prefecture/PrefectureList.vue");
+const PrefectureGoods = () => import("@/views/child/prefecture/PrefectureGoods.vue");
 const PharmacyZone = () => import("@/views/child/prefecture/PharmacyZone.vue");
 const OutpatientZone = () => import("@/views/child/prefecture/OutpatientZone.vue");
 //抽奖管理
@@ -81,6 +83,7 @@ const PrizeRule = () => import("@/views/child/lottery/PrizeRule.vue");
 const Recorded = () => import("@/views/child/lottery/Recorded.vue");
 //日志管理
 const LogIp = () => import("@/views/child/log/LogIp.vue");
+const HandleLog = () => import("@/views/child/log/HandleLog.vue");
 //用户行为分析
 const Collect = () => import("@/views/child/analyze/Collect.vue");
 const OrderFrequency = () => import("@/views/child/analyze/OrderFrequency.vue");
@@ -453,6 +456,12 @@ const routes = [
           title:"退款单申请"
         }
       },{
+        path:"payQuery",
+        component:PayQuery,
+        meta:{
+          title:"在线支付查询"
+        }
+      },{
         path:"commentAduit",
         component:CommentAduit,
         meta:{
@@ -469,6 +478,12 @@ const routes = [
         component:PharmacyZone,
         meta:{
           title:"药店专区管理"
+        }
+      },{
+        path:"prefectureGoods",
+        component:PrefectureGoods,
+        meta:{
+          title:"品牌商品"
         }
       },{
         path:"outpatientZone",
@@ -497,6 +512,12 @@ const routes = [
       },{
         path:"logIp",
         component:LogIp,
+        meta:{
+          title:"用户IP捕捉记录"
+        }
+      },{
+        path:"handleLog",
+        component:HandleLog,
         meta:{
           title:"用户IP捕捉记录"
         }
