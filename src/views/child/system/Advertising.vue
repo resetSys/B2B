@@ -64,9 +64,6 @@
 </template>
 
 <script>
-//组件
-import CrumbsBar from "@/components/CrumbsBar.vue";
-import Upload from "@/components/Upload"
 //混入
 import { mustFill,mustNumber } from "@/mixins/data/valid.js"
 
@@ -101,8 +98,7 @@ export default {
     }
   },
   components: {
-    CrumbsBar,
-    Upload
+    
   },
   methods:{
     /**upload上传回调 */

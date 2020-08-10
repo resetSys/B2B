@@ -114,8 +114,6 @@
 
 <script>
 //组件
-import PageHeader from "@/components/PageHeader.vue";
-import Upload from "@/components/Upload.vue";
 import WangEditor from "@/components/WangEditor.vue";
 
 
@@ -171,8 +169,6 @@ export default {
     }
   },
   components: {
-    PageHeader,
-    Upload,
     WangEditor
   },
   mounted(){

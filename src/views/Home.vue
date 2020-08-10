@@ -533,6 +533,10 @@ export default {
               title: "退款单申请",
               path: "refundRequest",
             },
+            {
+              title:"在线支付查询",
+              path:"payQuery"
+            }
           ],
         },
         {
@@ -589,6 +593,10 @@ export default {
               title: "用户IP捕捉",
               path: "logIp",
             },
+            {
+              title:"用户操作日志",
+              path:"handleLog"
+            }
           ],
         },
         {

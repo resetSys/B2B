@@ -150,10 +150,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
-import SearchBar from "@/components/SearchBar.vue";
 import ImgUpload from "@/components/ImgUpload";
 
 export default {
@@ -202,9 +198,6 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    Pagination,
-    SearchBar,
     ImgUpload,
   },
   methods:{
@@ -228,7 +221,6 @@ export default {
     /**会员 selection change触发事件 */
     selectionChange(section){
       //存放选中的表格数据
-      window.console.log(section)
       this.selectedList = section;
     },
     /**礼品新增 */
