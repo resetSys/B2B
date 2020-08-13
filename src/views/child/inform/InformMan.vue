@@ -131,8 +131,13 @@
             <el-form-item label="url地址" prop="url">
               <el-input v-model="addForm.url" clearable></el-input>
             </el-form-item>
-            <el-form-item label="类容" prop="classify">
-              <el-input v-model="addForm.classify" clearable></el-input>
+            <el-form-item label="内容" prop="classify">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 4, maxRows: 8}"
+                placeholder="请输入内容"
+                v-model="addForm.classify">
+              </el-input>
             </el-form-item>
           </el-form>
         </div>

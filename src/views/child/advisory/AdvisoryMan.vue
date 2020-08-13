@@ -2,39 +2,46 @@
   <!-- 咨询管理 -->
   <div class="advisoryMan">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['咨询管理',$route.meta.title]">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['咨询管理',$route.meta.title]">
       <template slot="controls">
-        <el-button type="primary" icon="el-icon-document-add">添加咨询</el-button>
+        <el-button type="primary" icon="el-icon-circle-plus-outline"
+          @click="handleAdd(false)">添加咨询</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="咨询分类" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value=""></el-option>
+        <el-select placeholder="咨询分类" style="width:100px;margin-right:5px" 
+          v-model="searchForm.type">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="新闻动态" value=""></el-option>
           <el-option label="医药咨询" value=""></el-option>
           <el-option label="监管信息" value=""></el-option>
           <el-option label="公告" value=""></el-option>
         </el-select>
-        <el-select placeholder="发布状态" style="width:100px;margin-right:5px" clearable>
-          <el-option label="全部" value=""></el-option>
+        <el-select placeholder="发布状态" style="width:100px;margin-right:5px" 
+          v-model="searchForm.status">
+          <el-option label="全部" value="99"></el-option>
           <el-option label="已发布" value=""></el-option>
           <el-option label="未发布" value=""></el-option>
         </el-select>
         <el-date-picker
           type="date"
+          v-model="searchForm.start"
           style="width:200px;margin-right:5px"
-          placeholder="选择开始日期">
+          placeholder="选择开始日期"
+          clearable>
         </el-date-picker>
         <el-date-picker
           type="date"
+          v-model="searchForm.end"
           style="width:200px;margin-right:5px"
-          placeholder="选择结束日期">
+          placeholder="选择结束日期"
+          clearable>
         </el-date-picker>
         <el-input style="width:200px;margin-right:5px" clearable
-          placeholder="输入咨询名称名称"></el-input>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          placeholder="输入咨询名称名称" v-model="searchForm.name"></el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -45,9 +52,12 @@
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
-          type="selection"
+          label="序号"
           align="center"
-          width="55">
+          width="50">
+          <template scope="scope">
+            <span>{{(currPage - 1) * pageSize + scope.$index + 1}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -94,22 +104,22 @@
         <el-table-column
           label="操作"
           align="center">
-          <template>
-            <el-button type="primary" style="padding:2px 3px;" plain>规则设置</el-button>
+          <template slot-scope="scope">
+            <el-button type="success" style="padding:2px 3px;" plain>上架</el-button>
+            <el-button type="danger" style="padding:2px 3px;" plain>下架</el-button>
+            <el-button type="warning" style="padding:2px 3px;" plain @click="handleAdd(scope.row)">编辑</el-button>
+            <el-button type="danger" style="padding:2px 3px;" plain>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
-import SearchBar from "@/components/SearchBar.vue";
 
 export default {
   name: 'advisoryMan',
@@ -126,12 +136,54 @@ export default {
         browse:"浏览次数",
         status:"发布状态"
       }],
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
+      /**搜索表单 */
+      searchForm:{
+        type:"99",
+        status:"99",
+        start:"",
+        end:"",
+        name:""
+      },
     }
   },
-  components: {
-    crumbsBar,
-    Pagination,
-    SearchBar
+  methods:{
+    /**获取数据 */
+    getTableData(){},
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
+    /**刷新表格数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+
+    /**新增/编辑咨询 */
+    handleAdd(row){
+      let prams = null;
+      if (row) {
+        prams = encodeURIComponent(JSON.stringify(row));
+      } else {
+        prams = row;
+      }
+      this.$router.push({
+        path:"addAdvisory",
+        query:{
+          row:prams
+        }
+      });
+      prams = null;
+    },
   }
 }
 </script>

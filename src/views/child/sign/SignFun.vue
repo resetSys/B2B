@@ -36,7 +36,6 @@
 
 <script>
 //组件
-import crumbsBar from "@/components/CrumbsBar.vue";
 import WangEditor from "@/components/WangEditor.vue";
 //混入
 import { mustFill } from "@/mixins/data/valid";
@@ -76,7 +75,6 @@ export default {
     };
   },
   components: {
-    crumbsBar,
     WangEditor
   },
   computed: {

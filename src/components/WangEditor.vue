@@ -24,7 +24,13 @@ export default {
       default: ''
     }
   },
-  
+  watch: {  
+    value: function(value) {  
+      if (value !== this.editor.txt.html()) {  
+        this.editor.txt.html(this.value)  
+      }  
+    }  
+  }, 
   mounted() {
     this.seteditor()
     this.editor.txt.html(this.value)

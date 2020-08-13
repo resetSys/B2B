@@ -98,12 +98,17 @@ const ImgMan = () => import("@/views/child/image/ImgMan.vue");
 //消息推送
 const InformMan = () => import("@/views/child/inform/InformMan.vue");
 //咨询管理
+const AddAdvisory = () => import("@/views/child/advisory/AddAdvisory.vue");
 const AdvisoryMan = () => import("@/views/child/advisory/AdvisoryMan.vue");
 const Helps = () => import("@/views/child/advisory/Helps.vue");
+const ViewDoc = () => import("@/views/child/advisory/ViewDoc.vue");
+const EditDoc = () => import("@/views/child/advisory/EditDoc.vue");
 //业务员管理
+const BindGroup = () => import("@/views/child/salesman/BindGroup.vue");
 const GroupMembers = () => import("@/views/child/salesman/GroupMembers.vue");
 const SalesmanList = () => import("@/views/child/salesman/SalesmanList.vue");
 const SalesmanOrderList = () => import("@/views/child/salesman/SalesmanOrderList.vue");
+const SalesmanAduit = () => import("@/views/child/salesman/SalesmanAduit.vue");
 
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -582,6 +587,12 @@ const routes = [
           title:"推送管理"
         }
       },{
+        path:"addAdvisory",
+        component:AddAdvisory,
+        meta:{
+          title:"咨询管理"
+        }
+      },{
         path:"advisoryMan",
         component:AdvisoryMan,
         meta:{
@@ -594,10 +605,28 @@ const routes = [
           title:"帮助中心"
         }
       },{
+        path:"viewDoc",
+        component:ViewDoc,
+        meta:{
+          title:"帮助文档列表"
+        }
+      },{
+        path:"editDoc",
+        component:EditDoc,
+        meta:{
+          title:"帮助文档编辑"
+        }
+      },{
         path:"groupMembers",
         component:GroupMembers,
         meta:{
           title:"会员分组管理"
+        }
+      },{
+        path:"bindGroup",
+        component:BindGroup,
+        meta:{
+          title:"绑定分组"
         }
       },{
         path:"salesmanList",
@@ -610,6 +639,12 @@ const routes = [
         component:SalesmanOrderList,
         meta:{
           title:"业务员订单列表"
+        }
+      },{
+        path:"salesmanAduit",
+        component:SalesmanAduit,
+        meta:{
+          title:"业务员审核"
         }
       }
     ]

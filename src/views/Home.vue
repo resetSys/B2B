@@ -687,6 +687,10 @@ export default {
               title: "业务员订单列表",
               path: "salesmanOrderList",
             },
+            {
+              title:"业务员审核",
+              path:"salesmanAduit"
+            }
           ],
         },
       ],

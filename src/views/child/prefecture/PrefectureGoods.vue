@@ -244,8 +244,6 @@ export default {
 
     /**获取表格数据 */
     getTableData(){},
-    /**获取商品数据 */
-    getGoodsList(){},
     /**分页size改变 */
     hanSiChange(val){
       this.pageSize = val;
@@ -256,6 +254,9 @@ export default {
       this.currPage = val;
       this.getTableData()
     },
+
+    /**获取商品数据 */
+    getGoodsList(){},
     /**分页size改变 */
     hanSiChange2(val){
       this.pageSize2 = val;
@@ -271,9 +272,7 @@ export default {
       this.dialogVisible = true;
     },
     /**点击确定绑定 */
-    submitForm(){
-    
-    },
+    submitForm(){},
     /**取消绑定 */
     clearForm(){
       this.dialogVisible = false;
