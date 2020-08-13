@@ -7,7 +7,8 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="订单状态" style="width:100px;margin-right:5px" v-model="searchForm.status">
+        <el-select placeholder="订单状态" style="width:100px;margin-right:5px"
+          v-model="searchForm.status">
           <el-option label="全部" value="99"></el-option>
           <el-option label="待审核" value=""></el-option>
           <el-option label="已通过" value=""></el-option>

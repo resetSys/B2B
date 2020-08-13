@@ -11,14 +11,16 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.classify" placeholder="商品分类" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.classify" placeholder="商品分类" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部分类" value="全部分类"></el-option>
           <el-option label="办公用品" value="办公用品"></el-option>
           <el-option label="家用家电" value="家用家电"></el-option>
           <el-option label="生活用品" value="生活用品"></el-option>
           <el-option label="热门兑换" value="热门兑换"></el-option>
         </el-select>
-        <el-select v-model="searchForm.status" placeholder="商品状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.status" placeholder="商品状态" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已启用" value="已启用"></el-option>
           <el-option label="未启用" value="未启用"></el-option>

@@ -10,11 +10,13 @@
         <el-date-picker
           style="margin-right:5px"
           type="date"
+          clearable 
           placeholder="选择开始日期">
         </el-date-picker>
         <el-date-picker
           style="margin-right:5px"
           type="date"
+          clearable 
           placeholder="选择截至日期">
         </el-date-picker>
         <el-input style="width:200px;margin-right:5px" clearable

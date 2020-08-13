@@ -13,14 +13,14 @@
     <search-bar>
       <template>
         <el-select placeholder="是否启用" 
-          style="width:100px;margin-right:5px" clearable
+          style="width:100px;margin-right:5px"
           v-model="searchForm.isUsing">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已上架" value="已上架"></el-option>
           <el-option label="未上架" value="未上架"></el-option>
         </el-select>
         <el-select placeholder="类型" 
-          style="width:100px;margin-right:5px" clearable
+          style="width:100px;margin-right:5px"
           v-model="searchForm.status">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="商品组合" value="商品组合"></el-option>

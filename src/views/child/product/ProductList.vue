@@ -15,7 +15,8 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.attr" placeholder="商品属性" style="width:100px;margin-right:5px">
+        <el-select v-model="searchForm.attr" placeholder="商品属性" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option
             v-for="(item,index) in attrList"
@@ -24,22 +25,26 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <el-select v-model="searchForm.status" placeholder="商品状态" style="width:100px;margin-right:5px">
+        <el-select v-model="searchForm.status" placeholder="商品状态" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
-        <el-select v-model="searchForm.activityArea" placeholder="活动专区" style="width:100px;margin-right:5px">
+        <el-select v-model="searchForm.activityArea" placeholder="活动专区" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
-        <el-select v-model="searchForm.activityStatus" placeholder="活动状态" style="width:100px;margin-right:5px">
+        <el-select v-model="searchForm.activityStatus" placeholder="活动状态" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option label="商城后台" value="商城后台"></el-option>
           <el-option label="业务通APP" value="业务通APP"></el-option>
         </el-select>
-        <el-select v-model="searchForm.classify" placeholder="商品分类" style="width:100px;margin-right:5px">
+        <el-select v-model="searchForm.classify" placeholder="商品分类" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option
             v-for="(item,index) in classifyList"

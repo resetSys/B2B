@@ -13,12 +13,14 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.status" placeholder="状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.status" placeholder="状态"
+           style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="正常" value="正常"></el-option>
           <el-option label="已删除" value="已删除"></el-option>
         </el-select>
-        <el-select v-model="searchForm.type" placeholder="领取类型" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.type" placeholder="领取类型" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="医疗机构" value="医疗机构"></el-option>
           <el-option label="零售药店" value="零售药店"></el-option>

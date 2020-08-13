@@ -12,19 +12,19 @@
     <search-bar>
       <template>
         <el-select v-model="searchForm.status" placeholder="状态" 
-          style="width:100px;margin-right:5px" clearable>
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value=""></el-option>
           <el-option label="已上架" value=""></el-option>
           <el-option label="未上架" value=""></el-option>
         </el-select>
         <el-select v-model="searchForm.device" placeholder="设备类型" 
-          style="width:100px;margin-right:5px" clearable>
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value=""></el-option>
           <el-option label="PC端" value=""></el-option>
           <el-option label="移动端" value=""></el-option>
         </el-select>
         <el-select v-model="searchForm.classify" placeholder="图片分类" 
-          style="width:100px;margin-right:5px" clearable>
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value=""></el-option>
           <el-option label="轮播图片" value=""></el-option>
           <el-option label="首页楼层图" value=""></el-option>

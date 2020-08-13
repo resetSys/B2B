@@ -7,7 +7,8 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.type" placeholder="审核状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.type" placeholder="审核状态" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已驳回" value="已驳回"></el-option>
           <el-option label="审核中" value="审核中"></el-option>

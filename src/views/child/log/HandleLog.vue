@@ -10,10 +10,12 @@
           type="date"
           style="width:200px;margin-right:5px;"
           v-model="searchForm.start"
+          clearable 
           placeholder="开始日期">
         </el-date-picker>
         <el-date-picker
           type="date"
+          clearable 
           v-model="searchForm.end"
           style="width:200px;margin-right:5px;"
           placeholder="截至日期">

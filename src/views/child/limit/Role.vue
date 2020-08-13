@@ -11,7 +11,8 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.isUsing" placeholder="是否启用" style="width:100px;margin-right:5px">
+        <el-select v-model="searchForm.isUsing" placeholder="是否启用" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option label="已启用" value="1"></el-option>
           <el-option label="未启用" value="2"></el-option>

@@ -11,12 +11,14 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.position" placeholder="位置选择" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.position" placeholder="位置选择" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="购物车" value="购物车"></el-option>
           <el-option label="结算成功" value="结算成功"></el-option>
         </el-select>
-        <el-select v-model="searchForm.status" placeholder="状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.status" placeholder="状态" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已上架" value="已上架"></el-option>
           <el-option label="已下架" value="已下架"></el-option>

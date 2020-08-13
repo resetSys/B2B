@@ -17,12 +17,14 @@
         </el-select>
         <el-date-picker
           type="date"
+          clearable 
           v-model="searchForm.start"
           style="width:200px;margin-right:5px"
           placeholder="选择开始日期">
         </el-date-picker>
         <el-date-picker
           type="date"
+          clearable 
           v-model="searchForm.end"
           style="width:200px;margin-right:5px"
           placeholder="选择结束日期">

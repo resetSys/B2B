@@ -7,7 +7,8 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.type" placeholder="方案类型" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.type" placeholder="方案类型" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="换购" value="换购"></el-option>
           <el-option label="买赠" value="买赠"></el-option>
@@ -15,7 +16,8 @@
           <el-option label="抢购" value="抢购"></el-option>
           <el-option label="效期" value="效期"></el-option>
         </el-select>
-        <el-select v-model="searchForm.status" placeholder="方案状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.status" placeholder="方案状态" 
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已启用" value="已启用"></el-option>
           <el-option label="未启用" value="未启用"></el-option>
@@ -25,12 +27,14 @@
           v-model="searchForm.start"
           style="width:200px;margin-right:5px;"
           type="date"
+          clearable 
           placeholder="开始日期">
         </el-date-picker>
         <el-date-picker
           v-model="searchForm.end"
           style="width:200px;margin-right:5px;"
           type="date"
+          clearable 
           placeholder="结束日期">
         </el-date-picker>
         <el-input v-model="searchForm.name" style="width:200px;margin-right:5px" clearable

@@ -10,8 +10,7 @@
         <el-select 
           placeholder="状态"
           v-model="searchForm.status" 
-          style="width:100px;margin-right:5px" 
-          clearable>
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option label="成功" value="成功"></el-option>
           <el-option label="失败" value="失败"></el-option>
@@ -19,20 +18,21 @@
         <el-select 
           placeholder="活动状态" 
           v-model="searchForm.actionStatus" 
-          style="width:100px;margin-right:5px" 
-          clearable>
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="99"></el-option>
           <el-option label="参与" value="参与"></el-option>
           <el-option label="不参与" value="不参与"></el-option>
         </el-select>
         <el-date-picker
           v-model="searchForm.start"
+          clearable 
           style="width:200px;margin-right:5px"
           placeholder="请选择起始日期"
           type="date">
         </el-date-picker>
         <el-date-picker
           v-model="searchForm.end"
+          clearable 
           style="width:200px;margin-right:5px"
           placeholder="请选择截至日期"
           type="date">

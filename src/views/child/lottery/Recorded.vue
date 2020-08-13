@@ -7,17 +7,19 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select placeholder="类型" style="width:100px;margin-right:5px" clearable>
+        <el-select placeholder="类型" style="width:100px;margin-right:5px">
           <el-option label="全部" value=""></el-option>
           <el-option label="中奖记录" value=""></el-option>
         </el-select>
         <el-date-picker
           type="date"
+          clearable 
           style="width:200px;margin-right:5px"
           placeholder="选择开始日期">
         </el-date-picker>
         <el-date-picker
           type="date"
+          clearable 
           style="width:200px;margin-right:5px"
           placeholder="选择结束日期">
         </el-date-picker>

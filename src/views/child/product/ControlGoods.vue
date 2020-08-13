@@ -11,7 +11,8 @@
     <!-- 搜索框 -->
     <search-bar>
       <template>
-        <el-select v-model="searchForm.status" placeholder="商品状态" style="width:100px;margin-right:5px" clearable>
+        <el-select v-model="searchForm.status" placeholder="商品状态"
+          style="width:100px;margin-right:5px">
           <el-option label="全部" value="全部"></el-option>
           <el-option label="已上架" value="已上架"></el-option>
           <el-option label="已下架" value="已下架"></el-option>
