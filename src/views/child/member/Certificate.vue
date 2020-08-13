@@ -97,10 +97,6 @@
 </template>
 
 <script>
-//组件
-import PageHeader from "@/components/PageHeader.vue";
-import Pagination from "@/components/Pagination.vue";
-import SearchBar from "@/components/SearchBar.vue";
 //混入
 import { formatStatus } from "@/mixins/filters/formatStatus.js";
 
@@ -139,9 +135,7 @@ export default {
     }
   },
   components: {
-    PageHeader,
-    Pagination,
-    SearchBar
+    
   },
   methods:{
     /**返回上一页 */

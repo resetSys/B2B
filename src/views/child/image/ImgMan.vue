@@ -162,10 +162,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
-import SearchBar from "@/components/SearchBar.vue";
 import ImgUpload from "@/components/ImgUpload.vue";
 
 export default {
@@ -215,9 +211,6 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    Pagination,
-    SearchBar,
     ImgUpload
   },
   methods:{

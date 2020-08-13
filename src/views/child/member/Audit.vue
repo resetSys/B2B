@@ -72,8 +72,6 @@
 </template>
 
 <script>
-//组件
-import PageHeader from "@/components/PageHeader.vue";
 
 export default {
   name: 'audit',
@@ -98,7 +96,7 @@ export default {
     }
   },
   components: {
-    PageHeader
+    
   },
   mounted(){
     //接收role传递参数

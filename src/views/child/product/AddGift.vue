@@ -54,7 +54,6 @@
 
 <script>
 //组件
-import PageHeader from "@/components/PageHeader.vue";
 import ImgUpload from "@/components/ImgUpload";
 
 export default {
@@ -78,7 +77,6 @@ export default {
     }
   },
   components: {
-    PageHeader,
     ImgUpload
   },
   methods:{

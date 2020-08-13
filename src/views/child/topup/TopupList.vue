@@ -189,9 +189,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
 
 export default {
   name: 'topupList',
@@ -236,8 +233,6 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    Pagination
   },
   methods:{
     /**获取表格数据 */

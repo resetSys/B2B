@@ -171,10 +171,6 @@
 </template>
 
 <script>
-//组件
-import PageHeader from "@/components/PageHeader.vue";
-import SearchBar from "@/components/SearchBar.vue";
-import Pagination from "@/components/Pagination.vue";
 //网络
 import { request } from "@/request";
 
@@ -214,9 +210,6 @@ export default {
     }
   },
   components: {
-    PageHeader,
-    SearchBar,
-    Pagination
   },
   mounted(){
     //接收role传递参数

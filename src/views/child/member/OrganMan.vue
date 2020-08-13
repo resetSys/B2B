@@ -119,9 +119,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import SearchBar from "@/components/SearchBar.vue";
 //混入
 import { mustFill } from "@/mixins/data/valid.js";//混入表单必填项
 
@@ -163,8 +160,7 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    SearchBar,
+    
   },
   methods:{
     /**获取表格数据 */

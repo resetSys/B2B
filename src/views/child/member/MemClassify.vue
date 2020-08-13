@@ -87,10 +87,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
-import SearchBar from "@/components/SearchBar.vue";
 
 export default {
   name: '',
@@ -131,9 +127,7 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    Pagination,
-    SearchBar
+    
   },
   methods:{
     /**新增分类 */

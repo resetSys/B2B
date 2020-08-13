@@ -57,7 +57,6 @@
 
 <script>
 //组件
-import CrumbsBar from "@/components/CrumbsBar.vue";
 import Upload from "@/components/Upload.vue";
 
 export default {
@@ -79,7 +78,6 @@ export default {
     }
   },
   components: {
-    CrumbsBar,
     Upload
   },
   methods:{

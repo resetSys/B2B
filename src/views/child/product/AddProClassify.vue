@@ -57,7 +57,6 @@
 
 <script>
 //组件
-import PageHeader from "@/components/PageHeader.vue";
 import ImgUpload from "@/components/ImgUpload";
 //网络
 import { request } from "@/request";
@@ -92,7 +91,6 @@ export default {
     }
   },
   components: {
-    PageHeader,
     ImgUpload
   },
   mounted(){

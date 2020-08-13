@@ -168,9 +168,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
 import ImgUpload from "@/components/ImgUpload";
 //网络
 import { request } from "@/request";
@@ -224,9 +221,7 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    Pagination,
-    ImgUpload,
+    ImgUpload
   },
   mounted(){
     this.getTableData()

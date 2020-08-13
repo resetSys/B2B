@@ -84,9 +84,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
 import Upload from "@/components/Upload.vue";
 
 export default {
@@ -128,8 +125,6 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    Pagination,
     Upload
   },
   methods:{

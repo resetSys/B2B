@@ -91,10 +91,6 @@
 </template>
 
 <script>
-//组件
-import crumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
-import SearchBar from "@/components/SearchBar.vue";
 //网络
 import { request } from "@/request";
 //混入
@@ -134,9 +130,7 @@ export default {
     }
   },
   components: {
-    crumbsBar,
-    Pagination,
-    SearchBar
+    
   },
   mounted(){
     this.getTableData();

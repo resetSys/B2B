@@ -44,8 +44,6 @@
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader.vue";
-
 export default {
   name: 'addConGoods',
   data() {
@@ -66,7 +64,6 @@ export default {
     }
   },
   components: {
-    PageHeader
   },
   methods:{
     goBack() {

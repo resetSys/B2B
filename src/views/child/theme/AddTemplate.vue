@@ -24,7 +24,6 @@
 
 <script>
 //组件
-import PageHeader from "@/components/PageHeader.vue";
 import WangEditor from "@/components/WangEditor.vue";
 
 export default {
@@ -44,7 +43,6 @@ export default {
     }
   },
   components: {
-    PageHeader,
     WangEditor
   },
   mounted(){

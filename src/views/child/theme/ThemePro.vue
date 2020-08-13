@@ -98,10 +98,6 @@
 </template>
 
 <script>
-//组件
-import CrumbsBar from "@/components/CrumbsBar.vue";
-import Pagination from "@/components/Pagination.vue";
-import SearchBar from "@/components/SearchBar.vue";
 //网络
 // import { request } from "@/request";
 
@@ -138,9 +134,6 @@ export default {
     }
   },
   components: {
-    CrumbsBar,
-    Pagination,
-    SearchBar
   },
   mounted(){
     

@@ -79,7 +79,6 @@
 </template>
 
 <script>
-import crumbsBar from "@/components/CrumbsBar.vue";
 
 export default {
   name: 'group',
@@ -102,7 +101,6 @@ export default {
     }
   },
   components: {
-    crumbsBar,
   },
   methods:{
     /**关闭drawer 清空表单信息 */

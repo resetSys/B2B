@@ -39,8 +39,6 @@
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader.vue";
-
 export default {
   name: 'addComm',
   data() {
@@ -58,7 +56,7 @@ export default {
     }
   },
   components: {
-    PageHeader
+    
   },
   methods:{
     /**返回上一页 */
