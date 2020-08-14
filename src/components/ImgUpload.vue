@@ -3,6 +3,7 @@
     <el-upload
       class="avatar-uploader"
       :action="action"
+      :auto-upload="false"
       :show-file-list="false"
       :on-success="handleAvatarSuccess"
       :before-upload="beforeAvatarUpload">

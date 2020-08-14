@@ -8,8 +8,6 @@
           :disabled="selectedList.length==0" @click="handleDel">批量删除</el-button>
         <el-button type="primary" icon="el-icon-s-order"
           :disabled="selectedList.length==0" @click="handlePut">批量上架</el-button>
-        <el-button type="primary" icon="el-icon-circle-plus-outline"
-          @click="handleAdd(false)">添加商品</el-button>
       </template>
     </crumbs-bar>
     <!-- 搜索框 -->
@@ -255,7 +253,7 @@ export default {
               // Stock_Quantity: "0.00"
               // Valdate: ""
 
-              id:Data[i].ArticleId,
+              id:Data[i].GoodsId,
               name:Data[i].Sub_Title,
               specification:Data[i].Drug_Spec,
               packingNnit:Data[i].Package_Unit,
@@ -270,8 +268,6 @@ export default {
             })
           }
         }
-        window.console.log(res);
-        
       }).catch((err) => {
         window.console.log(err);
       });
@@ -365,14 +361,14 @@ export default {
     handleAdd(row){
       let prams = null;
       if (row) {
-        prams = encodeURIComponent(JSON.stringify(row));
+        prams = encodeURIComponent(JSON.stringify(row.id));
       } else {
         prams = row;
       }
       this.$router.push({
         path:"addProduct",
         query:{
-          row:prams
+          goodsId:prams
         }
       });
       prams = null;

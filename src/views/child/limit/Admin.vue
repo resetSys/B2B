@@ -123,7 +123,7 @@
               <el-input v-model="addForm.pass" clearable></el-input>
             </el-form-item>
             <el-form-item label="所属机构" prop="organId">
-              <el-select v-model="addForm.organId" placeholder="请选择" clearable style="width:100%">
+              <el-select v-model="addForm.organId" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="(role,index) in organList"
                   :key="index"
@@ -133,7 +133,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="管理角色" prop="roleId">
-              <el-select v-model="addForm.roleId" placeholder="请选择" clearable style="width:100%">
+              <el-select v-model="addForm.roleId" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="(role,index) in roleList"
                   :key="index"
@@ -146,7 +146,7 @@
               <el-input v-model="addForm.tel" clearable></el-input>
             </el-form-item>
             <el-form-item label="性别" prop="sex">
-              <el-select v-model="addForm.sex" placeholder="请选择" clearable style="width:100%">
+              <el-select v-model="addForm.sex" placeholder="请选择" style="width:100%">
                 <el-option label="男" value="男"></el-option>
                 <el-option label="女" value="女"></el-option>
               </el-select>
