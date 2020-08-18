@@ -262,7 +262,8 @@ export default {
               repertory:"库存",
               retailPrice:Data[i].Price,
               validTime:"效期时间",
-
+              articleId:Data[i].ArticleId,
+              organId:Data[i].EntId,
               status:Data[i].Status,
               sort:Data[i].SortId
             })
@@ -361,14 +362,14 @@ export default {
     handleAdd(row){
       let prams = null;
       if (row) {
-        prams = encodeURIComponent(JSON.stringify(row.id));
+        prams = encodeURIComponent(JSON.stringify({goodsId:row.articleId,organId:row.organId}));
       } else {
         prams = row;
       }
       this.$router.push({
         path:"addProduct",
         query:{
-          goodsId:prams
+          prams:prams,
         }
       });
       prams = null;
