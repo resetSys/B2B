@@ -43,10 +43,10 @@
                 </template>
               </el-table-column>
               <el-table-column
+                prop="classifyId"
                 align="center"
-                prop="number"
                 show-overflow-tooltip
-                label="编号">
+                label="类别id">
               </el-table-column>
               <el-table-column
                 prop="name"
@@ -73,17 +73,17 @@
                   <el-button type="warning" style="padding:2px 3px;" plain
                     @click="handleAdd(scope.row)">编辑</el-button>
                   <el-button type="danger" style="padding:2px 3px;" plain
-                    @click="handleDel">删除</el-button>
+                    @click="handleDel(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
           </template>
         </el-table-column>
         <el-table-column
+          prop="classifyId"
           align="center"
-          prop="number"
           show-overflow-tooltip
-          label="编号">
+          label="类别id">
         </el-table-column>
         <el-table-column
           prop="name"
@@ -181,9 +181,9 @@ export default {
       /**表格数据 */
       //序号	编号	类别名称	级别	排序	操作
       tableData:[{
-        number:"编号",
+        parentId:"编号",
         name:"类别名称",
-        classify:"类别名称",
+        classifyId:"类别名称",
         grade:"级别",
         sort:"排序",
         imgUrl:"图片地址",
@@ -244,7 +244,6 @@ export default {
         if (Success) {
           this.recursion(categoryList);
         }
-        window.console.log(res);
       }).catch((err) => {
         window.console.log(err);
       });
@@ -254,9 +253,9 @@ export default {
       //先传入一个list，如果list中的Smethods是数组，再调用自身传入数组
       for (let i = 0; i < list.length; i++) {
         this.tableData.push({
-          number:list[i].ParentId,
+          parentId:list[i].ParentId,
           name:list[i].Title,
-          classify:list[i].CategoryId,
+          classifyId:list[i].CategoryId,
           grade:list[i].ClassLayer,
           sort:list[i].SortId,
           imgUrl:list[i].Img_Url,
@@ -265,12 +264,12 @@ export default {
         if (list[i].LowerList instanceof Array) {
           for (let j = 0,childs = list[i].LowerList; j < childs.length; j++) {
             this.tableData[i].childs.push({
-              number:list[i].ParentId,
-              name:list[i].Title,
-              classify:list[i].CategoryId,
-              grade:list[i].ClassLayer,
-              sort:list[i].SortId,
-              imgUrl:list[i].Img_Url,
+              parentId:childs[j].ParentId,
+              name:childs[j].Title,
+              classifyId:childs[j].CategoryId,
+              grade:childs[j].ClassLayer,
+              sort:childs[j].SortId,
+              imgUrl:childs[j].Img_Url,
             })
           }
         }
@@ -294,19 +293,40 @@ export default {
     /**会员 selection change触发事件 */
     selectionChange(section){
       //存放选中的表格数据
-      window.console.log(section)
       this.selectedList = section;
     },
 
     /**点击删除 */
-    handleDel(){
+    handleDel(row){
       this.$confirm('确定删除该条数据吗', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'error'
       }).then(() => {
-        
-      }).catch(() => {});
+        request({
+          url:"HTGoodsAdmin/DltGoodsCategory",
+          method:"post",
+          data:{
+            entId:this.organId,
+            userId:this.adminId,
+            CategoryId:row.classifyId
+          },
+        }).then((res) => {
+          let {Message,MsgCode,Success} = res.data.models;
+          if (Success) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+            this.getTableData();
+          } else {
+            this.$message({
+              message: '删除失败'+MsgCode+Message,
+              type: 'error'
+            });
+          }
+        })
+      })
     },
 
     /**新增/编辑分类 */

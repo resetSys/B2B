@@ -7,6 +7,8 @@ const Login = () =>import("@/views/Login.vue");
 const Home = () =>import("@/views/Home.vue");
 //第一个页面
 const FirstPage = () => import("@/views/child/FirstPage.vue");
+//用户引导
+const Driver = () => import("@/views/child/driver/Driver.vue");
 //系统配置
 const SysSetting = () => import("@/views/child/system/SysSetting.vue");
 const FloorSetting = () => import("@/views/child/system/FloorSetting.vue");
@@ -145,6 +147,13 @@ const routes = [
         component:FirstPage,
         meta:{
           title:"首页"
+        }
+      },
+      {
+        path:"driver",
+        component:Driver,
+        meta:{
+          title:"引导指南"
         }
       },
       {

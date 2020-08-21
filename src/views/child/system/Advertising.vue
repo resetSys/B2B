@@ -49,6 +49,9 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="广告图" prop="image">
+            <!-- 图片预览组件 -->
+            <img-view></img-view>
+            <!-- 文件上传组件 -->
             <upload accept="image/*" @fileChange="fileChange"></upload>
           </el-form-item>
         </div>
@@ -103,6 +106,7 @@ export default {
   methods:{
     /**upload上传回调 */
     fileChange(files){
+      console.log(files);
       this.addForm.image = files;
     },
     /**重置表单|刷新页面 */

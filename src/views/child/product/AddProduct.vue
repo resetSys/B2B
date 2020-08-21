@@ -61,13 +61,10 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="商品封面图" prop="">
-            <div class="imgView" v-show="coverImg!=''">
-              <el-image
-                class="imgView-img"
-                :src="coverImg"
-                fit="cover"
-                :preview-src-list="[coverImg]"></el-image>
-            </div>
+            <!-- 图片预览组件 -->
+            <img-view :imgList="[{url:coverImg,id:0}]">
+            </img-view>
+            <!-- 文件上传组件 -->
             <upload @fileChange="uploadCallBack" 
               accept="image/jpg,image/jpeg,image/png">
             </upload>
@@ -75,17 +72,8 @@
         </div>
         <div class="form-item-wrap">
           <el-form-item label="商品详情图" prop="">
-            <div class="imgView" v-show="slideList.length"
-              v-for="(item,index) in slideList"
-              :key="index">
-              <el-image
-                class="imgView-img"
-                :src="item.url"
-                fit="cover"
-                :preview-src-list="viewSlideList"></el-image>
-              <span class="imgView-del el-icon-delete"
-                @click="handleDelSlide(item.id)"></span>
-            </div>
+            <img-view :imgList="slideList" :isDelete="true" @handleDel="handleDelSlide">
+            </img-view>
             <upload @fileChange="uploadCallBack2"
               accept="image/jpg,image/jpeg,image/png"
               :multiple="true"></upload>
@@ -110,7 +98,6 @@
 <script>
 //组件
 import WangEditor from "@/components/WangEditor.vue";
-import Upload from "@/components/Upload.vue";
 //网络
 import { request } from "@/request";
 import { uploadRequest } from "@/request";
@@ -159,7 +146,6 @@ export default {
   },
   components: {
     WangEditor,
-    Upload
   },
   mounted(){
     //接收role传递参数
@@ -343,7 +329,7 @@ export default {
       this.$refs['addForm'].resetFields();
     },
     /**删除详情图片 */
-    handleDelSlide(id){
+    handleDelSlide(item){
       this.$confirm('确定删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -355,7 +341,7 @@ export default {
           data:{
             entId:this.organId,
             userId:this.adminId,
-            imgId:id
+            imgId:item.id
           },
         }).then((res) => {
           let {Success,MsgCode,Message} = res.data.models;
@@ -448,35 +434,6 @@ export default {
 .addProduct{
   width: 100%;
   height: 100%;
-}
-/* 商品图片上传预览 */
-.imgView{
-  display: inline-block;
-  position: relative;
-  margin-right: 10px;
-  margin-bottom: 5px;
-  height: 100px;
-  width: 100px;
-  vertical-align: middle;
-}
-.imgView-img{
-  width: 100%;
-  height: 100%;
-}
-.imgView-del{
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 50%;
-  left: 50%;
-  margin: -10px 0 0 -10px;
-  font-size: 20px;
-  color: #F56C6C;
-  opacity: 0.5;
-  transition: opacity 0.2s;
-}
-.imgView-del:hover{
-  opacity: 1;
 }
 
 </style>

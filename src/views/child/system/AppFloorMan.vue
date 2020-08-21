@@ -96,7 +96,6 @@
 
 <script>
 //组件
-import Upload from "@/components/Upload.vue";
 
 export default {
   name: 'appFloorMan',
@@ -130,7 +129,6 @@ export default {
     }
   },
   components: {
-    Upload
   },
   methods:{
     /**获取表格 */

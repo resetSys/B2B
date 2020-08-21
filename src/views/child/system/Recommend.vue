@@ -65,6 +65,8 @@
           <el-input v-model="formData.name" placeholder="请输入楼层名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="上传图片" prop="img">
+          <!-- 图片预览 -->
+          <img-view></img-view>
           <upload accept="image/*" :size="1024" @fileChange="fallback"></upload>
         </el-form-item>
         <el-form-item label="跳转链接" prop="url">
@@ -84,7 +86,6 @@
 </template>
 
 <script>
-import Upload from "@/components/Upload.vue";
 
 export default {
   name: 'recommend',
@@ -125,7 +126,6 @@ export default {
     }
   },
   components: {
-    Upload
   },
   methods:{
     /**文件上传回调 */

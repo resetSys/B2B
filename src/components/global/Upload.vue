@@ -22,12 +22,22 @@ export default {
     },
     size:{
       type:Number,
-      default:1024
+      default:10240
+    },
+    multiple:{
+      type:Boolean,
+      default:false
     }
   },
   data() {
     return {
 
+    }
+  },
+  mounted(){
+    //1、判断是否添加多选属性
+    if (this.multiple) {
+      this.$refs['fileInput'].setAttribute('multiple','multiple')
     }
   },
   methods:{
@@ -55,32 +65,24 @@ export default {
           type: 'warning'
         });
       } else {
-        //判断文件的大小
-        if (fileList[0].size > (this.size*1024)) {
-          this.$message({
-            message: '文件过大',
-            type: 'error'
-          });
-        } else {
-          //判断文件的类型
-          //模糊匹配和比较
-          //如果传过来的类型最后一个字符是※ 那么就进行字符串切割匹配
-          let isStart = this.accept.indexOf('*') != -1;
-          let type,isUse;
-          if (isStart) {
-            type = this.accept.slice(0,this.accept.lastIndexOf('*')-1);
-            isUse = fileList[0].type.indexOf(type) != -1;
+        //判断文件的类型
+        /**
+          只需要获取文件类型，进行查询即可
+         */
+        //1、将格式转化为小写
+        let accept = this.accept.toLowerCase();
+        //2、新建变量存放，file文件
+        let data = [];
+        //3、使用for循环判断文件是否符合格式
+        fileList.forEach(ele => {
+          if (accept.indexOf(ele.type)!=-1 || accept.indexOf("*")) {
+            //符合格式数据被添加
+            data.push(ele)
           }
-          if (this.accept == "" || this.accept == fileList[0].type || isUse) {
-            this.$emit('fileChange',fileList[0]);
-          } else {
-            this.$message({
-              message: '选择文件类型不正确',
-              type: 'error'
-            });
-          }
-        }
-      }
+        });
+        //4、返回符合格式的file数据
+        this.$emit('fileChange',data);
+      } 
     }
   }
 }

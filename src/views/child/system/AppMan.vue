@@ -31,6 +31,10 @@
         <div class="form-item-wrap">
           <el-form-item label="APK文件" prop="file">
             <upload @fileChange="fallback" :size="10240"></upload>
+            <span style="margin-left:10px;color:#67C23A;">
+              上传成功
+              <i class="el-icon-success"></i>
+            </span>
           </el-form-item>
         </div>
         <div class="form-item-wrap">
@@ -57,7 +61,6 @@
 
 <script>
 //组件
-import Upload from "@/components/Upload.vue";
 
 export default {
   name: 'appMan',
@@ -78,7 +81,6 @@ export default {
     }
   },
   components: {
-    Upload
   },
   methods:{
     /**重置表单|刷新页面 */

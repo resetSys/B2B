@@ -5,12 +5,18 @@
       <div ref="aside" class="aside" :style="asideStyle">
         <!-- 展开关闭菜单 -->
         <i v-if="isCollapse" class="open iconfont icon-open" @click="changeCollapse(false)"></i>
-        <i v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
-        <el-scrollbar class="scrollbar">
+        <i id="collapseOpen" v-else class="close iconfont icon-close" @click="changeCollapse(true)"></i>
+        <!-- 系统logo -->
+        <div class="aside-logo">
+          <img src="~assets/logo.png"
+            class="aside-logo-img" alt="logo">
+          <span class="aside-logo-title" v-show="!isCollapse">后台管理系统</span>
+        </div>
+        <el-scrollbar id="menuWarpper" style="height:calc(100% - 50px);">
           <!-- 导航菜单 -->
           <el-menu
             class
-            background-color="#545c64"
+            background-color="#3a3f51"
             text-color="#fff"
             active-text-color="#ffd04b"
             unique-opened
@@ -31,216 +37,6 @@
                 >{{ item.title }}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <!-- <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-setting"></i>
-                <span>系统配置</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="sysSetting">系统设置</el-menu-item>
-                <el-menu-item index="floorSetting">楼层设置</el-menu-item>
-                <el-menu-item index="recommend">推荐专区</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="iconfont icon-limit"></i>
-                <span>权限管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="admin">管理员管理</el-menu-item>
-                <el-menu-item index="role">角色管理</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title">
-                <i class="iconfont icon-member"></i>
-                <span>会员管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="memList">会员列表</el-menu-item>
-                <el-menu-item index="certExpired">证书过期管理</el-menu-item>
-                <el-menu-item index="registAudit">注册审核管理</el-menu-item>
-                <el-menu-item index="registCertificate">注册资质管理</el-menu-item>
-                <el-menu-item index="memClassify">会员分类管理</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="4">
-              <template slot="title">
-                <i class="iconfont icon-topup"></i>
-                <span>充值管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="topupList">充值活动列表</el-menu-item>
-                <el-menu-item index="topupWater">充值流水</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="5">
-              <template slot="title">
-                <i class="iconfont icon-sign"></i>
-                <span>签到管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="signRule">签到规则</el-menu-item>
-                <el-menu-item index="signFun">签到功能</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="6">
-              <template slot="title">
-                <i class="iconfont icon-themeActive"></i>
-                <span>主题活动</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="themeTem">主题活动模板</el-menu-item>
-                <el-menu-item index="themePro">主题商品组合</el-menu-item>
-                <el-menu-item index="template">模板绑定</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="7">
-              <template slot="title">
-                <i class="iconfont icon-product"></i>
-                <span>商品管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="productList">商品列表</el-menu-item>
-                <el-menu-item index="productClassify">商品分类</el-menu-item>
-                <el-menu-item index="giftList">礼品列表</el-menu-item>
-                <el-menu-item index="integralGoods">积分商品</el-menu-item>
-                <el-menu-item index="controlGoods">控销商品</el-menu-item>
-                <el-menu-item index="getGoods">商品到货提醒</el-menu-item>
-                <el-menu-item index="recommendGoods">商品推荐管理</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="8">
-              <template slot="title">
-                <i class="iconfont icon-promotion"></i>
-                <span>促销管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="schemes">方案列表</el-menu-item>
-                <el-menu-item index="single">单品方案设计</el-menu-item>
-                <el-menu-item index="group">组合方案设计</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="9">
-              <template slot="title">
-                <i class="iconfont icon-coupon"></i>
-                <span>优惠券管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="coupons">优惠券列表</el-menu-item>
-                <el-menu-item index="giveOut">优惠券下发</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="10">
-              <template slot="title">
-                <i class="iconfont icon-orderForm"></i>
-                <span>订单管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="orderList">订单列表</el-menu-item>
-                <el-menu-item index="expenseWater">消费流水列表</el-menu-item>
-                <el-menu-item index="integralList">积分订单列表</el-menu-item>
-                <el-menu-item index="integralWater">积分流水列表</el-menu-item>
-                <el-menu-item index="retreatAudit">退单审核</el-menu-item>
-                <el-menu-item index="refundRequest">退款单申请</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="11">
-              <template slot="title">
-                <i class="iconfont icon-FontAwesomecommentdots"></i>
-                <span>评论管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="commentAduit">商品评论审核</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="12">
-              <template slot="title">
-                <i class="iconfont icon-prefecture"></i>
-                <span>专区及品牌维护</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="prefectureList">品牌列表管理</el-menu-item>
-                <el-menu-item index="pharmacyZone">药店专区管理</el-menu-item>
-                <el-menu-item index="outpatientZone">门诊专区管理</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="13">
-              <template slot="title">
-                <i class="iconfont icon-lottery"></i>
-                <span>抽奖管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="recorded">中奖记录</el-menu-item>
-                <el-menu-item index="prizeRule">抽奖规则</el-menu-item>
-                <el-menu-item index="prizeList">奖品列表</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="14">
-              <template slot="title">
-                <i class="iconfont icon-log"></i>
-                <span>日志管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="logIp">用户IP捕捉</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="15">
-              <template slot="title">
-                <i class="iconfont icon-analyze"></i>
-                <span>行为分析</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="searchFrequency">搜索频率分析</el-menu-item>
-                <el-menu-item index="shopCart">购物车商品分析</el-menu-item>
-                <el-menu-item index="orderTime">下单时间统计</el-menu-item>
-                <el-menu-item index="orderFrequency">下单频率统计</el-menu-item>
-                <el-menu-item index="collect">收藏统计</el-menu-item>
-                <el-menu-item index="unitPrice">客单价统计</el-menu-item>
-                <el-menu-item index="orderSource">订单来源统计</el-menu-item>
-                <el-menu-item index="typePay">支付类型统计</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="16">
-              <template slot="title">
-                <i class="iconfont icon-image"></i>
-                <span>图片管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="imgMan">图片维护</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="17">
-              <template slot="title">
-                <i class="iconfont icon-pushMsg"></i>
-                <span>消息推送</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="informMan">消息管理</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="18">
-              <template slot="title">
-                <i class="iconfont icon-salesman"></i>
-                <span>咨询管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="advisoryMan">咨询管理</el-menu-item>
-                <el-menu-item index="helps">帮助中心</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="19">
-              <template slot="title">
-                <i class="iconfont icon-advisory"></i>
-                <span>业务员管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="salesmanList">业务员列表</el-menu-item>
-                <el-menu-item index="groupMembers">会员分组管理</el-menu-item>
-                <el-menu-item index="salesmanOrderList">业务员订单列表</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>-->
           </el-menu>
         </el-scrollbar>
       </div>
@@ -269,7 +65,7 @@
               </el-tabs>
             </div>
             <!-- 用户头像 -->
-            <el-dropdown style="margin-top:5px">
+            <el-dropdown id="profile" style="margin-top:5px">
               <img
                 style="height:40px;width:40px;border-radius:50%;"
                 src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -283,7 +79,7 @@
         </el-header>
         <!-- 菜单页面容器 -->
         <div class="main-con">
-          <transition name="fade">
+          <transition name="fade" mode="out-in">
             <keep-alive :include="keepAliveStr">
                 <router-view></router-view>
             </keep-alive>
@@ -307,6 +103,16 @@ export default {
       organId:this.$store.state.userInfo.organId,
       /**导航菜单数据 */
       navList: [
+        {
+          title: "引导指南",
+          icon: "iconfont icon-drive",
+          childs: [
+            {
+              title: "引导指南",
+              path: "driver",
+            }
+          ]
+        },
         {
           title: "系统配置",
           icon: "el-icon-setting",
@@ -803,7 +609,7 @@ export default {
   position: relative;
   width: 200px;
   height: 100%;
-  background-color: #545c64;
+  background-color: #3a3f51;
   overflow: visible;
   transition: width 0.3s;
 }
@@ -820,6 +626,28 @@ export default {
 .open {
   right: -22px;
 }
+
+/* logo */
+.aside-logo{
+  height: 50px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 0.5px solid #909399;
+  box-sizing: border-box;
+  padding: 10px 20px;
+}
+.aside-logo-img{
+  width: 30px;
+  height: 30px;
+  vertical-align: -8px;
+}
+.aside-logo-title{
+  font-size: 18px;
+  color: #FFF;
+  margin-left: 10px;
+}
+
 /******************* 头部信息 *******************/
 .home-header {
   position: relative;
@@ -856,15 +684,23 @@ export default {
   height: calc(100% - 50px);
 }
 
-/* // navMenu滚动条 */
-.scrollbar {
-  height: 100%;
-}
+
 /******************* 过渡动画 *******************/
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .2s;
+  transition: all 0.3s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter {
   opacity: 0;
+  transform: translateX(-30px);
+  -webkit-transform: translateX(-30px);
+  -ms-transform: translateX(-30px);
+  -moz-transform: translateX(-30px);
+}
+.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(-30px);
+  -webkit-transform: translateX(-30px);
+  -ms-transform: translateX(-30px);
+  -moz-transform: translateX(-30px);
 }
 </style>

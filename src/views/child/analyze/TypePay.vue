@@ -2,24 +2,28 @@
   <!-- 支付类型统计 -->
   <div class="typePay">
     <!-- 面包屑导航 -->
-    <crumbs-bar :crumbsList="['用户分析',$route.meta.title]">
+    <crumbs-bar @refresh="handleRefresh" :crumbsList="['用户分析',$route.meta.title]">
     </crumbs-bar>
     <!-- 搜索框 -->
     <search-bar>
       <template>
         <el-date-picker
+          v-model="searchForm.start"
           style="margin-right:5px"
           type="date"
           clearable 
           placeholder="选择开始日期">
         </el-date-picker>
         <el-date-picker
+          v-model="searchForm.end"
           style="margin-right:5px"
           type="date"
           clearable 
           placeholder="选择截至日期">
         </el-date-picker>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-input style="width:200px;margin-right:5px" clearable
+          placeholder="输入关键字" v-model="searchForm.name"></el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
       </template>
     </search-bar>
     <!-- 数据展示 -->
@@ -56,7 +60,8 @@
       </el-table>
     </el-scrollbar>
     <!-- 分页 -->
-    <pagination :allPage="0" :pageSize="20" :currIndex="1"></pagination>
+    <pagination :allPage="allPage" :pageSize="pageSize" :currIndex="currPage"
+      @hanSiChange="hanSiChange" @hanCurrChange="hanCurrChange"></pagination>
   </div>
 </template>
 
@@ -74,10 +79,36 @@ export default {
         modePay:"付款方式",
         scale:"占总次数百分比(%)"
       }],
+      /**搜索表单 */
+      searchForm:{
+        start:"",
+        end:"",
+        name:""
+      },
+      /**分页数据 */
+      currPage:1,
+      pageSize:20,
+      allPage:0,
     }
   },
-  components: {
-    
+  methods:{
+    /**获取表格数据 */
+    getTableData(){},
+    /**刷新数据 */
+    handleRefresh(){
+      this.getTableData();
+    },
+    /**分页size改变 */
+    hanSiChange(val){
+      this.pageSize = val;
+      this.getTableData()
+    },
+    /**当前页改变 */
+    hanCurrChange(val){
+      this.currPage = val;
+      this.getTableData()
+    },
+
   }
 }
 </script>

@@ -1,13 +1,18 @@
 <template>
   <!-- home显示第一页 -->
   <div class="firstPage">
-    <!-- <iframe class="iframe" src="./page/index.html" frameborder="0"></iframe> -->
+    数据统计界面
   </div>
 </template>
 
 <script>
+//混入driver
+//混入driver
+import driver from "@/mixins/drivers/driver"
+
 export default {
   name: 'firstPage',
+  mixins:[driver],
   data() {
     return {
 
@@ -15,7 +20,17 @@ export default {
   },
   components: {
 
-  }
+  },
+  mounted(){
+    //获取localStorage中的数据
+    let isNeedDrive = window.localStorage.getItem('isNeedDrive');
+    if (isNeedDrive) {
+      //不需要提示
+    } else {
+      //需要提示
+      this.guide();
+    }
+  },
 }
 </script>
 
