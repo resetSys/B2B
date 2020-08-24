@@ -89,12 +89,19 @@ export default {
           }).then((res) => {
             let {Success,Message,MsgCode,Data} = res.data.models;
             if (Success) {
+              //将返回的token、机构id、用户id存放到localStroage中
+              window.localStorage.setItem('b2bToken','admin-token');
+              window.localStorage.setItem('organId',Data[0].entId);
+              window.localStorage.setItem('adminId',Data[0].userId);
+              // this.$store.commit("changeId",{userInfo:Data[0]});
               //成功后跳转
-              this.$router.push({
+              this.$router.replace({
                 path:"/home"
               })
-              //将管理员id和机构id修改到vuex中
-              this.$store.commit("changeId",{userInfo:Data[0]});
+              this.$message({
+                message: '验证成功',
+                type: 'success'
+              });
             } else {
               this.$message({
                 message:Message+MsgCode,
