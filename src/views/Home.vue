@@ -65,14 +65,14 @@
               </el-tabs>
             </div>
             <!-- 用户头像 -->
-            <el-dropdown id="profile" style="margin-top:5px">
+            <el-dropdown id="profile" style="margin-top:5px" @command="handleCommand">
               <img
                 style="height:40px;width:40px;border-radius:50%;"
                 src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
                 alt/>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>修改密码</el-dropdown-item>
-                <el-dropdown-item>退出登录</el-dropdown-item>
+                <el-dropdown-item command="chnagePass">修改密码</el-dropdown-item>
+                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -88,6 +88,37 @@
         
       </div>
     </div>
+    <!-- 密码修改 -->
+    <!-- <el-dialog
+      title="密码修改"
+      :visible.sync="changePassDialog"
+      :close-on-click-modal="$store.state.closeOnClickModal"
+      :close-on-press-escape="$store.state.closeOnPresEscape"
+      width="500px">
+      <el-form :model="formData" label-position="left" label-width="80px"
+        :rules="formRule" ref="addForm">
+        <el-form-item label="配置名称" prop="name">
+          <el-input v-model="formData.name" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="配置状态" prop="status">
+          <el-select v-model="formData.status" placeholder="请选择" style="width:100%;">
+            <el-option label="开启" value="开启"></el-option>
+            <el-option label="关闭" value="关闭"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="金额" prop="money">
+          <el-input-number v-model="formData.money" :controls="false" style="width:100%;"
+            :min="1" :max="100"></el-input-number>
+        </el-form-item>
+        <el-form-item label="配置" prop="config">
+          <el-input v-model="formData.config" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm">取 消</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+      </span>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -511,7 +542,12 @@ export default {
       /**存储打开的标签页 */
       keepAlive: [],
       mainStyle:{width:'calc(100% - 200px)'},
-      asideStyle:{width:'200px'}
+      asideStyle:{width:'200px'},
+      /**修改密码dialog */
+      changePassDialog:false,
+      accountForm:{
+        
+      }
     };
   },
   computed: {
@@ -522,6 +558,9 @@ export default {
   },
   mounted() {
     // this.getNavList();
+    //从localStroage中获取机构id、用户id、token
+    this.$store.commit('getUserInfo');
+    this.setLimit();
   },
   methods: {
     /**获取导航菜单数据 */
@@ -540,9 +579,21 @@ export default {
           
         // }
         window.console.log(res)
+        // 获取成功后价格导航菜单的数据存放在vuex中，方便调用
       }).catch((err) => {
         window.console.log(err);
       });
+    },
+    /**存放权限数据到vuex中，合并为数据 */
+    setLimit(){
+      //该函数应该放在getNavList回调中
+      let path = [];
+      this.navList.forEach(ele => {
+        ele.childs.forEach(ele2 => {
+          path.push(ele2.path);
+        });
+      });
+      this.$store.commit('setLimitPath',{path:path.join()});
     },
 
     /**菜单伸缩展开 */
@@ -593,6 +644,42 @@ export default {
       this.keepAlive = this.keepAlive.filter((item) => item !== targetName);
       this.$router.push(this.activeTab);
     },
+
+    /**点击登出 */
+    handleCommand(command){
+      if (command == "logout") {
+        this.logout();
+      } else {
+        this.$message({
+          message: '修改密码',
+          type: 'info'
+        });
+      }
+    },
+    /**登出 */
+    logout(){
+      this.$confirm('确定登出吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        //清除localStroage，跳转到login
+        window.localStorage.removeItem('b2bToken');
+        window.localStorage.removeItem('organId');
+        window.localStorage.removeItem('adminId');
+        this.$router.replace({
+          path:"/login"
+        })
+      });
+    },
+    /**重置表单 */
+    resetForm(){
+
+    },
+    /**提交表单 */
+    submitForm(){
+    
+    }
   },
 };
 </script>
